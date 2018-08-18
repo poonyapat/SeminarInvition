@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        contactPhoneNumber: {
+        contactNumber: {
             type: DataTypes.STRING(30),
             allowNull: false
         },

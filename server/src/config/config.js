@@ -1,5 +1,5 @@
 module.exports = {
-    port: process.env.PORT || '5432',
+    port: process.env.PORT || '8081',
     db: {
         database: process.env.DB_NAME || 'seminar_invitation', 
         user: process.env.DB_USER || 'poony',

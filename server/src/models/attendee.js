@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
         registeredData: {
             type: DataTypes.JSON,
             allowNull: false
+        },
+        token: {
+            type: DataTypes.STRING,
+            allowNull: true
         }
     })
     const User = sequelize.import('./user')
