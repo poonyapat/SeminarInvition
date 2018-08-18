@@ -18,9 +18,17 @@ module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         username: {
             type: DataTypes.STRING(30),
-            primaryKey: true
+            primaryKey: true,
+            allowNull: false
         },
-        password: DataTypes.STRING
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        role: {
+            type: DataTypes.ENUM('Admin', 'Internal User', 'External User'),
+            allowNull: false
+        }
     },{
         hooks: {
             beforeCreate: hashPassword,
