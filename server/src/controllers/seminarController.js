@@ -16,7 +16,9 @@ module.exports = {
     async create(req, res){
         try {
             const seminar = await Seminar.create(req.body.info)
-            seminar.setDataValue('author',req.body.author)
+            seminar.update({
+                author: req.body.author
+            })
             res.send(seminar)
         }
         catch (error) {

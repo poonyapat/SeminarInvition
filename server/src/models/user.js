@@ -41,5 +41,6 @@ module.exports = (sequelize, DataTypes) => {
         return bcrypt.compare(password, this.password)
     }
 
+
     return User
 }

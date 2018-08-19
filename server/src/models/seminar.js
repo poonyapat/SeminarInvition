@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     })
     const User = sequelize.import('./user')
-    Seminar.belongsTo(User, {foreignKey: 'author'})
+    User.hasMany(Seminar, {foreignKey: 'author'})
 
     return Seminar
 }
