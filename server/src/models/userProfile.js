@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
             default: 5,
             allowNull: false
         }
-
     })
     const User = sequelize.import('./user')
     UserProfile.belongsTo(User)
