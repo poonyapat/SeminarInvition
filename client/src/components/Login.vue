@@ -60,7 +60,7 @@ export default {
                     username: this.username,
                     password: this.password
                 })
-                this.$store.dispatch('persistedLogin', response.data.token, response.data.user)
+                this.$store.dispatch('persistedLogin', response.data)
                 this.username = null
                 this.password = null
                 this.dialog = false
