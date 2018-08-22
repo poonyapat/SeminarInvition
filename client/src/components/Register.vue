@@ -70,6 +70,7 @@ export default {
                     password: this.password,
                     role: 'External User'
                 })
+                this.dialog = false
 
             } catch (error) {
                 this.error = error.response.data.error

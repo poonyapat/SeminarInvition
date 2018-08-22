@@ -63,6 +63,7 @@ export default {
                 this.$store.dispatch('persistedLogin', response.data.token, response.data.user)
                 this.username = null
                 this.password = null
+                this.dialog = false
             } catch(error){
                 this.errorMsg = error.response.data.error
             }
