@@ -7,7 +7,7 @@
             </router-link>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-items class="hidden-sm-and-down">
+        <v-toolbar-items>
             <login v-if="!$store.state.isUserLoggedIn"></login>
             <register v-if="!$store.state.isUserLoggedIn"></register>
             <v-btn flat :to="{name: 'about'}" v-if="$store.state.isUserLoggedIn">
@@ -20,7 +20,7 @@
                 <v-icon>
                     storage
                 </v-icon>
-                My Seminar
+                My Seminars
             </v-btn>
             <v-btn flat @click="logout" v-if="$store.state.isUserLoggedIn">
                 <v-icon>

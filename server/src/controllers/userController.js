@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
 function jwtSignUser(user){
-    const ONE_WEEK = 60 * 60 * 24 * 7
+    const ONE_WEEK = 1
     return jwt.sign(user, config.authentication.jwtSecret, {
         expiresIn: ONE_WEEK
     })
@@ -12,7 +12,6 @@ function jwtSignUser(user){
 module.exports = {
     async register(req, res){
         try {
-            console.log(req.body)
             const user = await User.create(req.body)
             res.send(user.toJSON())
         } catch(err){
@@ -24,7 +23,6 @@ module.exports = {
     async authenticate(req, res){
         try {
             const {username, password} = req.body
-            console.log(username)
             const user = await User.findOne({
                 where: {
                     username: username
