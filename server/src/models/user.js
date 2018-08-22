@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 
-function hashPassword(user, options){
+async function hashPassword(user, options){
     const SALT_FACTOR = 8
 
     if (!user.changed('password')){

@@ -8,7 +8,7 @@ module.exports = {
             })
             res.send(seminars)
         }catch(error){
-            error.status(500).send({
+            res.status(500).send({
                 error: 'An error has occured trying to fetch the seminars'
             })
         }
@@ -22,7 +22,7 @@ module.exports = {
             res.send(seminar)
         }
         catch (error) {
-            error.status(500).send({
+            res.status(500).send({
                 error: 'An error has occured trying to create the seminar'
             })
         }

@@ -6,10 +6,12 @@
                 v-model="username"
             ></v-text-field>
             <v-text-field
+                type="password"
                 label="Password"
                 v-model="password"
             ></v-text-field>
             <v-text-field
+                type="password"
                 label="Confirmed Password"
                 v-model="confirmedPassword"
             ></v-text-field>

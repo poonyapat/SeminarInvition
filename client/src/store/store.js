@@ -31,6 +31,10 @@ export default new Vuex.Store({
         persistedLogin({commit}, token, user){
             commit('setToken', token)
             commit('setUser', user)
+        },
+        logout({commit}){
+            commit('setToken', null)
+            commit('setUser',null)
         }
     }
 })

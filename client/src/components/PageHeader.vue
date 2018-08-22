@@ -8,19 +8,25 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
-            <login v-if="!$store.state.isUserLoggenIn"></login>
-            <register v-if="!$store.state.isUserLoggenIn"></register>
-            <v-btn flat :to="{name: 'about'}" v-if="$store.state.isUserLoggenIn">
+            <login v-if="!$store.state.isUserLoggedIn"></login>
+            <register v-if="!$store.state.isUserLoggedIn"></register>
+            <v-btn flat :to="{name: 'about'}" v-if="$store.state.isUserLoggedIn">
                 <v-icon>
                     bookmarks
                 </v-icon>
                 My Registered
             </v-btn>
-            <v-btn flat v-if="$store.state.isUserLoggenIn">
+            <v-btn flat v-if="$store.state.isUserLoggedIn">
                 <v-icon>
                     storage
                 </v-icon>
                 My Seminar
+            </v-btn>
+            <v-btn flat @click="logout" v-if="$store.state.isUserLoggedIn">
+                <v-icon>
+                    logout
+                </v-icon>
+                Log out
             </v-btn>
         </v-toolbar-items>
     </v-toolbar>
@@ -33,6 +39,12 @@
         data() {
             return {
                 iconColor: null,
+            }
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch('logout')
+                this.$router.push({name: 'home'})
             }
         },
         components: {
