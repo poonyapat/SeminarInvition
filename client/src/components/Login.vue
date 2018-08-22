@@ -1,9 +1,5 @@
 <template>
-    <dialog-button>
-        <span slot="caption">
-            <v-icon>person</v-icon>
-            Login
-        </span>
+    <dialog-button icon="person" caption="Login">
         <v-card-text>
             <v-text-field
                 label="Username"
@@ -24,16 +20,21 @@
 
 <script>
 import DialogButton from '@/components/global/DialogButton'
+import UserService from '@/services/userService'
+
 export default {
     data() {
         return {
-            usename: null,
+            username: null,
             password: null
         }
     },
     methods: {
-        cancel() {
-            
+        login(){
+            UserService.authenticate({
+                username: this.username,
+                password: this.password
+            })
         }
     },
     components: {

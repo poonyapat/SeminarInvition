@@ -20,7 +20,7 @@ module.exports = {
             })
         }
     },
-    async login(req, res){
+    async authenticate(req, res){
         try {
             const {username, password} = req.body
             const user = await User.findOne({

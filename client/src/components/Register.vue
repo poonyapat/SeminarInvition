@@ -1,9 +1,5 @@
 <template>
-    <dialog-button>
-        <span slot="caption">
-            <v-icon>person_add</v-icon>
-            Register
-        </span>
+    <dialog-button icon="person_add" caption="Register">
         <v-card-text>
             <v-text-field
                 label="Username"
@@ -31,7 +27,7 @@ import DialogButton from '@/components/global/DialogButton'
 export default {
     data() {
         return {
-            usename: null,
+            username: null,
             password: null,
             confirmedPassword: null
         }

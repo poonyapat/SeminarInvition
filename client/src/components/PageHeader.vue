@@ -8,9 +8,20 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
-            <login></login>
-            <register></register>
-            <v-btn flat :to="{name: 'about'}">About</v-btn>
+            <login v-if="!$store.state.isUserLoggenIn"></login>
+            <register v-if="!$store.state.isUserLoggenIn"></register>
+            <v-btn flat :to="{name: 'about'}" v-if="$store.state.isUserLoggenIn">
+                <v-icon>
+                    bookmarks
+                </v-icon>
+                My Registered
+            </v-btn>
+            <v-btn flat v-if="$store.state.isUserLoggenIn">
+                <v-icon>
+                    storage
+                </v-icon>
+                My Seminar
+            </v-btn>
         </v-toolbar-items>
     </v-toolbar>
 </template>

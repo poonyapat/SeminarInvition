@@ -1,4 +1,5 @@
 const SeminarController = require('./controllers/seminarController')
+const UserController = require('./controllers/userController')
 
 module.exports = (app) => {
     app.post('/seminar/create', 
@@ -6,4 +7,7 @@ module.exports = (app) => {
 
     app.get('/seminar',
     SeminarController.findAll)
+
+    app.post('/user',
+    UserController.authenticate)
 }
