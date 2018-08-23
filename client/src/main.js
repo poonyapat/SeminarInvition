@@ -5,27 +5,27 @@ import router from './router'
 import {sync} from 'vuex-router-sync'
 import store from './store/store'
 import 'vuetify/dist/vuetify.min.css'
+import colors from 'vuetify/es5/util/colors'
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
   theme: {
     //purple
-    // primary: '#7E57C2',
-    // secondary: '#EDE7F6',
+    // primary: colors.deepPurple.lighten1,
+    // secondary: colors.deepPurple.lighten5,
     //red
-    // secondary: '#FFCDD2',
-    // primary: '#D50000'
+    // primary: colors.red.accent4,
+    // secondary: colors.red.lighten4
     //pink
-    // primary: '#F48FB1',
-    // secondary: '#FCE4EC'
-    //orange
-    // primary: '#FF3D00',
-    // secondary: '#FFCCBC'
-    // secondary: '#1A237E'
+    // primary: colors.pink.lighten3,
+    // secondary: colors.pink.lighten5
     // cyan
-    primary: '#26C6DA',
-    secondary: '#B2EBF2'
+    primary: colors.cyan.lighten1,
+    secondary: colors.cyan.lighten4
+    // black
+    // primary: colors.grey.darken4,
+    // secondary: colors.grey.lighten2
   }
 })
 
