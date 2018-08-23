@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar class="deep-purple lighten-1" dark>
+    <v-toolbar class="primary" dark>
         <v-toolbar-title>
             <router-link class="title" tag="span" :to="{name: 'home'}">
                 <v-icon>home</v-icon>
@@ -10,11 +10,11 @@
         <v-toolbar-items>
             <login v-if="!$store.state.isUserLoggedIn"></login>
             <register v-if="!$store.state.isUserLoggedIn"></register>
-            <v-btn flat :to="{name: 'about'}" v-if="$store.state.isUserLoggedIn">
+            <v-btn flat :to="{name: 'myRegistered'}" v-if="$store.state.isUserLoggedIn">
                 <v-icon>
                     bookmarks
                 </v-icon>
-                My Registered
+                Registered Semianars
             </v-btn>
             <v-btn flat v-if="$store.state.isUserLoggedIn">
                 <v-icon>

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
 function jwtSignUser(user){
-    const ONE_WEEK = 1
+    const ONE_WEEK = 10
     return jwt.sign(user, config.authentication.jwtSecret, {
         expiresIn: ONE_WEEK
     })
@@ -12,6 +12,7 @@ function jwtSignUser(user){
 module.exports = {
     async register(req, res){
         try {
+            req.body.role = 'External User'
             const user = await User.create(req.body)
             res.send(user.toJSON())
         } catch(err){
@@ -39,10 +40,14 @@ module.exports = {
                     error: 'Wrong password'
                 })
             }
-            const loggedInUser = user.toJSON()
+            // const userJSON = user.toJSON
+            const reducedUser = {
+                username: user.username,
+                role: user.role
+            }
             res.send({
-                user: loggedInUser,
-                token: jwtSignUser(loggedInUser)
+                user: reducedUser,
+                token: jwtSignUser(reducedUser)
             })
         } catch (err){
             res.status(500).send({

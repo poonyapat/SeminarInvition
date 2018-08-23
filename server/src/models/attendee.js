@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         token: {
             type: DataTypes.STRING,
             allowNull: true
+        },
+        status: {
+            type: DataTypes.ENUM('Confirmed', 'Attended', 'Cancelled'),
+            default: 'Attended',
+            allowNull: false
         }
     })
     const User = sequelize.import('./user')

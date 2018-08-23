@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
+    <v-app class="secondary">
       <page-header/>
       <main>
         <v-container fluid>

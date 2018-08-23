@@ -8,8 +8,7 @@ module.exports = {
             ),
             password: Joi.string().regex(
                 new RegExp('^[a-zA-Z0-9]{8,32}$')
-            ),
-            role: Joi.string()
+            )
         }
 
         const {error, value} = Joi.validate(req.body, schema)

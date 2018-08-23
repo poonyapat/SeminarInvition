@@ -7,7 +7,7 @@
             width="500"
         >
             <v-card>
-                <v-card-title class="deep-purple lighten-1 headline white--text">
+                <v-card-title class="primary headline white--text">
                     <v-icon>person_add_</v-icon>
                     Register
                     <v-spacer></v-spacer>
@@ -34,7 +34,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn class="deep-purple lighten-1" dark @click="register">Submit</v-btn>
+                        <v-btn class="primary" dark @click="register">Submit</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
@@ -67,8 +67,7 @@ export default {
                 }
                 await UserService.register({
                     username: this.username,
-                    password: this.password,
-                    role: 'External User'
+                    password: this.password
                 })
                 this.dialog = false
 

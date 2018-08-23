@@ -7,7 +7,7 @@
             width="500"
         >
             <v-card>
-                <v-card-title class="deep-purple lighten-1 headline white--text">
+                <v-card-title class="primary headline white--text">
                     <v-icon>person_</v-icon>
                     Login
                     <v-spacer></v-spacer>
@@ -15,7 +15,7 @@
                         <v-icon>close</v-icon>
                     </v-btn>
                 </v-card-title>
-                <v-card-text>
+                <v-card-text >
                     <v-text-field
                         label="Username"
                         v-model="username"
@@ -29,7 +29,7 @@
                 <span class="red--text"> {{errorMsg}} </span>
                 <v-card-actions>
                     <v-layout justify-center>
-                        <v-btn class="deep-purple lighten-1" dark @click="login">Submit</v-btn>
+                        <v-btn class="primary" dark @click="login">Submit</v-btn>
                     </v-layout>
                 </v-card-actions>
             </v-card>
