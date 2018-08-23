@@ -1,5 +1,5 @@
 <template>
-    <v-card class="ma-2 secondary lighten-2">
+    <v-card class="ma-3 secondary lighten-2 elevation-5">
         <v-card-title primary-title>
         <h3>{{seminar.title}}</h3>
         </v-card-title>
@@ -22,7 +22,7 @@
             </v-btn>
         </v-card-actions>
         <v-slide-y-transition>
-            <v-card-text v-show="show" >
+            <v-card-text class="secondary lighten-1" v-show="show">
                 {{seminar.description}}
             </v-card-text>
         </v-slide-y-transition>

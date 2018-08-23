@@ -6,5 +6,8 @@ export default {
     },
     create(data){
         return Api().post('seminar/create', data)
+    },
+    findAllByAttendeeUsername(data){
+        return Api().post('registered_seminars', data)
     }
 }

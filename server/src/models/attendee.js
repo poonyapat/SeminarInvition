@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.ENUM('Confirmed', 'Attended', 'Cancelled'),
-            default: 'Attended',
             allowNull: false
         }
     })

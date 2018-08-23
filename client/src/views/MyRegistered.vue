@@ -1,15 +1,11 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 sm6 offset-sm3 class="mb-3">
-        <v-toolbar fla dense class="primary darken-1" dark>
-            <v-toolbar-title> My Registered Seminars </v-toolbar-title>
-        </v-toolbar>
-        </v-flex>
-        <v-flex xs12 sm6 offset-sm3 v-for="(seminar, index) in seminars" :key="index">
-            <seminar :seminar="seminar" />
-        </v-flex>
-        <v-flex xs12 sm6 offset-sm3 v-if="seminars.length === 0">
-            <v-card>
+        <v-flex xs12 sm8 offset-sm2>
+            <v-toolbar fla dense class="primary" dark>
+                <v-toolbar-title> My Registered Seminars </v-toolbar-title>
+            </v-toolbar>
+            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" />
+            <v-card v-if="seminars.length === 0">
                 <v-card-title>
                     <h1>Empty</h1>
                 </v-card-title>
@@ -32,7 +28,8 @@ export default {
         Seminar
     },
     async mounted(){
-        this.seminars = (await SeminarService.findAll()).data
+        console.log(this.$store.state.user.username)
+        this.seminars = (await SeminarService.findAllByAttendeeUsername({user: this.$store.state.user.username})).data
     }
 }
 </script>
