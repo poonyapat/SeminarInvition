@@ -11,7 +11,18 @@ export default {
     create(data){
         return Api().post('seminar/create', data)
     },
-    findAllByAttendeeUsername(data){
-        return Api().post('registered_seminars', data)
+    findAllByAttendeeUsername(username){
+        return Api().get('registered_seminars', {
+            params: {
+                user: username
+            }
+        })
+    },
+    findAllByAuthor(author){
+        return Api().get('seminar/author', {
+            params: {
+                author: author
+            }
+        })
     }
 }

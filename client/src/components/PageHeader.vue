@@ -8,6 +8,7 @@
         </v-toolbar-title>
         <v-toolbar-items>
             <v-btn flat :to="{name: 'browse'}">
+                <v-icon>search</v-icon>
                 Browse
             </v-btn>
         </v-toolbar-items>
@@ -21,7 +22,7 @@
                 </v-icon>
                 Registered Semianars
             </v-btn>
-            <v-btn flat v-if="$store.state.isUserLoggedIn">
+            <v-btn flat :to="{name: 'myCreatedSeminar'}" v-if="$store.state.isUserLoggedIn && hasPermissionToCreate">
                 <v-icon>
                     storage
                 </v-icon>
@@ -50,6 +51,12 @@
             logout() {
                 this.$store.dispatch('logout')
                 this.$router.push({name: 'home'})
+            },
+        },
+        computed: {
+            hasPermissionToCreate(){
+                const role = this.$store.state.user.role
+                return role === 'Internal User' || role === 'Admin'
             }
         },
         components: {

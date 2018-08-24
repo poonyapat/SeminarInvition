@@ -3,8 +3,6 @@ const {Seminar} = require('../models')
 module.exports = {
     async findAll(req, res){
         try {
-            console.log(req);
-            
             if (req.query.search){
                 const seminars = await Seminar.findAll({
                     limit: 10,
@@ -23,6 +21,21 @@ module.exports = {
                 res.send(seminars)
             }
         }catch(error){
+            res.status(500).send({
+                error: 'An error has occured trying to fetch the seminars'
+            })
+        }
+    },
+    async findAllByAuthor(req, res){
+        console.log(req.query)
+        try {
+            const seminars = await Seminar.findAll({
+                where: {
+                    author: req.query.author
+                }
+            })
+            res.send(seminars)
+        } catch(error){
             res.status(500).send({
                 error: 'An error has occured trying to fetch the seminars'
             })

@@ -12,7 +12,7 @@
             <v-card v-if="seminars.length === 0">
                 <v-card-title>
                     <h1 v-if="loaded">0 Seminar Found...</h1>
-                    <h1 v-else>Loading...</h1>
+                    <v-progress-linear v-else :indeterminate="true"></v-progress-linear>
                 </v-card-title>
             </v-card>
         </v-flex>

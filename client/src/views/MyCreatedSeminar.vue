@@ -2,46 +2,44 @@
     <v-layout row wrap>
         <v-flex xs12 sm8 offset-sm2>
             <v-toolbar fla dense class="primary" dark>
-                <v-toolbar-title> My Registered Seminars </v-toolbar-title>
+                <v-toolbar-title> My Created Seminars </v-toolbar-title>
             </v-toolbar>
-            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" registered/>
+            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" editable/>
             <v-card v-if="seminars.length === 0">
                 <v-card-title>
-                    <h1 v-if="loaded">0 Registered Seminar Found...</h1>
+                    <h1 v-if="loaded">0 Created Seminar Found...</h1>
                     <v-progress-linear v-else :indeterminate="true" color="primary"></v-progress-linear>
                 </v-card-title>
             </v-card>
         </v-flex>
+        <v-btn fixed right fab bottom large icon class="primary"><v-icon>add</v-icon></v-btn>
     </v-layout>
 </template>
 
 <script>
 import Seminar from '@/components/Seminar'
 import SeminarService from '@/services/seminarService'
-
 export default {
     data() {
         return {
-            seminars: [],
-            loaded: false
+            loaded: false,
+            seminars: []
         }
     },
     components: {
         Seminar
     },
     async mounted(){
-        if (!this.$store.state.token){
+        const state = this.$store.state
+        if (!state.user.role || ( state.user.role !== 'Internal User' && state.user.role !== 'Admin')){
             this.$router.push({name: 'home'})
         }
-        this.seminars = (await SeminarService.findAllByAttendeeUsername(this.$store.state.user.username)).data
+        this.seminars = (await SeminarService.findAllByAuthor( this.$store.state.user.username)).data
         this.loaded = true
     }
 }
 </script>
 
-<style scoped>
-.v-card__text {
-    max-height: 10em;
-    overflow: scroll
-}
+<style>
+
 </style>

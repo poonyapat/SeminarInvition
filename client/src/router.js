@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import MyRegistered from './views/MyRegistered.vue'
+import MyCreatedSeminar from './views/MyCreatedSeminar'
 import Browse from './views/Browse'
 
 Vue.use(Router)
@@ -28,6 +29,11 @@ export default new Router({
       path: '/browse',
       name: 'browse',
       component: Browse
+    },
+    {
+      path: '/created_seminar',
+      name: 'myCreatedSeminar',
+      component: MyCreatedSeminar
     }
   ]
 })

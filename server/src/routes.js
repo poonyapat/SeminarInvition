@@ -6,7 +6,7 @@ module.exports = (app) => {
     app.post('/seminar/create', 
     SeminarController.create)
 
-    app.post('/registered_seminars',
+    app.get('/registered_seminars',
     AttendeeController.findSeminarByUser)
 
     app.get('/seminar',
@@ -14,6 +14,9 @@ module.exports = (app) => {
     
     app.post('/seminar',
     SeminarController.findAll)
+
+    app.get('/seminar/author',
+    SeminarController.findAllByAuthor)
 
     app.post('/seminar/register',
     AttendeeController.register)

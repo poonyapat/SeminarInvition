@@ -4,9 +4,10 @@ const {Attendee, Seminar} = require('../models')
 module.exports = {
     async findSeminarByUser(req, res){
         try {
+            console.log(req.query)
             const attendees = await Attendee.findAll({
                 where: {
-                    user: req.body.user
+                    user: req.query.user
                 }
             })
             // res.send(attendees)

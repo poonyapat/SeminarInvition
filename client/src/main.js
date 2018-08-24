@@ -16,17 +16,23 @@ Vue.use(Vuetify, {
     // secondary: colors.deepPurple.lighten5,
     //red
     // primary: colors.red.accent4,
-    // secondary: colors.red.lighten4
+    // secondary: colors.red.lighten4,
     //pink
     // primary: colors.pink.lighten3,
-    // secondary: colors.pink.lighten5
+    // secondary: colors.pink.lighten5,
     // cyan
     primary: colors.cyan.lighten1,
     secondary: colors.cyan.lighten4,
     // black
     // primary: colors.grey.darken4,
-    // secondary: colors.grey.lighten2
-  }
+    // secondary: colors.grey.lighten2,
+
+    // others
+    cancel: colors.red.darken1,
+    info: colors.blue.base,
+    success: colors.green.darken1,
+    edit: colors.orange.base,
+  },
 })
 
 sync(store, router)

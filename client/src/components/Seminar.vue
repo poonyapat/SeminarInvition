@@ -4,22 +4,27 @@
         <h3>{{seminar.title}}</h3>
         </v-card-title>
         <v-card-actions class="secondary lighten-1">
-            <template v-if="registered">
-                <v-btn flat color="green">
-                    <v-icon>done</v-icon>
-                    Confirm
-                </v-btn>
-                <v-btn flat color="red">
-                    <v-icon>close</v-icon>
-                    Cancel
-                </v-btn>
-                <v-spacer></v-spacer>
-            </template>
-            <v-btn flat color="orange">
-                <v-icon>streetview</v-icon>
-                View
+            <v-btn flat color="green" v-if="registered">
+                <v-icon>done</v-icon>
+                Confirm
             </v-btn>
-            <v-spacer v-if="!registered"></v-spacer>
+            <v-btn flat color="cancel" v-if="registered">
+                <v-icon>close</v-icon>
+                Cancel
+            </v-btn>
+            <v-btn flat color="edit" v-if="editable">
+                <v-icon>edit</v-icon>
+                Edit
+            </v-btn>
+            <v-btn flat color="info" v-if="editable">
+                <v-icon>people</v-icon>
+                Attendees
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn flat color="info">
+                <v-icon>streetview</v-icon>
+                Info
+            </v-btn>
             <v-btn icon @click="show = !show">
                 <v-icon>{{show? 'keyboard_arrow_up': 'keyboard_arrow_down'}}</v-icon>
             </v-btn>
@@ -40,6 +45,10 @@ export default {
             required: true
         },
         registered: {
+            type: Boolean,
+            default: false
+        },
+        editable: {
             type: Boolean,
             default: false
         }
