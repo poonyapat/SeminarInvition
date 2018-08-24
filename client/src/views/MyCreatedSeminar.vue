@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 sm8 offset-sm2>
+        <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
             <v-toolbar fla dense class="primary" dark>
                 <v-toolbar-title> My Created Seminars </v-toolbar-title>
             </v-toolbar>
@@ -12,7 +12,7 @@
                 </v-card-title>
             </v-card>
         </v-flex>
-        <v-btn fixed right fab bottom large icon class="primary"><v-icon>add</v-icon></v-btn>
+        <v-btn fixed right fab bottom large icon class="primary" :to="{name: 'seminarCreation'}"><v-icon>add</v-icon></v-btn>
     </v-layout>
 </template>
 

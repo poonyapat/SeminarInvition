@@ -1,6 +1,6 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs12 sm8 offset-sm2>
+        <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
             <v-text-field
                 outline
                 label="Search"

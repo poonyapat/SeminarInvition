@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import About from './views/About.vue'
 import MyRegistered from './views/MyRegistered.vue'
 import MyCreatedSeminar from './views/MyCreatedSeminar'
+import SeminarCreation from './views/SeminarCreation'
 import Browse from './views/Browse'
 
 Vue.use(Router)
@@ -21,19 +22,24 @@ export default new Router({
       component: About
     },
     {
-      path: '/registered_seminar',
+      path: '/seminar/registered',
       name: 'myRegistered',
       component: MyRegistered
     },
     {
-      path: '/browse',
+      path: '/seminar',
       name: 'browse',
       component: Browse
     },
     {
-      path: '/created_seminar',
+      path: '/seminar/created',
       name: 'myCreatedSeminar',
       component: MyCreatedSeminar
+    },
+    {
+      path: '/seminar/creation',
+      name: 'seminarCreation',
+      component: SeminarCreation
     }
   ]
 })
