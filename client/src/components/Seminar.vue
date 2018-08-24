@@ -4,19 +4,22 @@
         <h3>{{seminar.title}}</h3>
         </v-card-title>
         <v-card-actions class="secondary lighten-1">
-            <v-btn flat color="green">
-                <v-icon>done</v-icon>
-                Confirm
-            </v-btn>
-            <v-btn flat color="red">
-                <v-icon>close</v-icon>
-                Cancel
-            </v-btn>
-            <v-spacer></v-spacer>
+            <template v-if="registered">
+                <v-btn flat color="green">
+                    <v-icon>done</v-icon>
+                    Confirm
+                </v-btn>
+                <v-btn flat color="red">
+                    <v-icon>close</v-icon>
+                    Cancel
+                </v-btn>
+                <v-spacer></v-spacer>
+            </template>
             <v-btn flat color="orange">
                 <v-icon>streetview</v-icon>
                 View
             </v-btn>
+            <v-spacer v-if="!registered"></v-spacer>
             <v-btn icon @click="show = !show">
                 <v-icon>{{show? 'keyboard_arrow_up': 'keyboard_arrow_down'}}</v-icon>
             </v-btn>
@@ -36,6 +39,10 @@ export default {
             type: Object,
             required: true
         },
+        registered: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {

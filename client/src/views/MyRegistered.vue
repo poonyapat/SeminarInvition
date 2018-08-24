@@ -4,10 +4,11 @@
             <v-toolbar fla dense class="primary" dark>
                 <v-toolbar-title> My Registered Seminars </v-toolbar-title>
             </v-toolbar>
-            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" />
+            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" registered/>
             <v-card v-if="seminars.length === 0">
                 <v-card-title>
-                    <h1>Empty</h1>
+                    <h1 v-if="loaded">0 Registered Seminar Found...</h1>
+                    <h1 v-else>Loading...</h1>
                 </v-card-title>
             </v-card>
         </v-flex>
@@ -21,15 +22,16 @@ import SeminarService from '@/services/seminarService'
 export default {
     data() {
         return {
-            seminars: []
+            seminars: [],
+            loaded: false
         }
     },
     components: {
         Seminar
     },
     async mounted(){
-        console.log(this.$store.state.user.username)
         this.seminars = (await SeminarService.findAllByAttendeeUsername({user: this.$store.state.user.username})).data
+        this.loaded = true
     }
 }
 </script>

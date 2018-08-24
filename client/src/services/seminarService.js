@@ -1,8 +1,12 @@
 import Api from '@/services/api'
 
 export default {
-    findAll(){
-        return Api().get('seminar')
+    findAll(data){
+        return Api().get('seminar', {
+            params: {
+                search: data
+            }
+        })
     },
     create(data){
         return Api().post('seminar/create', data)

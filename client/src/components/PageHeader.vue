@@ -1,11 +1,16 @@
 <template>
     <v-toolbar class="primary" dark>
-        <v-toolbar-title>
+        <v-toolbar-title class="pr-4">
             <router-link class="title" tag="span" :to="{name: 'home'}">
                 <v-icon>home</v-icon>
                 SeIMS
             </router-link>
         </v-toolbar-title>
+        <v-toolbar-items>
+            <v-btn flat :to="{name: 'browse'}">
+                Browse
+            </v-btn>
+        </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items>
             <login v-if="!$store.state.isUserLoggedIn"></login>

@@ -22,7 +22,7 @@ Vue.use(Vuetify, {
     // secondary: colors.pink.lighten5
     // cyan
     primary: colors.cyan.lighten1,
-    secondary: colors.cyan.lighten4
+    secondary: colors.cyan.lighten4,
     // black
     // primary: colors.grey.darken4,
     // secondary: colors.grey.lighten2
