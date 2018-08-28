@@ -16,7 +16,7 @@ module.exports = {
             }
             else {
                 const seminars = await Seminar.findAll({
-                    limit: 10
+                    // limit: 10
                 })
                 res.send(seminars)
             }

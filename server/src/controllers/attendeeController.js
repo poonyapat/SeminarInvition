@@ -30,7 +30,15 @@ module.exports = {
     },
     async register(req, res){
         try {
-            const attendee = (await Attendee.create(req.body)).data
+            const attendee = await Attendee.create(req.body)
+            const seminar = await Seminar.findOne({
+                where: {
+                    id: attendee.seminar
+                }
+            })
+            seminar.update({
+                currentRegistered: seminar.currentRegistered+1
+            })
             res.send(attendee)
         }catch(error){
             res.status(500).send({
@@ -38,6 +46,34 @@ module.exports = {
                 error: error
             })
         }
-
+    },
+    async cancelRegistration(req, res){
+        try {
+            const {user, seminar} = req.body
+            const attendee = await Attendee.findOne({
+                where: {
+                    user: user,
+                    seminar: seminar
+                }
+            })
+            if (!attendee){
+                res.status(403).send({
+                    error: 'Attendee is not found'
+                })
+            }
+            const registeredSeminar = await Seminar.findOne({
+                where: {
+                    id: seminar
+                }
+            })
+            registeredSeminar.update({
+                currentRegistered: registeredSeminar.currentRegistered-1
+            })
+            attendee.destroy()
+        } catch(error){
+            res.status(500).send({
+                error: error
+            })
+        }
     }
 }

@@ -21,6 +21,9 @@ module.exports = (app) => {
     app.post('/seminar/register',
     AttendeeController.register)
 
+    app.post('/cancel_registration',
+    AttendeeController.cancelRegistration)
+
     app.post('/login',
     UserController.authenticate)
 

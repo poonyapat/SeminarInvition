@@ -1,0 +1,22 @@
+.header-1 {
+    color: #ff8e8e !important;
+}
+
+.layout-main-1 {
+    /* background-color: #333333 !important */
+    background-color: #FFFFFF !important;
+}
+
+.layout-sub-1 {
+    /* background-color: rgb(85, 85, 85) !important */
+    background-color: rgb(255, 239, 239) !important
+}
+
+.content-1 {
+    /* color: rgb(255, 209, 209) !important */
+    color: #333333 !important
+}
+
+.inherit {
+    background-color: inherit !important
+}

@@ -27,7 +27,7 @@ export default new Router({
       component: MyRegistered
     },
     {
-      path: '/seminar',
+      path: '/seminar/browse',
       name: 'browse',
       component: Browse
     },

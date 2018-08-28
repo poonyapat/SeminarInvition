@@ -4,7 +4,7 @@
             <v-toolbar fla dense class="primary" dark>
                 <v-toolbar-title> My Registered Seminars </v-toolbar-title>
             </v-toolbar>
-            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" registered/>
+            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" registered @cancel-registration="remove"/>
             <v-card v-if="seminars.length === 0">
                 <v-card-title>
                     <h1 v-if="loaded">0 Registered Seminar Found...</h1>
@@ -28,6 +28,13 @@ export default {
     },
     components: {
         Seminar
+    },
+    methods: {
+        remove(seminar) {
+            const index = this.seminars.indexOf(seminar);
+            if (index > -1)
+                this.seminars.splice(index,1)
+        }
     },
     async mounted(){
         if (!this.$store.state.token){

@@ -8,7 +8,12 @@
                 <v-icon>done</v-icon>
                 Confirm
             </v-btn>
-            <v-btn flat color="cancel" v-if="registered">
+            <v-btn 
+                flat 
+                color="cancel" 
+                v-if="registered" 
+                @click="cancelRegistration(seminar.id)"
+            >
                 <v-icon>close</v-icon>
                 Cancel
             </v-btn>
@@ -21,10 +26,12 @@
                 Attendees
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat color="info">
-                <v-icon>streetview</v-icon>
-                Info
-            </v-btn>
+            <seminar-information-dialog :seminar="seminar">
+                <v-btn flat color="info">
+                    <v-icon>streetview</v-icon>
+                    Info
+                </v-btn>
+            </seminar-information-dialog>
             <v-btn icon @click="show = !show">
                 <v-icon>{{show? 'keyboard_arrow_up': 'keyboard_arrow_down'}}</v-icon>
             </v-btn>
@@ -38,6 +45,9 @@
 </template>
 
 <script>
+import SeminarInformationDialog from '@/components/SeminarInformationDialog'
+import attendeeService from '@/services/attendeeService'
+
 export default {
     props: {
         seminar: {
@@ -58,6 +68,25 @@ export default {
             show: false
         }
     },
+    methods: {
+        async cancelRegistration(seminar) {
+            if (!this.registered){
+                return
+            }
+            this.removeFromDatabase(seminar)
+            this.$emit('cancel-registration', this.seminar)
+        },
+
+        async removeFromDatabase(seminar){
+            await attendeeService.cancelRegistration({
+                user: this.$store.state.user.username,
+                seminar: seminar
+            })
+        }
+    },
+    components: {
+        SeminarInformationDialog
+    }
 }
 </script>
 
