@@ -28,6 +28,20 @@ module.exports = {
         }
 
     },
+    async findAllByUser(req, res){
+        try {
+            const attendees = await Attendee.findAll({
+                where: {
+                    user: req.query.user
+                }
+            })
+            res.send(attendees)
+        } catch(error){
+            res.status(500).send({
+                error: error
+            })
+        }
+    },
     async register(req, res){
         try {
             const attendee = await Attendee.create(req.body)
@@ -70,6 +84,31 @@ module.exports = {
                 currentRegistered: registeredSeminar.currentRegistered-1
             })
             attendee.destroy()
+        } catch(error){
+            res.status(500).send({
+                error: error
+            })
+        }
+    },
+    async updateStatus(req, res){
+        try {
+            const attendee = await Attendee.findOne({
+                where: {
+                    user: req.body.attendee.user,
+                    seminar: req.body.attendee.seminar
+                }
+            })
+            if (!attendee){
+                res.status(403).send({
+                    error: 'Attendee is not found'
+                })
+            }
+            attendee.update({
+                status: req.body.newStatus
+            })
+            res.send({
+                nessage: "Update Complete"
+            })
         } catch(error){
             res.status(500).send({
                 error: error

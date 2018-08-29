@@ -4,7 +4,32 @@
             <v-toolbar fla dense class="primary" dark>
                 <v-toolbar-title> My Registered Seminars </v-toolbar-title>
             </v-toolbar>
-            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" registered @cancel-registration="remove"/>
+            <seminar 
+                v-for="attendee in seminars" 
+                :key="attendee.seminar.id"
+                :seminar="attendee.seminar"
+                :status="attendee.status"
+                @confirm="confirm(attendee)"
+                @cancel="cancel(attendee)"
+            >
+                <v-btn 
+                    color="success" 
+                    flat 
+                    :disabled="attendee.status === 'Confirmed'" 
+                    @click="confirm(attendee)"
+                >
+                    <v-icon>done</v-icon>
+                    Confirm
+                </v-btn>
+                <v-btn 
+                    flat 
+                    color="cancel"
+                    @click="cancel(attendee)"
+                >
+                    <v-icon>close</v-icon>
+                    Cancel
+                </v-btn>
+            </seminar>
             <v-card v-if="seminars.length === 0">
                 <v-card-title>
                     <h1 v-if="loaded">0 Registered Seminar Found...</h1>
@@ -18,6 +43,7 @@
 <script>
 import Seminar from '@/components/Seminar'
 import SeminarService from '@/services/seminarService'
+import AttendeeService from '@/services/attendeeService'
 
 export default {
     data() {
@@ -30,17 +56,39 @@ export default {
         Seminar
     },
     methods: {
-        remove(seminar) {
-            const index = this.seminars.indexOf(seminar);
-            if (index > -1)
+        cancel(attendee) {
+            //remove from db
+            AttendeeService.cancelRegistration({
+                user: this.$store.state.user.username,
+                seminar: attendee.seminar.id
+            })
+            // remove from ui
+            const index = this.seminars.indexOf(attendee)
+            if (index > -1){
                 this.seminars.splice(index,1)
+            }
+        },
+        confirm(attendee){
+            // change status in db
+            AttendeeService.updateStatus({
+                user: this.$store.state.user.username,
+                seminar: attendee.seminar.id
+            }, "Confirmed")
+            // change status for ui
+            attendee.status = "Confirmed"
         }
     },
     async mounted(){
         if (!this.$store.state.token){
             this.$router.push({name: 'home'})
         }
-        this.seminars = (await SeminarService.findAllByAttendeeUsername(this.$store.state.user.username)).data
+        let attendees = (await AttendeeService.findAllByUser(this.$store.state.user.username)).data
+        for (let i = 0; i < attendees.length; i++){
+            this.seminars.push({
+                status: attendees[i].status,
+                seminar: (await SeminarService.findOneById(attendees[i].seminar)).data
+            })
+        }
         this.loaded = true
     }
 }

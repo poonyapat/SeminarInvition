@@ -18,6 +18,13 @@ export default {
             }
         })
     },
+    findOneById(id){
+        return Api().get('seminar/id', {
+            params: {
+                id: id
+            }
+        })
+    },
     findAllByAuthor(author){
         return Api().get('seminar/author', {
             params: {

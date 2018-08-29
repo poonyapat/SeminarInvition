@@ -21,7 +21,7 @@ module.exports = (app) => {
     app.post('/seminar/register',
     AttendeeController.register)
 
-    app.post('/cancel_registration',
+    app.post('/attendee/cancel',
     AttendeeController.cancelRegistration)
 
     app.post('/login',
@@ -30,4 +30,13 @@ module.exports = (app) => {
     app.post('/register',
     UserPolicy.register,
     UserController.register)
+
+    app.get('/user_attention',
+    AttendeeController.findAllByUser)
+
+    app.get('/seminar/id',
+    SeminarController.findOneById)
+
+    app.post('/attendee/update_status',
+    AttendeeController.updateStatus)
 }

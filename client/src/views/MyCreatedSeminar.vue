@@ -4,7 +4,16 @@
             <v-toolbar fla dense class="primary" dark>
                 <v-toolbar-title> My Created Seminars </v-toolbar-title>
             </v-toolbar>
-            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" editable/>
+            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar">
+                <v-btn flat color="edit" >
+                    <v-icon>edit</v-icon>
+                    Edit
+                </v-btn>
+                <v-btn flat color="info">
+                    <v-icon>people</v-icon>
+                    Attendees
+                </v-btn>
+            </seminar>
             <v-card v-if="seminars.length === 0">
                 <v-card-title>
                     <h1 v-if="loaded">0 Created Seminar Found...</h1>

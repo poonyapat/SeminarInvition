@@ -26,8 +26,26 @@ module.exports = {
             })
         }
     },
+    async findOneById(req, res){
+        try {
+            const seminar = await Seminar.findOne({
+                where: {
+                    id: req.query.id
+                }
+            })
+            if (!seminar){
+                res.status(403).send({
+                    error: 'Seminar is not found'
+                })
+            }
+            res.send(seminar)
+        } catch(error){
+            res.status(500).send({
+                error: 'An error has occured trying to fetch the seminars'
+            })
+        }
+    },
     async findAllByAuthor(req, res){
-        console.log(req.query)
         try {
             const seminars = await Seminar.findAll({
                 where: {
