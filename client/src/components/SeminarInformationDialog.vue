@@ -58,7 +58,7 @@
                                 </v-list-tile-title>
                                 
                                 <v-list-tile-sub-title>
-                                    <v-btn v-if="status === ''" class="primary">Register</v-btn>
+                                    <v-btn v-if="status === '' && seminar.author !== $store.state.user.username" class="primary">Register</v-btn>
                                     <v-btn v-if="status === 'Attended'" class="success" @click="$emit('confirm')">Confirm Registration</v-btn>
                                     <v-btn v-if="status !== ''" class="cancel" dark @click="$emit('cancel')">Cancel Registration</v-btn>
                                 </v-list-tile-sub-title>
