@@ -2,7 +2,7 @@ const {Attendee, Seminar} = require('../models')
 
 
 module.exports = {
-    async findSeminarByUser(req, res){
+    async findSeminarByUser(req, res) {
         try {
             console.log(req.query)
             const attendees = await Attendee.findAll({
@@ -12,7 +12,7 @@ module.exports = {
             })
             // res.send(attendees)
             let seminars = []
-            for (let i = 0; i < attendees.length; i++){
+            for (let i = 0; i < attendees.length; i++) {
                 seminars.push(await Seminar.findOne({
                     where: {
                         id: attendees[i].seminar
@@ -20,7 +20,7 @@ module.exports = {
                 }))
             }
             res.send(seminars)
-        } catch(err){
+        } catch (err) {
             res.status(500).send({
                 // error: 'An error has occured trying to fetch the seminars'
                 error: err
@@ -28,7 +28,7 @@ module.exports = {
         }
 
     },
-    async findAllByUser(req, res){
+    async findAllByUser(req, res) {
         try {
             const attendees = await Attendee.findAll({
                 where: {
@@ -36,13 +36,13 @@ module.exports = {
                 }
             })
             res.send(attendees)
-        } catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: error
             })
         }
     },
-    async register(req, res){
+    async register(req, res) {
         try {
             const attendee = await Attendee.create(req.body)
             const seminar = await Seminar.findOne({
@@ -51,17 +51,17 @@ module.exports = {
                 }
             })
             seminar.update({
-                currentRegistered: seminar.currentRegistered+1
+                currentRegistered: seminar.currentRegistered + 1
             })
             res.send(attendee)
-        }catch(error){
+        } catch (error) {
             res.status(500).send({
                 // error: 'error has occured trying to register'
                 error: error
             })
         }
     },
-    async cancelRegistration(req, res){
+    async cancelRegistration(req, res) {
         try {
             const {user, seminar} = req.body
             const attendee = await Attendee.findOne({
@@ -70,7 +70,7 @@ module.exports = {
                     seminar: seminar
                 }
             })
-            if (!attendee){
+            if (!attendee) {
                 res.status(403).send({
                     error: 'Attendee is not found'
                 })
@@ -81,24 +81,24 @@ module.exports = {
                 }
             })
             registeredSeminar.update({
-                currentRegistered: registeredSeminar.currentRegistered-1
+                currentRegistered: registeredSeminar.currentRegistered - 1
             })
             attendee.destroy()
-        } catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: error
             })
         }
     },
-    async updateStatus(req, res){
+    async updateStatus(req, res) {
         try {
             const attendee = await Attendee.findOne({
                 where: {
-                    user: req.body.attendee.user,
-                    seminar: req.body.attendee.seminar
+                    user: req.body.user,
+                    seminar: req.body.seminar
                 }
             })
-            if (!attendee){
+            if (!attendee) {
                 res.status(403).send({
                     error: 'Attendee is not found'
                 })
@@ -109,7 +109,7 @@ module.exports = {
             res.send({
                 nessage: "Update Complete"
             })
-        } catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: error
             })

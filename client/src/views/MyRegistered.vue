@@ -5,18 +5,18 @@
                 <v-toolbar-title> My Registered Seminars </v-toolbar-title>
             </v-toolbar>
             <seminar 
-                v-for="attendee in seminars" 
-                :key="attendee.seminar.id"
-                :seminar="attendee.seminar"
-                :status="attendee.status"
-                @confirm="confirm(attendee)"
-                @cancel="cancel(attendee)"
+                v-for="(seminar,index) in registeredSeminars" 
+                :key="seminar.id"
+                :seminar="seminar"
+                :status="attendees[index].status"
+                @confirm="confirm(seminar.id)"
+                @cancel="cancel(seminar.id)"
             >
                 <v-btn 
                     color="success" 
                     flat 
-                    :disabled="attendee.status === 'Confirmed'" 
-                    @click="confirm(attendee)"
+                    :disabled="attendees[index].status === 'Confirmed'" 
+                    @click="confirm(seminar.id)"
                 >
                     <v-icon>done</v-icon>
                     Confirm
@@ -24,13 +24,13 @@
                 <v-btn 
                     flat 
                     color="cancel"
-                    @click="cancel(attendee)"
+                    @click="cancel(seminar.id)"
                 >
                     <v-icon>close</v-icon>
                     Cancel
                 </v-btn>
             </seminar>
-            <v-card v-if="seminars.length === 0">
+            <v-card v-if="registeredSeminars.length === 0">
                 <v-card-title>
                     <h1 v-if="loaded">0 Registered Seminar Found...</h1>
                     <v-progress-linear v-else :indeterminate="true" color="primary"></v-progress-linear>
@@ -45,52 +45,70 @@ import Seminar from '@/components/Seminar'
 import SeminarService from '@/services/seminarService'
 import AttendeeService from '@/services/attendeeService'
 
+import { mapState, mapActions } from 'vuex'
+// fix registeredSeminar in template...!!!
 export default {
     data() {
         return {
-            seminars: [],
+            registeredSeminars: [],
             loaded: false
         }
+    },
+    computed: {
+        ...mapState([
+            'attendees','token', 'user'
+        ])
     },
     components: {
         Seminar
     },
     methods: {
-        cancel(attendee) {
+        cancel(seminarId) {
             //remove from db
-            AttendeeService.cancelRegistration({
-                user: this.$store.state.user.username,
-                seminar: attendee.seminar.id
-            })
-            // remove from ui
-            const index = this.seminars.indexOf(attendee)
-            if (index > -1){
-                this.seminars.splice(index,1)
+            AttendeeService.cancelRegistration(this.user.username,seminarId)
+            for (let i = 0; i < this.registeredSeminars.length; i++){
+                if (this.registeredSeminars[i].id === seminarId){
+                    this.registeredSeminars.splice(i,1)
+                }
             }
         },
-        confirm(attendee){
+        confirm(seminarId){
             // change status in db
-            AttendeeService.updateStatus({
-                user: this.$store.state.user.username,
-                seminar: attendee.seminar.id
-            }, "Confirmed")
-            // change status for ui
-            attendee.status = "Confirmed"
-        }
+            const confirm = "Confirmed"
+            AttendeeService.updateStatus(this.user.username, seminarId, confirm)
+            for (let i = 0; i < this.attendees.length; i++){
+                if (this.attendees[i].seminar === seminarId){
+                    this.updateAttendeeStatus({
+                        index: i,
+                        status: confirm
+                    })
+                }
+            }
+        },
+        ...mapActions([
+            'setAttendees', 'updateAttendeeStatus'
+        ])
     },
     async mounted(){
-        if (!this.$store.state.token){
+        if (!this.token){
             this.$router.push({name: 'home'})
         }
-        let attendees = (await AttendeeService.findAllByUser(this.$store.state.user.username)).data
-        for (let i = 0; i < attendees.length; i++){
-            this.seminars.push({
-                status: attendees[i].status,
-                seminar: (await SeminarService.findOneById(attendees[i].seminar)).data
-            })
+        this.setAttendees((await AttendeeService.findAllByUser(this.user.username)).data)
+    },
+    watch: {
+        attendees: {
+            imidiate: true,
+            async handler(attendees){
+                this.loaded = false
+                this.registeredSeminars = []
+                for (let i = 0; i < attendees.length; i++){
+                    this.registeredSeminars.push((await SeminarService.findOneById(attendees[i].seminar)).data)
+                }
+                this.loaded = true
+            }
         }
-        this.loaded = true
     }
+
 }
 </script>
 

@@ -10,36 +10,36 @@ import Browse from './views/Browse'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: About
-    },
-    {
-      path: '/seminar/registered',
-      name: 'myRegistered',
-      component: MyRegistered
-    },
-    {
-      path: '/seminar/browse',
-      name: 'browse',
-      component: Browse
-    },
-    {
-      path: '/seminar/created',
-      name: 'myCreatedSeminar',
-      component: MyCreatedSeminar
-    },
-    {
-      path: '/seminar/creation',
-      name: 'seminarCreation',
-      component: SeminarCreation
-    }
-  ]
+    routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: Home
+        },
+        {
+            path: '/about',
+            name: 'about',
+            component: About
+        },
+        {
+            path: '/seminar/registered',
+            name: 'myRegistered',
+            component: MyRegistered
+        },
+        {
+            path: '/seminar/browse',
+            name: 'browse',
+            component: Browse
+        },
+        {
+            path: '/seminar/created',
+            name: 'myCreatedSeminar',
+            component: MyCreatedSeminar
+        },
+        {
+            path: '/seminar/creation',
+            name: 'seminarCreation',
+            component: SeminarCreation
+        }
+    ]
 })

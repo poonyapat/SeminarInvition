@@ -24,3 +24,11 @@
 .content-2 {
     color: #999999 !important
 }
+
+.v-dialog__activator {
+    height: 100% !important
+}
+
+.v-dialog__container {
+    display: block !important
+}

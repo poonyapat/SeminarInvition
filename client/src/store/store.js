@@ -12,25 +12,38 @@ export default new Vuex.Store({
     state: {
         token: null,
         user: null,
-        isUserLoggedIn: false
+        isUserLoggedIn: false,
+        attendees: []
     },
     mutations: {
-        setToken(state, token){
+        setToken(state, token) {
             state.token = token
             state.isUserLoggedIn = !!token
         },
-        setUser(state, user){
+        setUser(state, user) {
             state.user = user
+        },
+        setAttendees(state, attendees) {
+            state.attendees = attendees
+        },
+        updateAttendeeStatus(state, data) {
+            state.attendees[data.index].status = data.status
         }
     },
     actions: {
-        persistedLogin({commit}, data){
+        persistedLogin({commit}, data) {
             commit('setToken', data.token)
             commit('setUser', data.user)
         },
-        logout({commit}){
+        logout({commit}) {
             commit('setToken', null)
-            commit('setUser',null)
+            commit('setUser', null)
+        },
+        setAttendees({commit}, attendees) {
+            commit('setAttendees', attendees)
+        },
+        updateAttendeeStatus({commit}, data) {
+            commit('updateAttendeeStatus', data)
         }
     }
 })

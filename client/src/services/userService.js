@@ -1,11 +1,11 @@
 import Api from '@/services/api'
 
 export default {
-    authenticate(credential){
+    authenticate(credential) {
         return Api().post('login', credential)
     },
 
-    register(userData){
+    register(userData) {
         return Api().post('register', userData)
     }
 }

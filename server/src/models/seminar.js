@@ -1,5 +1,3 @@
-
-
 module.exports = (sequelize, DataTypes) => {
     const Seminar = sequelize.define('Seminar', {
         title: {

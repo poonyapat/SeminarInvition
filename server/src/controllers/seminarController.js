@@ -1,9 +1,9 @@
 const {Seminar} = require('../models')
 
 module.exports = {
-    async findAll(req, res){
+    async findAll(req, res) {
         try {
-            if (req.query.search){
+            if (req.query.search) {
                 const seminars = await Seminar.findAll({
                     limit: 10,
                     where: {
@@ -20,32 +20,32 @@ module.exports = {
                 })
                 res.send(seminars)
             }
-        }catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: 'An error has occured trying to fetch the seminars'
             })
         }
     },
-    async findOneById(req, res){
+    async findOneById(req, res) {
         try {
             const seminar = await Seminar.findOne({
                 where: {
                     id: req.query.id
                 }
             })
-            if (!seminar){
+            if (!seminar) {
                 res.status(403).send({
                     error: 'Seminar is not found'
                 })
             }
             res.send(seminar)
-        } catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: 'An error has occured trying to fetch the seminars'
             })
         }
     },
-    async findAllByAuthor(req, res){
+    async findAllByAuthor(req, res) {
         try {
             const seminars = await Seminar.findAll({
                 where: {
@@ -53,13 +53,13 @@ module.exports = {
                 }
             })
             res.send(seminars)
-        } catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: 'An error has occured trying to fetch the seminars'
             })
         }
     },
-    async create(req, res){
+    async create(req, res) {
         try {
             const seminar = await Seminar.create(req.body.info)
             seminar.update({

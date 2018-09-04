@@ -1,11 +1,14 @@
 import Api from '@/services/api'
 
 export default {
-    cancelRegistration(attendee){
-        return Api().post('attendee/cancel', attendee)
+    cancelRegistration(username, seminarId) {
+        return Api().post('attendee/cancel', {
+            user: username,
+            seminar: seminarId
+        })
     },
 
-    findAllByUser(user){
+    findAllByUser(user) {
         return Api().get('user_attention', {
             params: {
                 user: user
@@ -13,9 +16,10 @@ export default {
         })
     },
 
-    updateStatus(attendee, newStatus){
+    updateStatus(username, seminarId, newStatus) {
         return Api().post('attendee/update_status', {
-            attendee: attendee,
+            user: username,
+            seminar: seminarId,
             newStatus: newStatus
         })
     }

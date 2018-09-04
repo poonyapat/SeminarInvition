@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     })
     const User = sequelize.import('./user')
-    const Seminar = sequelize.import ('./seminar')
+    const Seminar = sequelize.import('./seminar')
     User.belongsToMany(Seminar, {
         through: Attendee,
         foreignKey: 'user'

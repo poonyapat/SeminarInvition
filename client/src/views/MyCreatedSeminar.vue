@@ -28,6 +28,7 @@
 <script>
 import Seminar from '@/components/Seminar'
 import SeminarService from '@/services/seminarService'
+import { mapState } from 'vuex';
 export default {
     data() {
         return {
@@ -38,13 +39,25 @@ export default {
     components: {
         Seminar
     },
+    computed: {
+        ...mapState([
+            'user', 'attendees'
+        ])
+    },
     async mounted(){
-        const state = this.$store.state
-        if (!state.user.role || ( state.user.role !== 'Internal User' && state.user.role !== 'Admin')){
+        this.loaded = false
+        if (!this.user.role || (this.user.role !== 'Internal User' && this.user.role !== 'Admin')){
             this.$router.push({name: 'home'})
         }
-        this.seminars = (await SeminarService.findAllByAuthor( this.$store.state.user.username)).data
+        this.seminars = (await SeminarService.findAllByAuthor(this.user.username)).data
         this.loaded = true
+    },
+    wacth: {
+        attendees: async ()=> {
+            this.loaded = false
+            this.seminars = (await SeminarService.findAllByAuthor(this.user.username)).data
+            this.loaded = true
+        }
     }
 }
 </script>

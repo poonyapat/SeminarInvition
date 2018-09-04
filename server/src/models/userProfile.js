@@ -1,5 +1,3 @@
-
-
 module.exports = (sequelize, DataTypes) => {
     const UserProfile = sequelize.define('UserProfile', {
         username: {

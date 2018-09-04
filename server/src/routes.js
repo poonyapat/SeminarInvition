@@ -3,40 +3,40 @@ const UserController = require('./controllers/userController')
 const UserPolicy = require('./policies/userPolicy')
 const AttendeeController = require('./controllers/attendeeController')
 module.exports = (app) => {
-    app.post('/seminar/create', 
-    SeminarController.create)
+    app.post('/seminar/create',
+        SeminarController.create)
 
     app.get('/registered_seminars',
-    AttendeeController.findSeminarByUser)
+        AttendeeController.findSeminarByUser)
 
     app.get('/seminar',
-    SeminarController.findAll)
-    
+        SeminarController.findAll)
+
     app.post('/seminar',
-    SeminarController.findAll)
+        SeminarController.findAll)
 
     app.get('/seminar/author',
-    SeminarController.findAllByAuthor)
+        SeminarController.findAllByAuthor)
 
     app.post('/seminar/register',
-    AttendeeController.register)
+        AttendeeController.register)
 
     app.post('/attendee/cancel',
-    AttendeeController.cancelRegistration)
+        AttendeeController.cancelRegistration)
 
     app.post('/login',
-    UserController.authenticate)
+        UserController.authenticate)
 
     app.post('/register',
-    UserPolicy.register,
-    UserController.register)
+        UserPolicy.register,
+        UserController.register)
 
     app.get('/user_attention',
-    AttendeeController.findAllByUser)
+        AttendeeController.findAllByUser)
 
     app.get('/seminar/id',
-    SeminarController.findOneById)
+        SeminarController.findOneById)
 
     app.post('/attendee/update_status',
-    AttendeeController.updateStatus)
+        AttendeeController.updateStatus)
 }

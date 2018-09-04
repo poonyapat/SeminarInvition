@@ -1,14 +1,14 @@
 const bcrypt = require('bcryptjs')
 
-async function hashPassword(user, options){
+async function hashPassword(user, options) {
     const SALT_FACTOR = 8
 
-    if (!user.changed('password')){
+    if (!user.changed('password')) {
         return
     }
 
-    bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
-        bcrypt.hash(user.password, salt, function(err, hash){
+    bcrypt.genSalt(SALT_FACTOR, function (err, salt) {
+        bcrypt.hash(user.password, salt, function (err, hash) {
             user.setDataValue('password', hash)
         })
     })
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM('Admin', 'Internal User', 'External User'),
             allowNull: false
         }
-    },{
+    }, {
         hooks: {
             beforeCreate: hashPassword,
             beforeUpdate: hashPassword,
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     })
 
-    User.prototype.comparePassword = function(password){
+    User.prototype.comparePassword = function (password) {
         return bcrypt.compare(password, this.password)
     }
 
