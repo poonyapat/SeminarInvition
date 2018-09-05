@@ -11,10 +11,21 @@
 
 <script>
     import PageHeader from '@/components/PageHeader'
-
+    import {mapActions} from 'vuex'
+    import AttendeeService from '@/services/attendeeService'
     export default {
         components: {
             PageHeader
+        },
+        methods: {
+            ...mapActions([
+                'setAttendees'
+            ])
+        },
+        async beforeCreate(){
+            console.log(this.user)
+            this.setAttendees((await AttendeeService.findAllByUser(this.$store.state.user.username)).data)
+            console.log(this.$store.state.attendees)
         }
     }
 </script>

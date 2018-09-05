@@ -28,6 +28,9 @@ export default new Vuex.Store({
         },
         updateAttendeeStatus(state, data) {
             state.attendees[data.index].status = data.status
+        },
+        removeAttendeeByIndex(state, index){
+            state.attendees.splice(index,1)
         }
     },
     actions: {
@@ -44,6 +47,9 @@ export default new Vuex.Store({
         },
         updateAttendeeStatus({commit}, data) {
             commit('updateAttendeeStatus', data)
+        },
+        cancelRegistration({commit}, index){
+            commit('removeAttendeeByIndex', index)
         }
     }
 })

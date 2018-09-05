@@ -46,12 +46,11 @@ import SeminarService from '@/services/seminarService'
 import AttendeeService from '@/services/attendeeService'
 
 import { mapState, mapActions } from 'vuex'
-// fix registeredSeminar in template...!!!
 export default {
     data() {
         return {
             registeredSeminars: [],
-            loaded: false
+            loaded: true
         }
     },
     computed: {
@@ -93,7 +92,6 @@ export default {
         if (!this.token){
             this.$router.push({name: 'home'})
         }
-        this.setAttendees((await AttendeeService.findAllByUser(this.user.username)).data)
     },
     watch: {
         attendees: {

@@ -6,13 +6,10 @@
         <v-card-actions class="secondary lighten-1">
             <slot/>
             <v-spacer></v-spacer>
-            <seminar-information-dialog :seminar="seminar" :status="status" @cancel="$emit('cancel')"
-                                        @confirm="$emit('confirm')">
-                <v-btn flat color="info">
-                    <v-icon>streetview</v-icon>
-                    Info
-                </v-btn>
-            </seminar-information-dialog>
+            <v-btn flat color="info" :to="{name: 'seminarInformation', params: {id: seminar.id}}">
+                <v-icon>streetview</v-icon>
+                Info
+            </v-btn>
             <v-btn icon @click="show = !show">
                 <v-icon>{{show? 'keyboard_arrow_up': 'keyboard_arrow_down'}}</v-icon>
             </v-btn>
@@ -26,7 +23,6 @@
 </template>
 
 <script>
-    import SeminarInformationDialog from '@/components/SeminarInformationDialog'
 
     export default {
         props: {
@@ -44,9 +40,6 @@
                 show: false
             }
         },
-        components: {
-            SeminarInformationDialog
-        }
     }
 </script>
 

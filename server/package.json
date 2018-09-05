@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node ./node_modules/nodemon/bin/nodemon.js src/app.js --exec \"node\""
@@ -23,5 +22,6 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.3"
-  }
+  },
+  "description": ""
 }
