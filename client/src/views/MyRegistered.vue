@@ -68,6 +68,7 @@ export default {
             for (let i = 0; i < this.registeredSeminars.length; i++){
                 if (this.registeredSeminars[i].id === seminarId){
                     this.registeredSeminars.splice(i,1)
+                    this.cancelRegistration(i)
                 }
             }
         },
@@ -85,13 +86,19 @@ export default {
             }
         },
         ...mapActions([
-            'setAttendees', 'updateAttendeeStatus'
+            'setAttendees', 'updateAttendeeStatus', 'cancelRegistration'
         ])
     },
     async mounted(){
         if (!this.token){
             this.$router.push({name: 'home'})
         }
+        this.loaded = false
+        this.registeredSeminars = []
+        for (let i = 0; i < this.attendees.length; i++){
+            this.registeredSeminars.push((await SeminarService.findOneById(this.attendees[i].seminar)).data)
+        }
+        this.loaded = true
     },
     watch: {
         attendees: {

@@ -52,7 +52,7 @@
                         </v-list-tile-title>
 
                         <v-list-tile-sub-title>
-                            <v-btn v-if="!user || status === '' && seminar.author !== user.username"
+                            <v-btn v-if="!user || status === '' && seminar.author !== user.username" @click="register(seminar.id)"
                                     class="primary">
                                     Register
                             </v-btn>
@@ -94,11 +94,20 @@ export default {
         formatDate(date) {
             return date.replace('T', ' ').slice(0, 10)
         },
+        async register(seminarId){
+            await AttendeeService.register(this.user.username, seminarId, {})
+            this.setAttendees((await AttendeeService.findAllByUser(this.user.username)).data)
+            this.$router.push({name: 'myRegistered'})
+        },
         cancel(seminarId) {
             //remove from db
             AttendeeService.cancelRegistration(this.user.username,seminarId)
-
-            this.status = ''
+            for (let i  = 0; i < this.attendees.length; i++){
+                if (this.attendees[i].seminar === seminarId){
+                    this.cancelRegistration(i)
+                }
+            }
+            this.$router.push({name: 'myRegistered'})
         },
         confirm(seminarId){
             // change status in db
@@ -110,12 +119,12 @@ export default {
                         index: i,
                         status: confirm
                     })
-                    this.status = "Confirmed"
                 }
             }
+            this.$router.push({name: 'myRegistered'})
         },
         ...mapActions([
-            'updateAttendeeStatus', 'cancelRegistration'
+            'updateAttendeeStatus', 'cancelRegistration', 'setAttendees'
         ])
     },
     async mounted() {

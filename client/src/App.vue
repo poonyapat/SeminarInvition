@@ -11,7 +11,7 @@
 
 <script>
     import PageHeader from '@/components/PageHeader'
-    import {mapActions} from 'vuex'
+    import {mapActions, mapState} from 'vuex'
     import AttendeeService from '@/services/attendeeService'
     export default {
         components: {

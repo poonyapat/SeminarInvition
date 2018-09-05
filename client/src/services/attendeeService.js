@@ -22,5 +22,14 @@ export default {
             seminar: seminarId,
             newStatus: newStatus
         })
+    },
+
+    register(username, seminarId, data){
+        return Api().post('seminar/register', {
+            user: username,
+            seminar: seminarId,
+            registeredData: data,
+            status: 'Attended'
+        })
     }
 }
