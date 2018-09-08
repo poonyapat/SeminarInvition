@@ -1,4 +1,7 @@
-const {Attendee, Seminar} = require('../models')
+const {
+    Attendee,
+    Seminar
+} = require('../models')
 
 
 module.exports = {
@@ -63,7 +66,10 @@ module.exports = {
     },
     async cancelRegistration(req, res) {
         try {
-            const {user, seminar} = req.body
+            const {
+                user,
+                seminar
+            } = req.body
             const attendee = await Attendee.findOne({
                 where: {
                     user: user,

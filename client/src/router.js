@@ -6,6 +6,7 @@ import MyRegistered from './views/MyRegistered.vue'
 import MyCreatedSeminar from './views/MyCreatedSeminar'
 import SeminarCreation from './views/SeminarCreation'
 import SeminarInformation from './views/SeminarInformation'
+import SeminarRegister from './views/SeminarRegister'
 import Browse from './views/Browse'
 
 Vue.use(Router)
@@ -46,6 +47,11 @@ export default new Router({
             path: '/seminar/:id',
             name: 'seminarInformation',
             component: SeminarInformation
+        },
+        {
+            path: '/seminar/:id/register',
+            name: 'seminarRegister',
+            component: SeminarRegister
         }
     ]
 })

@@ -31,5 +31,12 @@ export default {
                 author: author
             }
         })
+    },
+    getRequiredData(id){
+        return Api().get('seminar/requiredData', {
+            params: {
+                id: id
+            }
+        })
     }
 }

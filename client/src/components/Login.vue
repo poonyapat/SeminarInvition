@@ -36,44 +36,46 @@
 </template>
 
 <script>
-    import UserService from '@/services/userService'
-    import {mapActions} from 'vuex'
+import UserService from "@/services/userService";
+import AttendeeService from "@/services/attendeeService";
+import { mapActions } from "vuex";
 
-    export default {
-        data() {
-            return {
-                username: null,
-                password: null,
-                errorMsg: null,
-                dialog: false
-            }
-        },
-        methods: {
-            activate() {
-                this.dialog = true;
-            },
-            async login() {
-                try {
-                    this.error = null
-                    const response = await UserService.authenticate({
-                        username: this.username,
-                        password: this.password
-                    })
-                    this.persistedLogin(response.data)
-                    this.username = null
-                    this.password = null
-                    this.dialog = false
-                } catch (error) {
-                    this.errorMsg = error.response.data.error
-                }
-            },
-            ...mapActions([
-                'persistedLogin'
-            ])
-        }
-    }
+export default {
+  data() {
+    return {
+      username: null,
+      password: null,
+      errorMsg: null,
+      dialog: false
+    };
+  },
+  methods: {
+    activate() {
+      this.dialog = true;
+    },
+    async login() {
+      try {
+        this.error = null;
+        const response = await UserService.authenticate({
+          username: this.username,
+          password: this.password
+        });
+        this.persistedLogin(response.data);
+        this.setAttendees(
+          (await AttendeeService.findAllByUser(response.data.user.username))
+            .data
+        );
+        this.username = null;
+        this.password = null;
+        this.dialog = false;
+      } catch (error) {
+        this.errorMsg = error.response.data.error;
+      }
+    },
+    ...mapActions(["persistedLogin", "setAttendees"])
+  }
+};
 </script>
 
 <style>
-
 </style>

@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
         requiredData: {
             type: DataTypes.JSON,
             allowNull: false
+        },
+        baseInformation: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     })
 

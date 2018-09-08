@@ -183,7 +183,7 @@
                 stepper: 1,
                 attrName: '',
                 attrType: '',
-                types: ['short-text', 'long-text', 'number'],
+                types: ['short-text', 'long-text', 'number', 'boolean'],
                 requiredBasicInfo: false
             }
         },

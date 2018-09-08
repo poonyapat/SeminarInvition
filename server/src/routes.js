@@ -39,4 +39,7 @@ module.exports = (app) => {
 
     app.post('/attendee/update_status',
         AttendeeController.updateStatus)
+
+    app.get('/seminar/requiredData',
+        SeminarController.getRequiredData)
 }

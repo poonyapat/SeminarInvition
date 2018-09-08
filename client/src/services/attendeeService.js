@@ -24,7 +24,7 @@ export default {
         })
     },
 
-    register(username, seminarId, data){
+    register(username, seminarId, data) {
         return Api().post('seminar/register', {
             user: username,
             seminar: seminarId,

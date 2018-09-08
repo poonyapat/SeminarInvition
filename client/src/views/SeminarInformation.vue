@@ -71,85 +71,83 @@
 </template>
 
 <script>
-import {mapState, mapActions} from 'vuex'
-import SeminarService from '@/services/seminarService'
-import AttendeeService from '@/services/attendeeService'
+import { mapState, mapActions } from "vuex";
+import SeminarService from "@/services/seminarService";
+import AttendeeService from "@/services/attendeeService";
 export default {
-    data() {
-        return {
-            seminar: {
-                title: '',
-                startTime: '',
-                endTime: ''
-            },
-            status: ''
+  data() {
+    return {
+      seminar: {
+        title: "",
+        startTime: "",
+        endTime: ""
+      },
+      status: ""
+    };
+  },
+  computed: {
+    ...mapState(["user", "attendees"])
+  },
+  methods: {
+    formatDate(date) {
+      return date.replace("T", " ").slice(0, 10);
+    },
+    async register(seminarId) {
+      this.$router.push({ name: "seminarRegister", params: { id: seminarId } });
+    },
+    cancel(seminarId) {
+      //remove from db
+      AttendeeService.cancelRegistration(this.user.username, seminarId);
+      for (let i = 0; i < this.attendees.length; i++) {
+        if (this.attendees[i].seminar === seminarId) {
+          this.cancelRegistration(i);
         }
+      }
+      this.$router.push({ name: "myRegistered" });
     },
-    computed: {
-        ...mapState([
-            'user', 'attendees'
-        ])
-    },
-    methods: {
-        formatDate(date) {
-            return date.replace('T', ' ').slice(0, 10)
-        },
-        async register(seminarId){
-            await AttendeeService.register(this.user.username, seminarId, {})
-            this.setAttendees((await AttendeeService.findAllByUser(this.user.username)).data)
-            this.$router.push({name: 'myRegistered'})
-        },
-        cancel(seminarId) {
-            //remove from db
-            AttendeeService.cancelRegistration(this.user.username,seminarId)
-            for (let i  = 0; i < this.attendees.length; i++){
-                if (this.attendees[i].seminar === seminarId){
-                    this.cancelRegistration(i)
-                }
-            }
-            this.$router.push({name: 'myRegistered'})
-        },
-        confirm(seminarId){
-            // change status in db
-            const confirm = "Confirmed"
-            AttendeeService.updateStatus(this.user.username, seminarId, confirm)
-            for (let i = 0; i < this.attendees.length; i++){
-                if (this.attendees[i].seminar === seminarId){
-                    this.updateAttendeeStatus({
-                        index: i,
-                        status: confirm
-                    })
-                }
-            }
-            this.$router.push({name: 'myRegistered'})
-        },
-        ...mapActions([
-            'updateAttendeeStatus', 'cancelRegistration', 'setAttendees'
-        ])
-    },
-    async mounted() {
-        const seminarId = this.$store.state.route.params.id
-        this.seminar = (await SeminarService.findOneById(seminarId)).data
-        for (let i = 0; i < this.attendees.length; i++){
-            if (this.attendees[i].seminar == seminarId){
-                this.status = this.attendees[i].status
-            }
+    confirm(seminarId) {
+      // change status in db
+      const confirm = "Confirmed";
+      AttendeeService.updateStatus(this.user.username, seminarId, confirm);
+      for (let i = 0; i < this.attendees.length; i++) {
+        if (this.attendees[i].seminar === seminarId) {
+          this.updateAttendeeStatus({
+            index: i,
+            status: confirm
+          });
         }
+      }
+      this.$router.push({ name: "myRegistered" });
     },
-}
+    ...mapActions([
+      "updateAttendeeStatus",
+      "cancelRegistration",
+      "setAttendees"
+    ])
+  },
+  async mounted() {
+    const seminarId = this.$store.state.route.params.id;
+    this.seminar = (await SeminarService.findOneById(seminarId)).data;
+    for (let i = 0; i < this.attendees.length; i++) {
+      if (this.attendees[i].seminar == seminarId) {
+        this.status = this.attendees[i].status;
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
-    .v-list-tile {
-        transition: all 0.5s ease-in-out;
-    }
+.v-list-tile {
+  transition: all 0.5s ease-in-out;
+}
 
-    .v-list__tile:hover {
-        background-color: #3333332f;
-        color: black;
-    }
+.v-list__tile:hover {
+  background-color: #3333332f;
+  color: black;
+}
 
-    .v-list__tile:hover .v-list__tile__title {
-        font-weight: 1000;
-    }
+.v-list__tile:hover .v-list__tile__title {
+  font-weight: 1000;
+}
 </style>

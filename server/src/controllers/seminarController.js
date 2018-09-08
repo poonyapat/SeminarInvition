@@ -1,4 +1,4 @@
-const {Seminar} = require('../models')
+const {Seminar, RequiredData} = require('../models')
 
 module.exports = {
     async findAll(req, res) {
@@ -62,14 +62,36 @@ module.exports = {
     async create(req, res) {
         try {
             const seminar = await Seminar.create(req.body.info)
+            req.body.requiredData.seminar = seminar.id
+            const requiredData = await RequiredData.create(req.body.requiredData)
             seminar.update({
                 author: req.body.author
             })
-            res.send(seminar)
+            res.send({seminar:seminar, requiredData: requiredData})
         }
         catch (error) {
             res.status(500).send({
                 error: 'An error has occured trying to create the seminar'
+            })
+        }
+    },
+    async getRequiredData(req, res){
+        try {
+            const requiredData = await RequiredData.findOne({
+                where: {
+                    seminar: req.query.id
+                }
+            })
+            if (!requiredData){
+                res.status(500).send({
+                    error: 'An error has occured trying to get seminar\'s required data'
+                })
+            }
+            res.send(requiredData)
+        }
+        catch(error){
+            res.status(500).send({
+                error: 'An error has occured trying to get seminar\'s required data'
             })
         }
     }
