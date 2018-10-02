@@ -44,6 +44,7 @@
                     </v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
+
             <v-list-tile avatar v-if="isUserLoggedIn && hasPermissionToCreate" :to="{name: 'myCreatedSeminar'}">
                 <v-list-tile-avatar>
                     <v-icon>storage</v-icon>
@@ -56,6 +57,20 @@
                     </v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
+
+            <v-list-tile v-if="isUserLoggedIn" :to="{name: 'UserProflie'}">
+                <v-list-tile-avatar>
+                        <v-icon>person_outline</v-icon>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            <h3>
+                                Proflie
+                            </h3>
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+            </v-list-tile>
+
             <login v-if="!isUserLoggedIn">
                 <v-list-tile avatar @click="()=>{}">
                     <v-list-tile-avatar>
