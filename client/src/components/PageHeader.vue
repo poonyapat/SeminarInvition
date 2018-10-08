@@ -42,12 +42,18 @@
                     </v-icon>
                     My Seminars
                 </v-btn>
+                <v-btn flat :to="{name: 'userprofile'}" v-if="$store.state.isUserLoggedIn">
+                    <v-icon>
+                        person_outline
+                    </v-icon>
+                    Proflie
+                </v-btn>
                 <v-btn flat @click="logout" v-if="$store.state.isUserLoggedIn">
                     <v-icon>
                         logout
                     </v-icon>
                     Log out
-                </v-btn>
+                </v-btn>               
             </v-toolbar-items>
         </v-toolbar>
         <navigator :show="show" @hide="show = false"/>

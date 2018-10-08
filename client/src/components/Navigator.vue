@@ -58,7 +58,7 @@
                 </v-list-tile-content>
             </v-list-tile>
 
-            <v-list-tile v-if="isUserLoggedIn" :to="{name: 'UserProflie'}">
+            <v-list-tile v-if="isUserLoggedIn" :to="{name: 'userprofile'}">
                 <v-list-tile-avatar>
                         <v-icon>person_outline</v-icon>
                     </v-list-tile-avatar>

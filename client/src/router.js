@@ -8,7 +8,7 @@ import SeminarCreation from './views/SeminarCreation'
 import SeminarInformation from './views/SeminarInformation'
 import SeminarRegister from './views/SeminarRegister'
 import Browse from './views/Browse'
-import UserProflie from './views/UserProflie'
+import UserProfile from './views/UserProfile'
 
 Vue.use(Router)
 
@@ -55,9 +55,9 @@ export default new Router({
             component: SeminarRegister
         },
         {
-            path: '/seminar/UserProflie',
-            name: 'userProflie',
-            component: UserProflie
+            path: '/seminar/UserProfile',
+            name: 'userprofile',
+            component: UserProfile
         }
     ]
 })
