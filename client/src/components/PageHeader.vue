@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-toolbar class="primary" dark scroll-off-screen scroll-target="#App" fixed dense>
+        <v-toolbar class="primary" dark scroll-off-screen scroll-target="#App" fixed app>
 
             <v-toolbar-side-icon @click="show = true" class="hidden-md-and-up"></v-toolbar-side-icon>
             <router-link class="title pr-4" tag="span" :to="{name: 'home'}">

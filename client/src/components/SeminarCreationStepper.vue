@@ -7,21 +7,24 @@
             <v-text-field
                     clearable
                     label="Seminar Title"
-                    v-model="seminarData.title"
+                    v-model="info.title"
+                    :rules="rules.notNull"
             ></v-text-field>
             <v-textarea
                     clearable
                     label="Seminar Description"
-                    v-model="seminarData.description"
+                    v-model="info.description"
+                    :rules="rules.notNull"
             >
             </v-textarea>
             <v-text-field
                     label="Maximum Attendees"
-                    v-model="seminarData.maxAttendees"
+                    v-model="info.maximumAttendees"
                     type="number"
+                    :rules="rules.notNull"
             >
             </v-text-field>
-            <v-btn color="primary" @click="stepper = 2">
+            <v-btn round color="primary" @click="stepper = 2" :disabled="!completeStep1">
                 <v-icon>navigate_next</v-icon>
                 Continue
             </v-btn>
@@ -33,16 +36,17 @@
             <v-textarea
                     clearable
                     label="Location"
-                    v-model="seminarData.location"
+                    v-model="info.place"
+                    :rules="rules.notNull"
             >
             </v-textarea>
             <date-selector label="Start Date" @selected="setStartDate"></date-selector>
             <date-selector label="End Date" @selected="setEndDate"></date-selector>
-            <v-btn color="primary" @click="stepper = 3">
+            <v-btn round color="primary" @click="stepper = 3" :disabled="!completeStep2">
                 <v-icon>navigate_next</v-icon>
                 Continue
             </v-btn>
-            <v-btn color="cancel" @click="stepper = 1" dark>
+            <v-btn round color="cancel" @click="stepper = 1" dark>
                 <v-icon>navigate_before</v-icon>
                 Back
             </v-btn>
@@ -83,11 +87,11 @@
                 </v-flex>
             </v-layout>
             <br>
-            <v-btn color="primary" @click="stepper = 4">
+            <v-btn round color="primary" @click="stepper = 4" :disabled="!completeStep3">
                 <v-icon>navigate_next</v-icon>
                 Continue
             </v-btn>
-            <v-btn color="cancel" @click="stepper = 2" dark>
+            <v-btn round color="cancel" @click="stepper = 2" dark>
                 <v-icon>navigate_before</v-icon>
                 Back
             </v-btn>
@@ -97,24 +101,34 @@
         </v-stepper-step>
         <v-stepper-content step="4">
             <v-text-field
-                    label="Contact Number"
-                    v-model="seminarData.contactNumber"
+                    label="Company"
+                    v-model="info.company"
                     type="text"
                     clearable
+                    :rules="rules.notNull"
+            ></v-text-field>
+            <v-text-field
+                    label="Contact Number"
+                    v-model="info.contactNumber"
+                    type="text"
+                    clearable
+                    mask="phone"
+                    :rules="rules.notNull"
             >
             </v-text-field>
             <v-text-field
                     label="Contact Email"
-                    v-model="seminarData.contactEmail"
+                    v-model="info.contactEmail"
                     type="text"
                     clearable
+                    :rules="rules.notNull"
             >
             </v-text-field>
-            <v-btn color="primary" @click="stepper = 5">
+            <v-btn round color="primary" @click="stepper = 5" :disabled="!completeStep4">
                 <v-icon>navigate_next</v-icon>
                 Continue
             </v-btn>
-            <v-btn color="cancel" @click="stepper = 3" dark>
+            <v-btn round color="cancel" @click="stepper = 3" dark>
                 <v-icon>navigate_before</v-icon>
                 Back
             </v-btn>
@@ -151,11 +165,11 @@
                     </v-list-group>
                 </v-list>
             </v-card>
-            <v-btn color="primary" @click="stepper = 1">
+            <v-btn round color="primary" @click="create">
                 <v-icon>done</v-icon>
                 Done
             </v-btn>
-            <v-btn color="cancel" @click="stepper = 4" dark>
+            <v-btn round color="cancel" @click="stepper = 4" dark>
                 <v-icon>navigate_before</v-icon>
                 Back
             </v-btn>
@@ -165,26 +179,31 @@
 
 <script>
     import DateSelector from '@/components/DateSelector'
-
+    import SeminarService from '@/services/seminarService'
+    import {mapState} from 'vuex'
     export default {
         data() {
             return {
-                seminarData: {
+                info: {
                     title: '',
                     description: '',
-                    maxAttendees: 0,
-                    location: '',
-                    startDate: '',
-                    endDate: '',
-                    contactEmail: '',
+                    company: '',
+                    place: '',
+                    startTime: '',
+                    endTime: '',
+                    maximumAttendees: 0,
                     contactNumber: '',
+                    contactEmail: '',
                 },
                 requiredData: [],
                 stepper: 1,
                 attrName: '',
                 attrType: '',
                 types: ['short-text', 'long-text', 'number', 'boolean'],
-                requiredBasicInfo: false
+                requiredBasicInfo: false,
+                rules: {
+                    notNull: [v => v.length > 0 || 'Require Information'],
+                }
             }
         },
         components: {
@@ -192,10 +211,10 @@
         },
         methods: {
             setStartDate(val) {
-                this.seminarData.startDate = val
+                this.info.startTime = val
             },
             setEndDate(val) {
-                this.seminarData.endDate = val
+                this.info.endTime = val
             },
             addNewAttr() {
                 this.requiredData.push({
@@ -207,21 +226,51 @@
             },
             removeData(index) {
                 this.requiredData.splice(index, 1)
+            },
+            create(){
+                let rd = {}
+                for (let index in this.requiredData){
+                    rd[this.requiredData[index].name] = this.requiredData[index].type
+                }
+                SeminarService.create({
+                    info: this.info,
+                    requiredData: {
+                        requiredData: rd,
+                        baseInformation: this.requiredBasicInfo
+                    },
+                    author: this.user.username
+                })
+                this.$router.push({name: 'home'})
             }
         },
         computed: {
             seminarShowableData() {
                 return {
-                    'Title': this.seminarData.title,
-                    'Description': this.seminarData.description,
-                    'Max Attendees': this.seminarData.maxAttendees,
-                    'Location': this.seminarData.location,
-                    'Start Date': this.seminarData.startDate,
-                    'End Date': this.seminarData.endDate,
-                    'Contact Email': this.seminarData.contactEmail,
-                    'Contact Number': this.seminarData.contactNumber,
+                    'Title': this.info.title,
+                    'Description': this.info.description,
+                    'Max Attendees': this.info.maximumAttendees,
+                    'Location': this.info.place,
+                    'Start Date': this.info.startTime,
+                    'End Date': this.info.endTime,
+                    'Contact Email': this.info.contactEmail,
+                    'Contact Number': this.info.contactNumber,
                 }
-            }
+            },
+            completeStep1(){
+                return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees > 0
+            },
+            completeStep2(){
+                return this.info.place.length > 0 && this.info.startTime.length > 0 && this.info.endTime.length > 0
+            },
+            completeStep3(){
+                return this.requiredData.length > 0 || this.requiredBasicInfo
+            },
+            completeStep4(){
+                return this.info.contactNumber.length > 9 && this.info.contactEmail.match(/.+@.+\..+/)
+            },
+            ...mapState([
+                'user'
+            ])
         }
     }
 </script>

@@ -1,18 +1,20 @@
 <template>
-  <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <v-container fill-height>
+      <base-home v-if="!isUserLoggedIn"></base-home>
+    </v-container>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import BaseHome from '@/components/BaseHome'
+import {mapState} from 'vuex'
 export default {
-  name: 'home',
   components: {
-    HelloWorld
+    BaseHome
+  },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn'
+    ])
   }
 }
 </script>

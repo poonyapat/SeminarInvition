@@ -6,7 +6,7 @@
         <v-card-actions class="secondary lighten-1">
             <slot/>
             <v-spacer></v-spacer>
-            <v-btn flat color="info" :to="{name: 'seminarInformation', params: {id: seminar.id}}">
+            <v-btn round flat color="info" :to="{name: 'seminarInformation', params: {id: seminar.id}}">
                 <v-icon>streetview</v-icon>
                 Info
             </v-btn>

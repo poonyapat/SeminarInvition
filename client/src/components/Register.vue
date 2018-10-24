@@ -7,10 +7,10 @@
         <slot slot="activator"/>
         <v-card>
             <v-card-title class="primary headline white--text">
-                <v-icon>person_add_</v-icon>
+                <v-icon dark>person_add_</v-icon>
                 Register
                 <v-spacer></v-spacer>
-                <v-btn @click="dialog = false" flat icon>
+                <v-btn @click="dialog = false" flat icon dark>
                     <v-icon>close</v-icon>
                 </v-btn>
             </v-card-title>

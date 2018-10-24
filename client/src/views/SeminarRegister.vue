@@ -7,7 +7,7 @@
             <v-card class="ma-3 pa-3">
                 <v-card-text>
                     <div lg12 v-for="(type, key) in requiredData.requiredData" :key="key" class="ma-4">
-                        <v-text-field v-if="type !== 'boolean'" :label="key" v-model="registeredData[key]"></v-text-field>
+                        <v-text-field v-if="type !== 'boolean'" :label="key" v-model="registeredData[key]" :type="type === 'number'?'Number':'text'"></v-text-field>
                         <v-checkbox :label="key" v-if="type === 'boolean'" v-model="registeredData[key]"></v-checkbox>
                     </div>
                 </v-card-text>

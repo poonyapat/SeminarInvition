@@ -1,17 +1,15 @@
 <template>
-    <v-app class="secondary" id="app">
+    <v-app id="app">
         <page-header/>
-        <main class="mt-5 pt-5">
-            <v-container fluid>
-                <router-view/>
-            </v-container>
-        </main>
+        <v-content>
+            <router-view/>
+        </v-content>
     </v-app>
 </template>
 
 <script>
     import PageHeader from '@/components/PageHeader'
-    import {mapActions, mapState} from 'vuex'
+    import {mapActions} from 'vuex'
     import AttendeeService from '@/services/attendeeService'
     export default {
         components: {
@@ -22,10 +20,8 @@
                 'setAttendees'
             ])
         },
-        async beforeCreate(){
-            console.log(this.user)
+        async mounted(){
             this.setAttendees((await AttendeeService.findAllByUser(this.$store.state.user.username)).data)
-            console.log(this.$store.state.attendees)
         }
     }
 </script>

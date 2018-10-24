@@ -22,7 +22,7 @@
                     @blur="date = parseDate(dateFormatted)"
                     readonly
             ></v-text-field>
-            <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+            <v-date-picker :min="min" v-model="date" no-title @input="menu1 = false"></v-date-picker>
         </v-menu>
     </v-flex>
 </template>
@@ -34,6 +34,10 @@
                 type: String,
                 default: 'Date'
             },
+            min: {
+                type: String,
+                default: '2001-01-01'
+            }
         },
         data() {
             return {

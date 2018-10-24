@@ -1,16 +1,16 @@
 <template>
 
     <v-dialog
-            v-model="dialog"
-            width="500"
+      v-model="dialog"
+      width="500"
     >
         <slot slot="activator"/>
         <v-card>
             <v-card-title class="primary headline white--text">
-                <v-icon>person_</v-icon>
+                <v-icon dark>person_</v-icon>
                 Login
                 <v-spacer></v-spacer>
-                <v-btn @click="dialog = false" flat icon>
+                <v-btn @click="dialog = false" flat icon dark>
                     <v-icon>close</v-icon>
                 </v-btn>
             </v-card-title>

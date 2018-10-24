@@ -1,23 +1,25 @@
 <template>
-    <v-layout row wrap>
-        <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
-            <v-text-field
-                clearable
-                outline
-                label="Search"
-                v-model="searcher"
-                prepend-inner-icon="search"
-            >
-            </v-text-field>
-            <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" />
-            <v-card v-if="seminars.length === 0">
-                <v-card-title>
-                    <h1 v-if="loaded">0 Seminar Found...</h1>
-                    <v-progress-linear v-else :indeterminate="true"></v-progress-linear>
-                </v-card-title>
-            </v-card>
-        </v-flex>
-    </v-layout>
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
+                <v-text-field
+                    clearable
+                    outline
+                    label="Search"
+                    v-model="searcher"
+                    prepend-inner-icon="search"
+                >
+                </v-text-field>
+                <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" />
+                <v-card v-if="seminars.length === 0">
+                    <v-card-title>
+                        <h1 v-if="loaded">0 Seminar Found...</h1>
+                        <v-progress-linear v-else :indeterminate="true"></v-progress-linear>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>

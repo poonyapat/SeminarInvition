@@ -61,6 +61,7 @@ module.exports = {
     },
     async create(req, res) {
         try {
+            req.body.info.currentRegistered = 0
             const seminar = await Seminar.create(req.body.info)
             req.body.requiredData.seminar = seminar.id
             const requiredData = await RequiredData.create(req.body.requiredData)
@@ -71,7 +72,7 @@ module.exports = {
         }
         catch (error) {
             res.status(500).send({
-                error: 'An error has occured trying to create the seminar'
+                error:error
             })
         }
     },

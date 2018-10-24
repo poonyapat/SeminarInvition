@@ -1,43 +1,45 @@
 <template>
-    <v-layout row wrap>
-        <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
-            <v-toolbar fla dense class="primary" dark>
-                <v-toolbar-title> My Registered Seminars </v-toolbar-title>
-            </v-toolbar>
-            <seminar 
-                v-for="(seminar,index) in registeredSeminars" 
-                :key="seminar.id"
-                :seminar="seminar"
-                :status="attendees[index].status"
-                @confirm="confirm(seminar.id)"
-                @cancel="cancel(seminar.id)"
-            >
-                <v-btn 
-                    color="success" 
-                    flat 
-                    :disabled="attendees[index].status === 'Confirmed'" 
-                    @click="confirm(seminar.id)"
+    <v-container fluid>
+        <v-layout row wrap>
+            <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
+                <v-toolbar fla dense class="primary" dark>
+                    <v-toolbar-title> My Registered Seminars </v-toolbar-title>
+                </v-toolbar>
+                <seminar 
+                    v-for="(seminar,index) in registeredSeminars" 
+                    :key="seminar.id"
+                    :seminar="seminar"
+                    :status="attendees[index].status"
+                    @confirm="confirm(seminar.id)"
+                    @cancel="cancel(seminar.id)"
                 >
-                    <v-icon>done</v-icon>
-                    Confirm
-                </v-btn>
-                <v-btn 
-                    flat 
-                    color="cancel"
-                    @click="cancel(seminar.id)"
-                >
-                    <v-icon>close</v-icon>
-                    Cancel
-                </v-btn>
-            </seminar>
-            <v-card v-if="registeredSeminars.length === 0">
-                <v-card-title>
-                    <h1 v-if="loaded">0 Registered Seminar Found...</h1>
-                    <v-progress-linear v-else :indeterminate="true" color="primary"></v-progress-linear>
-                </v-card-title>
-            </v-card>
-        </v-flex>
-    </v-layout>
+                    <v-btn 
+                        color="success" 
+                        flat 
+                        :disabled="attendees[index].status === 'Confirmed'" 
+                        @click="confirm(seminar.id)"
+                    >
+                        <v-icon>done</v-icon>
+                        Confirm
+                    </v-btn>
+                    <v-btn 
+                        flat 
+                        color="cancel"
+                        @click="cancel(seminar.id)"
+                    >
+                        <v-icon>close</v-icon>
+                        Cancel
+                    </v-btn>
+                </seminar>
+                <v-card v-if="registeredSeminars.length === 0">
+                    <v-card-title>
+                        <h1 v-if="loaded">0 Registered Seminar Found...</h1>
+                        <v-progress-linear v-else :indeterminate="true" color="primary"></v-progress-linear>
+                    </v-card-title>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
