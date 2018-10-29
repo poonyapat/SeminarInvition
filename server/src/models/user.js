@@ -28,6 +28,19 @@ module.exports = (sequelize, DataTypes) => {
         role: {
             type: DataTypes.ENUM('Admin', 'Internal User', 'External User'),
             allowNull: false
+        },
+        fullname: DataTypes.STRING,
+        gender: DataTypes.ENUM('Male', 'Female', 'Other'),
+        age: DataTypes.INTEGER,
+        nationality: DataTypes.STRING(20),
+        email: DataTypes.STRING,
+        contactNumber: DataTypes.STRING(20),
+        officeNumber: DataTypes.STRING(20),
+        fax: DataTypes.STRING(30),
+        company: DataTypes.STRING,
+        credit: {
+            type: DataTypes.FLOAT,
+            default: 5,
         }
     }, {
         hooks: {

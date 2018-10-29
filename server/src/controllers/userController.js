@@ -3,10 +3,22 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
 function jwtSignUser(user) {
-    const ONE_WEEK = 10
+    const ONE_WEEK = 24 * 60 * 60 * 7
     return jwt.sign(user, config.authentication.jwtSecret, {
         expiresIn: ONE_WEEK
     })
+}
+
+function jwtVerifyUser(username, token) {
+    try {
+        decoded = jwt.verify(token, config.authentication.jwtSecret)
+        if (decoded.username === username)
+            return true
+        else return false
+    }
+    catch (err) {
+        return false
+    }
 }
 
 module.exports = {
@@ -40,18 +52,50 @@ module.exports = {
                     error: 'Wrong password'
                 })
             }
-            // const userJSON = user.toJSON
-            const reducedUser = {
-                username: user.username,
-                role: user.role
-            }
+            token = jwtSignUser({username: user.username})
+            jwtVerifyUser(user.username, token)
+            delete user.dataValues.password
             res.send({
-                user: reducedUser,
-                token: jwtSignUser(reducedUser)
+                user: user,
+                token: token
             })
         } catch (err) {
             res.status(500).send({
-                error: 'An error has occured trying to login'
+                error: 'An error has occured trying to login, Contact Admin'
+            })
+        }
+    },
+    async updateProfile(req, res) {
+        try {
+            const user = await User.findOne({
+                where: {
+                    username: req.body.username
+                }
+            })
+            if (jwtVerifyUser(req.body.username, req.body.token)) {
+                user.update(req.body.data)
+                res.status(200).send()
+            }
+            else {
+                res.status(402).send({
+                    error: 'Unauthentication'
+                })
+            }
+        } catch (err) {
+            res.status(500).send({
+                error: 'An error has occured trying to update user profile, Contact Admin'
+            })
+        }
+    },
+
+    async verify(req, res) {
+        try {
+            decoded = jwtVerifyUser(req.body.username, req.body.token)
+            console.log(decoded)
+            res.status(200).send({ verified: decoded })
+        } catch (err) {
+            res.status(500).send({
+                error: 'Invalid'
             })
         }
     }

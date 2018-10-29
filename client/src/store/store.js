@@ -31,6 +31,11 @@ export default new Vuex.Store({
         },
         removeAttendeeByIndex(state, index){
             state.attendees.splice(index,1)
+        },
+        updateUser(state, data) {
+            for (let key in data) {
+                state.user[key] = data[key] === '-' || !data[key]?null: data[key]
+            }
         }
     },
     actions: {
@@ -51,6 +56,9 @@ export default new Vuex.Store({
         },
         cancelRegistration({commit}, index){
             commit('removeAttendeeByIndex', index)
+        },
+        updateUser({ commit }, data) {
+            commit('updateUser', data)
         }
     }
 })

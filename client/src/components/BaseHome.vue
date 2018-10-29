@@ -3,8 +3,8 @@
         <v-flex class="white--text">
           <h3 class="display-3">Welcome to the <span class="display-4">SeIMS</span> </h3>
 
-          <span class="subheading">SeIMS help you to register and manage your registered seminars. 
-            <br> This application is the intermediary between you and organizer. </span>
+          <span class="subheading">SeIMS [Seminar Invitation Management System] help you to register and manage your registered seminars. 
+            <br> This application is the intermediary between you and organizer.</span>
 
           <v-divider class="my-3"></v-divider>
 
