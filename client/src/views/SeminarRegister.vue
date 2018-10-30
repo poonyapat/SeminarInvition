@@ -64,8 +64,8 @@ export default {
         requiredData: {}
       },
       baseInformation: {
-        fullname: {label: 'Full name', value: '', type: 'text'},
-        gender: {label: 'Gender', value: '', type: 'select', choices: ['Male', 'Female', 'Others']},
+        fullname: {label: 'Fullname', value: '', type: 'text'},
+        gender: {label: 'Gender', value: '', type: 'select', choices: ['Male', 'Female', 'Other']},
         age: {label: 'Age', value: 15, type: 'number', min: 15, max: 100},
         nationality: {label: 'Nationality', value: '', type: 'text'},
         email: {label: 'Email', value: '', type: 'text'},

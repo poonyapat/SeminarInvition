@@ -35,7 +35,8 @@
 
 .main {
     background: 
-        linear-gradient(to right, rgba(231, 166, 199, 0.7), rgba(255, 143, 210, 0.8)),
+        /* linear-gradient(to right, rgba(231, 166, 199, 0.7), rgba(255, 143, 210, 0.8)), */
+        linear-gradient(to right, rgba(255, 95, 95, 0.7), rgba(189, 108, 255, 0.7)),
         /* linear-gradient(to right, rgba(0, 123, 255, 0.7), rgba(0, 123, 255, 0.8)), */
         /* linear-gradient(to right, rgba(255, 249, 196, 0.7), rgba(253, 216, 53, 0.8)), */
         url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important;
