@@ -11,7 +11,7 @@
                 >
                 </v-text-field>
                 <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" />
-                <v-card v-if="seminars.length === 0">
+                <v-card v-if="seminars.length === 0" class="low-op">
                     <v-card-title>
                         <h1 v-if="loaded">0 Seminar Found...</h1>
                         <v-progress-linear v-else :indeterminate="true"></v-progress-linear>

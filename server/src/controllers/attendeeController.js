@@ -86,10 +86,11 @@ module.exports = {
                     id: seminar
                 }
             })
+            attendee.destroy()
             registeredSeminar.update({
                 currentRegistered: registeredSeminar.currentRegistered - 1
             })
-            attendee.destroy()
+            res.status(200).send()
         } catch (error) {
             res.status(500).send({
                 error: error

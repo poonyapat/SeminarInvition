@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <v-layout row wrap>
+        <v-layout row wrap v-if="this.token">
             <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
                 <v-toolbar fla dense class="primary" dark>
                     <v-toolbar-title> My Registered Seminars </v-toolbar-title>
@@ -31,7 +31,7 @@
                         Cancel
                     </v-btn>
                 </seminar>
-                <v-card v-if="registeredSeminars.length === 0">
+                <v-card v-if="registeredSeminars.length === 0" class="low-op">
                     <v-card-title>
                         <h1 v-if="loaded">0 Registered Seminar Found...</h1>
                         <v-progress-linear v-else :indeterminate="true" color="primary"></v-progress-linear>
@@ -39,6 +39,7 @@
                 </v-card>
             </v-flex>
         </v-layout>
+        <error v-else code="403" msg="Access Denied"/>
     </v-container>
 </template>
 
@@ -46,6 +47,7 @@
 import Seminar from '@/components/Seminar'
 import SeminarService from '@/services/seminarService'
 import AttendeeService from '@/services/attendeeService'
+import Error from '@/components/Error'
 
 import { mapState, mapActions } from 'vuex'
 export default {
@@ -61,7 +63,7 @@ export default {
         ])
     },
     components: {
-        Seminar
+        Seminar, Error
     },
     methods: {
         cancel(seminarId) {
@@ -92,9 +94,6 @@ export default {
         ])
     },
     async mounted(){
-        if (!this.token){
-            this.$router.push({name: 'home'})
-        }
         this.loaded = false
         this.registeredSeminars = []
         for (let i = 0; i < this.attendees.length; i++){
@@ -124,4 +123,5 @@ export default {
     max-height: 10em;
     overflow: scroll
 }
+
 </style>

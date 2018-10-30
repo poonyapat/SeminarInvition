@@ -2,10 +2,10 @@
     <v-container fill-height grid-list-lg>
         <v-layout>
             <v-flex>
-                <v-card class="modal fill-height" dark>
+                <v-card class="low-op fill-height" dark>
                     <v-toolbar>
                         <v-toolbar-title>
-                            {{user.username}}
+                            {{user.username}} Profile
                         </v-toolbar-title>
                         <v-divider></v-divider>
                         <v-btn round class="edit" v-show="!editing" @click="editing=true">
@@ -60,7 +60,7 @@ export default {
                 nationality: this.profile['General']['Nationality'],
                 email: this.profile['Contact']['Email'],
                 contactNumber: this.profile['Contact']['Contact Number'],
-                company: this.profile['Company Information']['company'],
+                company: this.profile['Company Information']['Company'],
                 officeNumber: this.profile['Company Information']['Office Number'],
                 fax: this.profile['Company Information']['Fax'],
             })
@@ -91,7 +91,7 @@ export default {
                 'Company Information':{
                     'Company': this.user.company?this.user.company:'-',
                     'Office Number': this.user.officeNumber?this.user.officeNumber:'-',
-                    'Fax': this.user.tax?this.user.fax:'-'
+                    'Fax': this.user.fax?this.user.fax:'-'
                 },
                 'Others': {
                     'Role': this.user.role?this.user.role:'-',
@@ -109,9 +109,5 @@ export default {
 <style scoped>
 .primary {
     color: #DDDDDD !important;
-}
-
-.modal {
-    background-color: rgba(0, 0, 0, 0.3) !important;
 }
 </style>

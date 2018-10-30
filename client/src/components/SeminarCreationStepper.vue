@@ -137,34 +137,32 @@
             Confirmation
         </v-stepper-step>
         <v-stepper-content step="5">
-            <v-card>
-                <v-list class="tertiary">
-                    <v-list-tile v-for="(attr, key) in seminarShowableData" :key="key" @click="() => {return}">
+            <v-list class="tertiary">
+                <v-list-tile v-for="(attr, key) in seminarShowableData" :key="key" @click="() => {return}">
+                    <v-list-tile-content>
+                        <v-list-tile-title> {{key}}</v-list-tile-title>
+                        <v-list-tile-sub-title> {{attr}}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-group>
+                    <v-list-tile slot="activator">
                         <v-list-tile-content>
-                            <v-list-tile-title> {{key}}</v-list-tile-title>
-                            <v-list-tile-sub-title> {{attr}}</v-list-tile-sub-title>
+                            <v-list-tile-title>Attendee's Information Requirement</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                    <v-list-group>
-                        <v-list-tile slot="activator">
-                            <v-list-tile-content>
-                                <v-list-tile-title>Attendee's Information Requirement</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile v-show="requiredBasicInfo" @click="() => {return}">
-                            <v-list-tile-content>
-                                <v-list-tile-title> {{'*Basic Information*'}}</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile v-for="(data, index) in requiredData" :key="index" @click="() => {return}">
-                            <v-list-tile-content>
-                                <v-list-tile-title> {{data.name}}</v-list-tile-title>
-                                <v-list-tile-sub-title> {{data.type}}</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </v-list-group>
-                </v-list>
-            </v-card>
+                    <v-list-tile v-show="requiredBasicInfo" @click="() => {return}">
+                        <v-list-tile-content>
+                            <v-list-tile-title> {{'*Basic Information*'}}</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                    <v-list-tile v-for="(data, index) in requiredData" :key="index" @click="() => {return}">
+                        <v-list-tile-content>
+                            <v-list-tile-title> {{data.name}}</v-list-tile-title>
+                            <v-list-tile-sub-title> {{data.type}}</v-list-tile-sub-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </v-list-group>
+            </v-list>
             <v-btn round color="primary" @click="create">
                 <v-icon>done</v-icon>
                 Done
@@ -206,6 +204,11 @@
                 }
             }
         },
+        mounted() {
+            this.info.company = this.user.company
+            this.info.contactNumber = this.user.contactNumber
+            this.info.contactEmail = this.user.email
+        },
         components: {
             DateSelector
         },
@@ -240,7 +243,7 @@
                     },
                     author: this.user.username
                 })
-                this.$router.push({name: 'home'})
+                this.$router.push({name: 'myCreatedSeminar', params: { force: true}})
             }
         },
         computed: {

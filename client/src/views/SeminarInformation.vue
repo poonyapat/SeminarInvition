@@ -1,11 +1,11 @@
 <template>
     <v-container fluid>
-        <v-layout wrap justify-center>
+        <v-layout v-if="seminar" wrap justify-center>
             <v-flex sm12 lg10>
                 <v-toolbar fla class="primary" dark>
                     <v-toolbar-title> {{seminar.title}} </v-toolbar-title>
                 </v-toolbar>
-                <v-list class="content-2 ma-3" three-line>
+                <v-list class="ma-3 low-op" dark three-line>
                     <v-list-tile>
                         <v-list-tile-content>
                             <v-list-tile-title>Title</v-list-tile-title>
@@ -69,6 +69,7 @@
                 </v-list>
             </v-flex>
         </v-layout>
+        <error v-else code="404" msg="Seminar is not found" />
     </v-container>
 </template>
 
@@ -76,6 +77,7 @@
 import { mapState, mapActions } from "vuex";
 import SeminarService from "@/services/seminarService";
 import AttendeeService from "@/services/attendeeService";
+import Error from '@/components/Error'
 export default {
   data() {
     return {
@@ -86,6 +88,9 @@ export default {
       },
       status: ""
     };
+  },
+  components: {
+    Error
   },
   computed: {
     ...mapState(["user", "attendees"])
@@ -129,7 +134,11 @@ export default {
   },
   async mounted() {
     const seminarId = this.$store.state.route.params.id;
-    this.seminar = (await SeminarService.findOneById(seminarId)).data;
+    try {
+        this.seminar = (await SeminarService.findOneById(seminarId)).data;
+    } catch(error){
+        this.seminar = null
+    }
     for (let i = 0; i < this.attendees.length; i++) {
       if (this.attendees[i].seminar == seminarId) {
         this.status = this.attendees[i].status;

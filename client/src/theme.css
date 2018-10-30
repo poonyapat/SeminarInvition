@@ -33,9 +33,27 @@
     display: block !important
 }
 
-#app {
+.main {
     background: 
-        linear-gradient(to right, rgba(255, 93, 174, 0.8), rgba(255, 143, 210, 0.829)),
-        url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg);
-    background-size: cover;
+        linear-gradient(to right, rgba(231, 166, 199, 0.7), rgba(255, 143, 210, 0.8)),
+        /* linear-gradient(to right, rgba(0, 123, 255, 0.7), rgba(0, 123, 255, 0.8)), */
+        /* linear-gradient(to right, rgba(255, 249, 196, 0.7), rgba(253, 216, 53, 0.8)), */
+        url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important;
+}
+
+#app {
+    background-size: cover !important;
+}
+
+.low-op {
+    background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.low-op.theme--dark {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+
+.nobg {
+    background: transparent !important
 }

@@ -25,6 +25,7 @@ module.exports = {
     async register(req, res) {
         try {
             req.body.role = 'External User'
+            req.body.credit = 5
             const user = await User.create(req.body)
             res.send(user.toJSON())
         } catch (err) {
@@ -91,7 +92,6 @@ module.exports = {
     async verify(req, res) {
         try {
             decoded = jwtVerifyUser(req.body.username, req.body.token)
-            console.log(decoded)
             res.status(200).send({ verified: decoded })
         } catch (err) {
             res.status(500).send({
