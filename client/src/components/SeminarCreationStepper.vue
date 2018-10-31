@@ -40,8 +40,8 @@
                     :rules="rules.notNull"
             >
             </v-textarea>
-            <date-selector label="Start Date" @selected="setStartDate"></date-selector>
-            <date-selector label="End Date" @selected="setEndDate"></date-selector>
+            <date-selector label="Start Date" :value="info.startTime" :min="today" @selected="setStartDate" :max="info.endTime"></date-selector>
+            <date-selector label="End Date" :value="info.endTime" :min="info.startTime" @selected="setEndDate"></date-selector>
             <v-btn round color="primary" @click="stepper = 3" :disabled="!completeStep2">
                 <v-icon>navigate_next</v-icon>
                 Continue
@@ -163,7 +163,7 @@
                     </v-list-tile>
                 </v-list-group>
             </v-list>
-            <v-btn round color="primary" @click="create">
+            <v-btn round color="primary" @click="$emit('submit-form', requiredData, info, requiredBasicInfo)">
                 <v-icon>done</v-icon>
                 Done
             </v-btn>
@@ -200,14 +200,36 @@
                 types: ['short-text', 'long-text', 'number', 'boolean'],
                 requiredBasicInfo: false,
                 rules: {
-                    notNull: [v => v.length > 0 || 'Require Information'],
+                    notNull: [v => !!v || 'Require Information'],
                 }
             }
         },
-        mounted() {
-            this.info.company = this.user.company
-            this.info.contactNumber = this.user.contactNumber
-            this.info.contactEmail = this.user.email
+        props: {
+            seminarId: {
+                type: Number,
+            },
+        },
+        async mounted() {
+            if (this.seminarId){
+                let seminar = (await SeminarService.findOneById(this.seminarId)).data
+                for (let attr in seminar){
+                    if (!["id", 'currentRegistered', 'author', 'createdAt', 'updatedAt'].includes(attr)){
+                        this.info[attr] = seminar[attr]
+                    }
+                }
+                console.log(this.info)
+                let requiredData = (await SeminarService.getRequiredData(this.seminarId)).data
+                this.requiredBasicInfo = requiredData.baseInformation
+                for (let attr in requiredData.requiredData){
+                    this.requiredData.push({name: attr, type: requiredData.requiredData[attr]})
+                }
+                console.log(requiredData.requiredData)
+            }
+            else {
+                this.info.company = this.user.company
+                this.info.contactNumber = this.user.contactNumber
+                this.info.contactEmail = this.user.email
+            }
         },
         components: {
             DateSelector
@@ -229,24 +251,12 @@
             },
             removeData(index) {
                 this.requiredData.splice(index, 1)
-            },
-            create(){
-                let rd = {}
-                for (let index in this.requiredData){
-                    rd[this.requiredData[index].name] = this.requiredData[index].type
-                }
-                SeminarService.create({
-                    info: this.info,
-                    requiredData: {
-                        requiredData: rd,
-                        baseInformation: this.requiredBasicInfo
-                    },
-                    author: this.user.username
-                })
-                this.$router.push({name: 'myCreatedSeminar', params: { force: true}})
             }
         },
         computed: {
+            today(){
+                return new Date().toISOString().slice(0,10)
+            },
             seminarShowableData() {
                 return {
                     'Title': this.info.title,

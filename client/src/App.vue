@@ -21,7 +21,8 @@
             ])
         },
         async mounted(){
-            this.setAttendees((await AttendeeService.findAllByUser(this.$store.state.user.username)).data)
+            if (this.$store.state.user)
+                this.setAttendees((await AttendeeService.findAllByUser(this.$store.state.user.username)).data)
         }
     }
 </script>

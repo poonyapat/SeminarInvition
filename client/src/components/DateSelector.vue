@@ -21,8 +21,9 @@
                     prepend-icon="event"
                     @blur="date = parseDate(dateFormatted)"
                     readonly
+                    clearable
             ></v-text-field>
-            <v-date-picker :min="min" v-model="date" no-title @input="menu1 = false"></v-date-picker>
+            <v-date-picker :min="min" :max="max" v-model="date" no-title @input="menu1 = false"></v-date-picker>
         </v-menu>
     </v-flex>
 </template>
@@ -36,7 +37,14 @@
             },
             min: {
                 type: String,
-                default: '2001-01-01'
+                default: ''
+            },
+            max: {
+                type: String,
+                default: ''
+            },
+            value: {
+                type: String
             }
         },
         data() {
@@ -46,17 +54,16 @@
                 menu1: false,
             }
         },
-        computed: {
-            computedDateFormatted() {
-                return this.formatDate(this.date)
-            }
-        },
-
         watch: {
             date() {
                 this.dateFormatted = this.formatDate(this.date)
                 this.$emit('selected', this.date)
             },
+            value() {
+                if (this.value){
+                    this.date = this.value.slice(0,10)
+                }
+            }
         },
 
         methods: {

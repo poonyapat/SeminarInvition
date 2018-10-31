@@ -76,6 +76,26 @@ module.exports = {
             })
         }
     },
+    async update(req, res) {
+        try {
+            const seminar = await Seminar.findOne({ where: { id:req.body.id } })
+            await seminar.update(req.body.info)
+        } catch (error) {
+            res.status(500).send({
+                error: error
+            })
+            return;
+        }
+        try {
+            const requiredData = await RequiredData.findOne({ where: { id: req.body.id } })
+            await requiredData.update(req.body.requiredData)
+            res.status(200).send()
+        } catch (error) {
+            res.status(500).send({
+                error: error
+            })
+        }
+    },
     async getRequiredData(req, res){
         try {
             const requiredData = await RequiredData.findOne({

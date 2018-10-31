@@ -11,9 +11,9 @@
                       <v-radio-group v-if="data.type === 'select'" v-model="data.value" :label="data.label">
                         <v-radio v-for="choice in data.choices" :key="choice" :label="choice" :value="choice"></v-radio>
                       </v-radio-group>
-                      <v-text-field v-else-if="data.type === 'text'" v-model="data.value" :label="data.label" :mask="data.mask"></v-text-field>
+                      <v-text-field v-else-if="data.type === 'text'" v-model="data.value" :label="data.label" :mask="data.mask" :rules="rules.notNull"></v-text-field>
                       <div v-else-if="data.type === 'number' && data.min && data.max">
-                        <v-text-field type="number" v-model="data.value" style="width: 20%" :label="data.label"></v-text-field>
+                        <v-text-field type="number" v-model="data.value" style="width: 20%" :label="data.label" :rules="rules.notNull"></v-text-field>
                         <v-slider  
                           v-if="data.min && data.max"
                           v-model="data.value" 
@@ -30,10 +30,17 @@
                 <v-card-text v-if="hasAdditional">
                     <h1>{{hasBase? 'Additional Information': 'Information'}}</h1>
                     <div lg12 v-for="(type, key) in requiredData.requiredData" :key="key" class="ma-4">
-                        <v-text-field v-if="type !== 'boolean'" :label="key" v-model="registeredData[key]" :type="type === 'number'?'Number':'text'"></v-text-field>
+                        <v-text-field v-if="type !== 'boolean'" :label="key" v-model="registeredData[key]" :rules="rules.notNull" :type="type === 'number'?'Number':'text'"></v-text-field>
                         <v-checkbox :label="key" v-if="type === 'boolean'" v-model="registeredData[key]"></v-checkbox>
                     </div>
                 </v-card-text>
+                
+                <v-alert
+                  :value="infoError"
+                  type="error"
+                >
+                  {{infoError}}
+                </v-alert>
                 <v-card-actions justify-center>
                     <v-spacer></v-spacer>
                     <v-btn class="success mr-4 mb-4" @click="register()">Register</v-btn>
@@ -73,7 +80,11 @@ export default {
         company: {label: 'Company', value: '', type: 'text'},
         officeNumber: {label: 'Office Number', value: '', type: 'text', mask: 'phone'},
         fax: {label: 'Fax', value: '', type: 'text', mask: 'phone'},
-      }
+      },
+      rules: {
+          notNull: [v => v.length > 0 || 'Require Information'],
+      },
+      infoError: false
     };
   },
   computed: {
@@ -86,11 +97,8 @@ export default {
     },
     accessible(){
       return !this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id))
-    }
-  },
-  methods: {
-    ...mapActions(["setAttendees"]),
-    async register() {
+    },
+    fullRegisteredData(){
       let res = {}
       for (let attr in this.baseInformation){
         res[attr] = this.baseInformation[attr].value
@@ -98,10 +106,34 @@ export default {
       for (let attr in this.registeredData){
         res[attr] = this.registeredData[attr]
       }
+      return res;
+    },
+    isAbleToRegister(){
+      for (let attr in this.baseInformation){
+        if (!this.baseInformation[attr].value){
+          return false
+        }
+      }
+      for (let attr in this.registeredData){
+        if (!this.registeredData[attr]){
+          return false
+        }
+      }
+      return true
+    }
+  },
+  methods: {
+    ...mapActions(["setAttendees"]),
+    async register() {
+      if (!this.isAbleToRegister){
+        this.infoError = 'Information is required'
+        return
+      }
+      this.infoError = false
       await AttendeeService.register(
         this.user.username,
         this.seminar.id,
-        res
+        this.fullRegisteredData
       );
       this.setAttendees(
         (await AttendeeService.findAllByUser(this.user.username)).data

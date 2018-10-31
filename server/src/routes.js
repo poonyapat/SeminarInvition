@@ -42,6 +42,9 @@ module.exports = (app) => {
 
     app.get('/seminar/requiredData',
         SeminarController.getRequiredData)
+
+    app.post('/seminar/update',
+        SeminarController.update)
     
     app.post('/userProfile/update',
         UserController.updateProfile)

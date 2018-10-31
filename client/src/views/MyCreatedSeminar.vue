@@ -15,7 +15,7 @@
                     </v-btn>
                 </v-toolbar>
                 <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar">
-                    <v-btn round flat color="edit" >
+                    <v-btn round flat color="edit" :to="{name: 'seminarEditor', params: {id: seminar.id}}">
                         <v-icon>edit</v-icon>
                         Edit
                     </v-btn>
@@ -53,7 +53,7 @@ export default {
     },
     computed: {
         ...mapState([
-            'user', 'attendees', 'route'
+            'user', 'attendees', 'route', 'mySeminars'
         ]),
         accessible(){
             return this.user && (this.user.role == 'Internal User' || this.user.role == 'Admin')
@@ -68,7 +68,7 @@ export default {
         this.loaded = true
     },
     wacth: {
-        attendees: async ()=> {
+        mySeminars: async ()=> {
             this.loaded = false
             if (!this.user)
                 this.seminars = []

@@ -13,7 +13,8 @@ export default new Vuex.Store({
         token: null,
         user: null,
         isUserLoggedIn: false,
-        attendees: []
+        attendees: [],
+        mySeminars: []
     },
     mutations: {
         setToken(state, token) {
@@ -31,6 +32,12 @@ export default new Vuex.Store({
         },
         removeAttendeeByIndex(state, index){
             state.attendees.splice(index,1)
+        },
+        setMySeminars(state, seminars) {
+            state.mySeminars = seminars
+        },
+        updateMySeminar(state, data) {
+            state.mySeminars[data.index] = data.seminar
         },
         updateUser(state, data) {
             for (let key in data) {
@@ -56,6 +63,12 @@ export default new Vuex.Store({
         },
         cancelRegistration({commit}, index){
             commit('removeAttendeeByIndex', index)
+        },
+        setMySeminars({ commit }, seminars) {
+            commit('setMySeminars', seminars)
+        },
+        updateMySeminar({ commit }, data) {
+            commit('updateMySeminar', data)
         },
         updateUser({ commit }, data) {
             commit('updateUser', data)

@@ -7,7 +7,6 @@ const {
 module.exports = {
     async findSeminarByUser(req, res) {
         try {
-            console.log(req.query)
             const attendees = await Attendee.findAll({
                 where: {
                     user: req.query.user

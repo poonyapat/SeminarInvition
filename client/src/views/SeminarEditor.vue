@@ -3,9 +3,9 @@
         <v-layout row wrap v-if="accessible">
             <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
                 <v-toolbar fla dense class="primary" dark>
-                    <v-toolbar-title> Create Seminar </v-toolbar-title>
+                    <v-toolbar-title> Edit Seminar </v-toolbar-title>
                 </v-toolbar>
-                <seminar-creation-stepper class="mt-3" @submit-form="create"/>
+                <seminar-creation-stepper :seminarId="route.params.id" @submit-form="update" class="mt-3"/>
             </v-flex>
         </v-layout>
         <error v-else code="403" msg="Access Denied"/>
@@ -22,19 +22,20 @@ export default {
         SeminarCreationStepper, Error
     },
     computed: {
-        ...mapState(['user']),
+        ...mapState(['user', 'route']),
         accessible(){
             return this.user.role && (this.user.role == 'Internal User' || this.user.role == 'Admin')
         }
     },
     methods: {
         ...mapActions(['setMySeminars']),
-        async create(requiredData, info, requiredBasicInfo){
+        async update(requiredData, info, requiredBasicInfo){
             let rd = {}
             for (let index in requiredData){
                 rd[requiredData[index].name] = requiredData[index].type
             }
-            await SeminarService.create({
+            const res = await SeminarService.update({
+                id: this.route.params.id,
                 info: info,
                 requiredData: {
                     requiredData: rd,

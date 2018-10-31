@@ -11,6 +11,9 @@ export default {
     create(data) {
         return Api().post('seminar/create', data)
     },
+    update(data) {
+        return Api().post('seminar/update', data)
+    },
     findAllByAttendeeUsername(username) {
         return Api().get('registered_seminars', {
             params: {
