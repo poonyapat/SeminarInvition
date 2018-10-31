@@ -217,13 +217,11 @@
                         this.info[attr] = seminar[attr]
                     }
                 }
-                console.log(this.info)
                 let requiredData = (await SeminarService.getRequiredData(this.seminarId)).data
                 this.requiredBasicInfo = requiredData.baseInformation
                 for (let attr in requiredData.requiredData){
                     this.requiredData.push({name: attr, type: requiredData.requiredData[attr]})
                 }
-                console.log(requiredData.requiredData)
             }
             else {
                 this.info.company = this.user.company
