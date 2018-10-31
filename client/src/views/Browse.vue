@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
-        <v-layout row wrap>
-            <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
+        <v-layout row wrap justify-center>
+            <v-flex xs12 sm10 md8 lg6 text-xs-center>
                 <v-text-field
                     clearable
                     outline
@@ -10,8 +10,22 @@
                     prepend-inner-icon="search"
                 >
                 </v-text-field>
+                <v-pagination
+                v-if="seminars.length"
+                v-model="page"
+                :length="maxPage"
+                :total-visible="7"
+                round
+                ></v-pagination>
                 <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar" />
-                <v-card v-if="seminars.length === 0" class="low-op">
+                <v-pagination
+                v-if="seminars.length"
+                v-model="page"
+                :length="maxPage"
+                :total-visible="7"
+                round
+                ></v-pagination>
+                <v-card v-if="!seminars.length" class="low-op">
                     <v-card-title>
                         <h1 v-if="loaded">0 Seminar Found...</h1>
                         <v-progress-linear v-else :indeterminate="true"></v-progress-linear>
@@ -33,17 +47,41 @@ export default {
         return {
             seminars: [],
             searcher: null,
-            loaded: false
+            loaded: false,
+            page: 1,
+            maxPage: 1
         }
+    },
+    mounted(){
+        this.$router.push({name: 'browse', query: {page: this.page}})
     },
     watch: {
         searcher: debounce(async function(value){
             const route = {
-                name: 'browse'
+                name: 'browse',
+                query: {
+                    page: 1
+                }
             }
             if (value !== ''){
                 route.query = {
-                    search: this.searcher
+                    search: this.searcher,
+                    page: 1
+                }
+            }
+            this.$router.push(route)
+        }, 500),
+        page: debounce(async function(value){
+            const route = {
+                name: 'browse',
+                query: {
+                    page: this.page
+                }
+            }
+            if (this.searcher !== ''){
+                route.query = {
+                    search: this.searcher,
+                    page: this.page
                 }
             }
             this.$router.push(route)
@@ -52,7 +90,19 @@ export default {
             immediate: true,
             async handler (value) {
                 this.searcher = value
-                this.seminars = (await SeminarService.findAll(value)).data
+                let temp = (await SeminarService.findAll({search:value, page:this.page})).data
+                this.seminars = temp.rows;
+                this.maxPage = Math.ceil(temp.count/10)
+                this.loaded = true
+            }
+        },
+        '$route.query.page': {
+            immediate: true,
+            async handler (value) {
+                this.page = parseInt(value)
+                let temp = (await SeminarService.findAll({search:this.search, page:value})).data
+                this.seminars = temp.rows;
+                this.maxPage = Math.ceil(temp.count/10)
                 this.loaded = true
             }
         },

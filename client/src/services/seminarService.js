@@ -3,9 +3,7 @@ import Api from '@/services/api'
 export default {
     findAll(data) {
         return Api().get('seminar', {
-            params: {
-                search: data
-            }
+            params: data
         })
     },
     create(data) {

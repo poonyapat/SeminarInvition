@@ -3,21 +3,33 @@ const {Seminar, RequiredData} = require('../models')
 module.exports = {
     async findAll(req, res) {
         try {
+            offset = 10 * (req.query.page -1)
+            console.log(req.query)
             if (req.query.search) {
-                const seminars = await Seminar.findAll({
-                    limit: 10,
+                const seminars = await Seminar.findAndCountAll({
+                    offset: offset,
+                    limit: 10 ,
                     where: {
                         title: {
                             $like: `%${req.query.search}%`
                         }
-                    }
+                    },
+                    order: [ 
+                        ['updatedAt', 'DESC']
+                    ]
                 })
+                console.log(seminars)
                 res.send(seminars)
             }
             else {
-                const seminars = await Seminar.findAll({
-                    // limit: 10
+                const seminars = await Seminar.findAndCountAll({
+                    offset: offset,
+                    limit: 10,
+                    order: [ 
+                        ['updatedAt', 'DESC']
+                    ]
                 })
+                console.log(seminars)
                 res.send(seminars)
             }
         } catch (error) {
