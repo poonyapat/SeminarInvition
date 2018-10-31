@@ -1,72 +1,31 @@
 <template>
-    <v-container fluid>
+    <v-container>
         <v-layout v-if="seminar" wrap justify-center>
             <v-flex sm12 lg10>
-                <v-toolbar fla class="primary" dark>
+                <v-toolbar flat dark class="primary" >
                     <v-toolbar-title> {{seminar.title}} </v-toolbar-title>
                 </v-toolbar>
-                <v-list class="ma-3 low-op" dark three-line>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Title</v-list-tile-title>
-                            <v-list-tile-sub-title> {{seminar.title}}</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Description</v-list-tile-title>
-                            <v-list-tile-sub-title> {{seminar.description}}</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Date</v-list-tile-title>
-                            <v-list-tile-sub-title
-                                    v-if="formatDate(seminar.startTime) !== formatDate(seminar.endTime)">
-                                Start Date : {{formatDate(seminar.startTime)}} <br>
-                                End Date : {{formatDate(seminar.endTime)}}
-                            </v-list-tile-sub-title>
-                            <v-list-tile-sub-title v-else>
-                                {{formatDate(seminar.startTime)}}
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Place</v-list-tile-title>
-                            <v-list-tile-sub-title> {{seminar.place}}</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Contact</v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                Email : {{seminar.contactEmail}} <br>
-                                Phone : {{seminar.contactNumber}}
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                Current Attendees : {{seminar.currentRegistered}} / {{seminar.maximumAttendees}}
-                            </v-list-tile-title>
-
-                            <v-list-tile-sub-title>
-                                <v-btn v-if="!user || status === '' && seminar.author !== user.username" @click="register(seminar.id)"
-                                        class="primary">
-                                        Register
-                                </v-btn>
-                                <v-btn v-if="status === 'Attended'" class="success" @click="confirm(seminar.id)">
-                                    Confirm Registration
-                                </v-btn>
-                                <v-btn v-if="status !== ''" class="cancel" dark @click="cancel(seminar.id)">Cancel
-                                    Registration
-                                </v-btn>
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list>
+                <v-card class="low-op pa-2">
+                    <v-card-text v-for="(info, key) in showableInfo" :key="key">
+                        <h2>{{info.label}}</h2>
+                        <div v-if="Array.isArray(info.value)">
+                            <p v-for="(v,k) in info.value" :key="k">{{v.label}} : {{v.value}}</p>
+                        </div>
+                        <p v-else>{{info.value}}</p>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-btn v-if="!user || status === '' && seminar.author !== user.username" @click="register(seminar.id)" class="primary">
+                                Register
+                        </v-btn>
+                        <v-btn v-if="status === 'Attended'" class="success" @click="confirm(seminar.id)">
+                            Confirm Registration
+                        </v-btn>
+                        <v-btn v-if="status !== ''" class="cancel" dark @click="cancel(seminar.id)">
+                            Cancel Registration
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-flex>
         </v-layout>
         <error v-else code="404" msg="Seminar is not found" />
@@ -93,7 +52,20 @@ export default {
     Error
   },
   computed: {
-    ...mapState(["user", "attendees"])
+    ...mapState(["user", "attendees"]),
+    showableInfo(){
+        return {
+            title: {label: 'Title', value: this.seminar.title},
+            description: {label: 'Description', value: this.seminar.description},
+            date: {label: 'Date', value: this.formatDate(this.seminar.startTime) !== this.formatDate(this.seminar.endTime)?
+                    [{label: 'Start Date', value: this.formatDate(this.seminar.startTime)}, {label: 'End Date', value: this.formatDate(this.seminar.endTime)}]:
+                    this.formatDate(this.seminar.startTime) 
+            },
+            place: {label: 'Location', value: this.seminar.place},
+            contact: {label: 'Contact', value: [{label: 'Email', value: this.seminar.contactEmail}, {label:'Contact Number', value: this.seminar.contactNumber}]},
+            attendees: {label: 'Current Attendees', value: this.seminar.currentRegistered +' / '+ this.seminar.maximumAttendees}
+        }
+    }
   },
   methods: {
     formatDate(date) {
@@ -160,5 +132,16 @@ export default {
 
 .v-list__tile:hover .v-list__tile__title {
   font-weight: 1000;
+}
+
+p {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    margin-bottom: 0;
+}
+
+textarea {
+    width: 100%;
+    height: 100vw;
 }
 </style>

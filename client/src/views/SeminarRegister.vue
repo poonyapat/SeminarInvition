@@ -91,10 +91,17 @@ export default {
   methods: {
     ...mapActions(["setAttendees"]),
     async register() {
+      let res = {}
+      for (let attr in this.baseInformation){
+        res[attr] = this.baseInformation[attr].value
+      }
+      for (let attr in this.registeredData){
+        res[attr] = this.registeredData[attr]
+      }
       await AttendeeService.register(
         this.user.username,
         this.seminar.id,
-        JSON.parse(JSON.stringify(this.registeredData))
+        res
       );
       this.setAttendees(
         (await AttendeeService.findAllByUser(this.user.username)).data
