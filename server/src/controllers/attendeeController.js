@@ -1,6 +1,7 @@
 const {
     Attendee,
-    Seminar
+    Seminar,
+    User
 } = require('../models')
 
 
@@ -37,6 +38,28 @@ module.exports = {
                     user: req.query.user
                 }
             })
+            res.send(attendees)
+        } catch (error) {
+            res.status(500).send({
+                error: error
+            })
+        }
+    },
+    async findAllBySeminar(req, res) {
+        try {
+            const attendees = await Attendee.findAll({
+                where: {
+                    seminar: req.query.seminar
+                }
+            })
+            for (let i in attendees) {
+                attendees[i].registeredData.credit = (await User.findOne({
+                    where: {
+                        username: attendees[i].user
+                    },
+                    attributes: ['credit']
+                })).credit
+            }
             res.send(attendees)
         } catch (error) {
             res.status(500).send({

@@ -16,6 +16,14 @@ export default {
         })
     },
 
+    findAllBySeminar(seminarId) {
+        return Api().get('seminar/attendees', {
+            params: {
+                seminar: seminarId
+            }
+        })
+    },
+
     updateStatus(username, seminarId, newStatus) {
         return Api().post('attendee/update_status', {
             user: username,

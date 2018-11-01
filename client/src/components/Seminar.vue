@@ -16,7 +16,9 @@
         </v-card-actions>
         <v-slide-y-transition>
             <v-card-text class="secondary lighten-1" v-show="show">
-                {{seminar.description}}
+                <p class="description ma-0 pa-0">
+                    {{seminar.description}}
+                </p>
             </v-card-text>
         </v-slide-y-transition>
     </v-card>
@@ -43,6 +45,9 @@
     }
 </script>
 
-<style>
-
+<style scoped>
+.description {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
 </style>

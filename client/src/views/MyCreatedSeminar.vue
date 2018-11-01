@@ -19,7 +19,7 @@
                         <v-icon>edit</v-icon>
                         Edit
                     </v-btn>
-                    <v-btn round flat color="info">
+                    <v-btn round flat color="info" :to="{name: 'attendeesInformation', params: {id: seminar.id}}">
                         <v-icon>people</v-icon>
                         Attendees
                     </v-btn>

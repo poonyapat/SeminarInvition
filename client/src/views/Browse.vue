@@ -65,27 +65,27 @@ export default {
             }
             if (value !== ''){
                 route.query = {
-                    search: this.searcher,
+                    search: value,
                     page: 1
                 }
             }
             this.$router.push(route)
         }, 500),
-        page: debounce(async function(value){
+        page: function(value){
             const route = {
                 name: 'browse',
                 query: {
-                    page: this.page
+                    page: value
                 }
             }
             if (this.searcher !== ''){
                 route.query = {
                     search: this.searcher,
-                    page: this.page
+                    page: value
                 }
             }
             this.$router.push(route)
-        }, 500),
+        },
         '$route.query.search': {
             immediate: true,
             async handler (value) {
@@ -100,6 +100,8 @@ export default {
             immediate: true,
             async handler (value) {
                 this.page = parseInt(value)
+                if (!this.page)
+                    return
                 let temp = (await SeminarService.findAll({search:this.search, page:value})).data
                 this.seminars = temp.rows;
                 this.maxPage = Math.ceil(temp.count/10)
