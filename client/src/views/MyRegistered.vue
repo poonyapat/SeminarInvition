@@ -20,7 +20,10 @@
                         @click="confirm(seminar.id)"
                     >
                         <v-icon>done</v-icon>
+                        
+                        <span class="hidden-xs-only">  
                         Confirm
+                        </span>
                     </v-btn>
                     <v-btn 
                         flat 
@@ -28,7 +31,9 @@
                         @click="cancel(seminar.id)"
                     >
                         <v-icon>close</v-icon>
+                        <span class="hidden-xs-only">  
                         Cancel
+                        </span>
                     </v-btn>
                 </seminar>
                 <v-card v-if="registeredSeminars.length === 0" class="low-op">

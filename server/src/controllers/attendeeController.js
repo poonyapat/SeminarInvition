@@ -135,6 +135,16 @@ module.exports = {
             attendee.update({
                 status: req.body.newStatus
             })
+            if (req.body.newStatus === 'Declined') {
+                const seminar = await Seminar.findOne({
+                    where: {
+                        id: req.body.seminar
+                    }
+                })
+                seminar.update({
+                    currentRegistered: seminar.currentRegistered - 1
+                })
+            }
             res.send({
                 nessage: "Update Complete"
             })

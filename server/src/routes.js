@@ -55,4 +55,7 @@ module.exports = (app) => {
     
     app.post('/user/verify',
         UserController.verify)
+    
+    app.post('/user/generate',
+        UserController.generate)
 }

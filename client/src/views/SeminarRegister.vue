@@ -43,8 +43,8 @@
                 </v-alert>
                 <v-card-actions justify-center>
                     <v-spacer></v-spacer>
-                    <v-btn class="success mr-4 mb-4" @click="register()">Register</v-btn>
-                    <v-btn class="cancel ml-4 mb-4" :to="{name: 'seminarInformation', params: {id: seminar.id}}" dark>Cancel</v-btn>
+                    <v-btn round class="success mr-4 mb-4" @click="register()">Register</v-btn>
+                    <v-btn round class="cancel ml-4 mb-4" :to="{name: 'seminarInformation', params: {id: seminar.id}}" dark>Cancel</v-btn>
                     <v-spacer></v-spacer>
                 </v-card-actions>
             </v-card>
@@ -88,7 +88,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["user", "route", "attendees"]),
+    ...mapState(["user", "route", "attendees", "mySeminars"]),
     hasAdditional(){
       return Boolean(Object.keys(this.requiredData.requiredData).length)
     },
@@ -96,7 +96,10 @@ export default {
       return this.requiredData.baseInformation
     },
     accessible(){
-      return !this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id))
+      console.log(!this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id)))
+      console.log(!this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id))
+      return !this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id)) &&
+          !this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id)
     },
     fullRegisteredData(){
       let res = {}

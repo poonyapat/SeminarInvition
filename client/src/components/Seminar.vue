@@ -1,6 +1,6 @@
 <template>
     <v-card class="ma-3 secondary lighten-1 elevation-5">
-        <v-card-title primary-title class="secondary low-op">
+        <v-card-title primary-title class="secondary low-op overflow-hidden">
             <h3>{{seminar.title}}</h3>
         </v-card-title>
         <v-card-actions class="secondary lighten-1">

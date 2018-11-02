@@ -15,5 +15,12 @@ export default {
             data: data,
             token: token
         })
+    },
+
+    generateUser(adminCredential, userData) {
+        return Api().post('user/generate', {
+            adminCredential: adminCredential,
+            user: userData
+        })
     }
 }

@@ -7,6 +7,7 @@
                     <v-spacer></v-spacer>
                     <v-btn 
                         round
+                        flat
                         class="primary" 
                         :to="{name: 'seminarCreation'}"
                     >
@@ -17,11 +18,15 @@
                 <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar">
                     <v-btn round flat color="edit" :to="{name: 'seminarEditor', params: {id: seminar.id}}">
                         <v-icon>edit</v-icon>
+                        <span class="hidden-xs-only">    
                         Edit
+                        </span>
                     </v-btn>
                     <v-btn round flat color="info" :to="{name: 'attendeesInformation', params: {id: seminar.id}}">
                         <v-icon>people</v-icon>
+                        <span class="hidden-xs-only"> 
                         Attendees
+                        </span>
                     </v-btn>
                 </seminar>
                 <v-card v-if="seminars.length === 0" class="low-op">

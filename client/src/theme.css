@@ -35,15 +35,17 @@
 
 .main {
     background: 
-        /* linear-gradient(to right, rgba(231, 166, 199, 0.7), rgba(255, 143, 210, 0.8)), */
+        linear-gradient(to right, rgba(115, 255, 173, 0.815), rgba(116, 203, 253, 0.8)),
+        url(https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/r3NpKei5gizy8iatz/videoblocks-abstract-background-with-crystal-shape-of-glass-with-light-reflection-on-glossy-surface-counter-of-numbers-with-glitter-dots-and-color-lines-abstract-background-with-animation-rotation-of-squares-of_rt-he67buz_thumbnail-full01.png) !important;
+    /* background: 
         linear-gradient(to right, rgba(255, 95, 95, 0.7), rgba(189, 108, 255, 0.7)),
-        /* linear-gradient(to right, rgba(0, 123, 255, 0.7), rgba(0, 123, 255, 0.8)), */
-        /* linear-gradient(to right, rgba(255, 249, 196, 0.7), rgba(253, 216, 53, 0.8)), */
-        url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important;
+        url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important; */
+    background-blend-mode: overlay;
 }
 
 #app {
-    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
 }
 
 .low-op {

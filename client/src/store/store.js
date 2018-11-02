@@ -54,6 +54,7 @@ export default new Vuex.Store({
             commit('setToken', null)
             commit('setUser', null)
             commit('setAttendees', [])
+            commit('setMySeminars', [])
         },
         setAttendees({commit}, attendees) {
             commit('setAttendees', attendees)

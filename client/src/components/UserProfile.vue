@@ -1,8 +1,8 @@
 <template>
-    <v-layout>
+    <v-layout column>
         <v-flex>
-            <v-card class="low-op fill-height">
-                <v-toolbar dark>
+            <v-card class="low-op fill-height mb-3">
+                <v-toolbar dark class="primary">
                     <v-toolbar-title>
                         {{user.username}} Profile
                     </v-toolbar-title>
@@ -54,12 +54,16 @@
                 </v-container>
             </v-card>
         </v-flex>
+        <v-flex v-if="user.role === 'Admin'">
+            <admin-card></admin-card>
+        </v-flex>
     </v-layout>
 </template>
 
 <script>
 import {mapState, mapActions} from 'vuex'
 import UserService from '@/services/userService'
+import AdminCard from '@/components/AdminCard'
 export default {
     computed: {
         ...mapState([
@@ -116,6 +120,9 @@ export default {
                 }
             }
         }
+    },
+    components: {
+        AdminCard
     },
     async mounted(){
         this.loadProfile()

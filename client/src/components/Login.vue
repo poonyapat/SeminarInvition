@@ -61,10 +61,8 @@ export default {
           password: this.password
         });
         this.persistedLogin(response.data);
-        this.setAttendees(
-          (await AttendeeService.findAllByUser(response.data.user.username))
-            .data
-        );
+        this.setAttendees((await AttendeeService.findAllByUser(response.data.user.username)).data)
+        this.setMySeminars((await SeminarService.findAllByAuthor(response.data.user.username)).data)
         this.username = null;
         this.password = null;
         this.dialog = false;
@@ -72,7 +70,7 @@ export default {
         this.errorMsg = error.response.data.error;
       }
     },
-    ...mapActions(["persistedLogin", "setAttendees"])
+    ...mapActions(["persistedLogin", "setAttendees", 'setMySeminars'])
   }
 };
 </script>

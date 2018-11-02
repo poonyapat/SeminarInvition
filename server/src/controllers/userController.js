@@ -34,6 +34,33 @@ module.exports = {
             })
         }
     },
+    async generate(req, res) {
+        try {
+            const admin = await User.findOne({
+                where: {
+                    username: req.body.adminCredential.username
+                }
+            })
+            if (!admin) {
+                res.status(403).send({
+                    error: 'Invalid Admin\'s Credential'
+                })
+            }
+            const isPasswordValid = await admin.comparePassword(req.body.adminCredential.password)
+            if (!isPasswordValid) {
+                res.status(403).send({
+                    error: 'Invalid Admin\'s Credential'
+                })
+            }
+            req.body.user.credit = 5
+            const user = await User.create(req.body.user)
+            res.send(user.toJSON())
+        } catch (error) {
+            res.status(400).send({
+                error: 'Invalid User Data'
+            })
+        }
+    },
     async authenticate(req, res) {
         try {
             const {username, password} = req.body

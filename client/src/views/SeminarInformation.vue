@@ -14,7 +14,7 @@
                         <p v-else>{{info.value}}</p>
                     </v-card-text>
                     <v-divider></v-divider>
-                    <v-card-actions>
+                    <v-card-text>
                         <v-btn v-if="!user || status === '' && seminar.author !== user.username" @click="register(seminar.id)" class="primary">
                                 Register
                         </v-btn>
@@ -24,7 +24,7 @@
                         <v-btn v-if="status !== ''" class="cancel" dark @click="cancel(seminar.id)">
                             Cancel Registration
                         </v-btn>
-                    </v-card-actions>
+                    </v-card-text>
                 </v-card>
             </v-flex>
         </v-layout>
@@ -116,6 +116,7 @@ export default {
         this.status = this.attendees[i].status;
       }
     }
+    console.log(!this.user, this.status === '' , this.seminar.author , this.user.username)
   }
 };
 </script>
