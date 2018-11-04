@@ -23,6 +23,7 @@
                         :max="5"
                         thumb-label="always"
                     ></v-slider>
+                    <rejected-list :rejected-list="seminar.rejectedList" @remove="removeFromRejectedList" @add="addToRejectedList"></rejected-list>
                 </v-card>
             </v-flex>
             <v-flex xs12 sm10 md8>
@@ -74,6 +75,7 @@
 import AttendeeService from '@/services/attendeeService'
 import SeminarService from '@/services/seminarService'
 import AttendeeInformation from '@/components/AttendeeInformation'
+import RejectedList from '@/components/RejectedList'
 import Error from '@/components/Error'
 import {mapState} from 'vuex'
 export default {
@@ -99,6 +101,26 @@ export default {
                     this.attendees.pop(i)
             }
         },
+        async removeFromRejectedList(username){
+            for (let i in this.seminar.rejectedList){
+                if (this.seminar.rejectedList[i] === username) this.seminar.rejectedList.pop(i)
+            }
+            await SeminarService.update({
+                id: this.seminar.id,
+                info: {
+                    rejectedList: this.seminar.rejectedList
+                }
+            })
+        },
+        async addToRejectedList(username){
+            this.seminar.rejectedList.push(username)
+            await SeminarService.update({
+                id: this.seminar.id,
+                info: {
+                    rejectedList: this.seminar.rejectedList
+                }
+            })
+        }
     },
     computed: {
         ...mapState(['route', 'user']),
@@ -131,7 +153,7 @@ export default {
         }
     },
     components: {
-        AttendeeInformation, Error
+        AttendeeInformation, Error, RejectedList
     },
     async mounted(){
         this.loaded = false

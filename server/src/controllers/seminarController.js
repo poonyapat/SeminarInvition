@@ -97,14 +97,16 @@ module.exports = {
             })
             return;
         }
-        try {
-            const requiredData = await RequiredData.findOne({ where: { id: req.body.id } })
-            await requiredData.update(req.body.requiredData)
-            res.status(200).send()
-        } catch (error) {
-            res.status(500).send({
-                error: error
-            })
+        if (req.body.requiredData) {
+            try {
+                const requiredData = await RequiredData.findOne({ where: { id: req.body.id } })
+                await requiredData.update(req.body.requiredData)
+                res.status(200).send()
+            } catch (error) {
+                res.status(500).send({
+                    error: error
+                })
+            }
         }
     },
     async getRequiredData(req, res){
