@@ -9,7 +9,7 @@
 
 <script>
     import PageHeader from '@/components/PageHeader'
-    import {mapActions} from 'vuex'
+    import {mapState,mapActions} from 'vuex'
     import AttendeeService from '@/services/attendeeService'
     import SeminarService from '@/services/seminarService'
     export default {
@@ -21,9 +21,14 @@
                 'setAttendees', 'setMySeminars'
             ])
         },
+        computed: {
+            ...mapState([
+                'user'
+            ])
+        },
         async mounted(){
-            if (this.$store.state.user){
-                this.setAttendees((await AttendeeService.findAllByUser(this.$store.state.user.username)).data)
+            if (this.user){
+                this.setAttendees((await AttendeeService.findAllByUser(this.user.username)).data)
                 this.setMySeminars((await SeminarService.findAllByAuthor(this.user.username)).data)
             }
         }

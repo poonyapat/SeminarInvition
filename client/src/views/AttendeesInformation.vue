@@ -47,10 +47,10 @@
                             <td>{{ props.item.registeredData.credit }}</td>
                             <td>
                                 <v-tooltip bottom>
-                                    <v-icon slot="activator" small @click="props.expanded=true;declineAttendee(props.item.user, props.item.seminar)">
+                                    <v-icon slot="activator" small @click="props.expanded=true;rejectAttendee(props.item.user, props.item.seminar)">
                                         delete
                                     </v-icon>
-                                    <span>Decline Attendee</span>
+                                    <span>Reject Attendee</span>
                                 </v-tooltip>
                             </td>
                         </tr>
@@ -92,8 +92,8 @@ export default {
         }
     },
     methods: {
-        async declineAttendee(username, seminarId) {
-            await AttendeeService.cancelRegistration(username, seminarId);
+        async rejectAttendee(username, seminarId) {
+            await AttendeeService.rejectAttendee(username, seminarId);
             for (let i in this.attendees){
                 if (this.attendees[i].user === username)
                     this.attendees.pop(i)
@@ -135,9 +135,7 @@ export default {
     },
     async mounted(){
         this.loaded = false
-        this.attendees = (await AttendeeService.findAllBySeminar(this.route.params.id)).data.filter((attendee)=> {
-            return attendee.status !== 'Declined'
-        })
+        this.attendees = (await AttendeeService.findAllBySeminar(this.route.params.id)).data
         this.seminar = (await SeminarService.findOneById(this.route.params.id)).data
         this.loaded = true
     }
@@ -145,11 +143,11 @@ export default {
 </script>
 
 <style>
-td, #head, table, tbody, thead, .v-datatable.v-table, .v-datatable__actions {
-    /* background-color: rgba(255, 0, 76, 0.2) !important */
+/* td, #head, table, tbody, thead, .v-datatable.v-table, .v-datatable__actions {
+    background-color: rgba(255, 0, 76, 0.2) !important,
     background-color: rgba(255, 255, 255, 0.2) !important
 }
 .transparent, .v-card.v-card--flat, .v-list {
     background: transparent !important
-}
+} */
 </style>

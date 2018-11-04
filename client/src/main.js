@@ -21,8 +21,8 @@ Vue.use(Vuetify, {
         // primary: colors.pink.lighten3,
         // secondary: colors.pink.lighten4,
         // cyan
-        primary: colors.cyan.lighten1,
-        secondary: colors.cyan.lighten4,
+        // primary: colors.cyan.lighten1,
+        // secondary: colors.cyan.lighten4,
         // brown
         // primary: colors.brown.lighten1,
         // secondary: colors.brown.lighten4,
@@ -39,8 +39,8 @@ Vue.use(Vuetify, {
         // secondary: colors.grey.lighten2,
 
         // black-pink
-        // primary: colors.grey.darken4,
-        // secondary: colors.pink.lighten4,
+        primary: colors.grey.darken4,
+        secondary: '#FFCCDD',
 
         // others
         cancel: colors.red.darken1,

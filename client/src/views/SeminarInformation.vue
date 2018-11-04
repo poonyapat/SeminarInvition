@@ -15,7 +15,7 @@
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-text>
-                        <v-btn v-if="!user || status === '' && seminar.author !== user.username" @click="register(seminar.id)" class="primary">
+                        <v-btn v-if="!user || status === '' && seminar.author !== user.username && seminar.rejectedList && !seminar.rejectedList.includes(user.username)" @click="register(seminar.id)" class="primary">
                                 Register
                         </v-btn>
                         <v-btn v-if="status === 'Attended'" class="success" @click="confirm(seminar.id)">
@@ -116,7 +116,6 @@ export default {
         this.status = this.attendees[i].status;
       }
     }
-    console.log(!this.user, this.status === '' , this.seminar.author , this.user.username)
   }
 };
 </script>

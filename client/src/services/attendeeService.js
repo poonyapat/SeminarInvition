@@ -8,6 +8,13 @@ export default {
         })
     },
 
+    rejectAttendee(username, seminarId) {
+        return Api().post('attendee/reject', {
+            user: username,
+            seminar: seminarId
+        })
+    },
+
     findAllByUser(user) {
         return Api().get('user_attention', {
             params: {

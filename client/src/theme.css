@@ -35,17 +35,26 @@
 
 .main {
     background: 
-        linear-gradient(to right, rgba(115, 255, 173, 0.815), rgba(116, 203, 253, 0.8)),
-        url(https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/r3NpKei5gizy8iatz/videoblocks-abstract-background-with-crystal-shape-of-glass-with-light-reflection-on-glossy-surface-counter-of-numbers-with-glitter-dots-and-color-lines-abstract-background-with-animation-rotation-of-squares-of_rt-he67buz_thumbnail-full01.png) !important;
-    /* background: 
         linear-gradient(to right, rgba(255, 95, 95, 0.7), rgba(189, 108, 255, 0.7)),
-        url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important; */
+        url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important;
+}
+
+.secondary {
+    background: linear-gradient(to right, rgb(255, 95, 95), rgb(96, 67, 121)),
+    url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important;;
     background-blend-mode: overlay;
 }
+
+/* .v-toolbar.primary {
+    background: linear-gradient(to right, rgb(134, 48, 48), rgb(97, 64, 124)),
+    url(https://cdn.vuetifyjs.com/images/parallax/material2.jpg) !important;;
+    background-blend-mode: screen;
+} */
 
 #app {
     background-repeat: no-repeat !important;
     background-attachment: fixed !important;
+    background-size: cover !important
 }
 
 .low-op {

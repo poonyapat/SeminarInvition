@@ -82,7 +82,7 @@ export default {
         fax: {label: 'Fax', value: '', type: 'text', mask: 'phone'},
       },
       rules: {
-          notNull: [v => v.length > 0 || 'Require Information'],
+          notNull: [v => !!v || 'Require Information'],
       },
       infoError: false
     };
@@ -96,10 +96,9 @@ export default {
       return this.requiredData.baseInformation
     },
     accessible(){
-      console.log(!this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id)))
-      console.log(!this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id))
       return !this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id)) &&
-          !this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id)
+          !this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id) &&
+          this.seminar.rejectedList && !(this.seminar.rejectedList.includes(this.user.username))
     },
     fullRegisteredData(){
       let res = {}
@@ -151,8 +150,10 @@ export default {
     const seminarId = this.route.params.id;
     this.seminar = (await SeminarService.findOneById(seminarId)).data;
     this.requiredData = (await SeminarService.getRequiredData(seminarId)).data;
-    for (let index in this.baseInformation){
-      this.baseInformation[index].value = this.user[index]
+    if (this.user){
+      for (let index in this.baseInformation){
+        this.baseInformation[index].value = this.user[index]
+      }
     }
     if (this.baseInformation.age.value < this.baseInformation.age.min)
       this.baseInformation.age.value = this.baseInformation.age.min

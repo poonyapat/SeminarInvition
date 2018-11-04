@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         contactEmail: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        rejectedList: {
+            type: DataTypes.ARRAY(DataTypes.STRING),
+            defaultValue: []
         }
     })
     const User = sequelize.import('./user')

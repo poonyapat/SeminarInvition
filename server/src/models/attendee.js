@@ -9,13 +9,19 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         },
         status: {
-            type: DataTypes.ENUM('Confirmed', 'Attended', 'Cancelled'),
+            type: DataTypes.ENUM('Confirmed', 'Attended', 'Cancelled', 'Reserved'),
             allowNull: false
         },
         order: {
             type: DataTypes.INTEGER,
-            allowNull: false
         }
+    },{
+        indexes: [
+            {
+                unique: true,
+                fields: ['seminar', 'status', 'order']
+            }
+        ]
     })
     const User = sequelize.import('./user')
     const Seminar = sequelize.import('./seminar')

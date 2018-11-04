@@ -28,7 +28,7 @@
             <span class="red--text"> {{errorMsg}} </span>
             <v-card-actions>
                 <v-layout justify-center>
-                    <v-btn class="primary" dark @click="login">Submit</v-btn>
+                    <v-btn round class="primary" dark @click="login">Login</v-btn>
                 </v-layout>
             </v-card-actions>
         </v-card>
@@ -38,6 +38,7 @@
 <script>
 import UserService from "@/services/userService";
 import AttendeeService from "@/services/attendeeService";
+import SeminarService from "@/services/seminarService"
 import { mapActions } from "vuex";
 
 export default {
@@ -67,6 +68,7 @@ export default {
         this.password = null;
         this.dialog = false;
       } catch (error) {
+        console.log(error)
         this.errorMsg = error.response.data.error;
       }
     },
