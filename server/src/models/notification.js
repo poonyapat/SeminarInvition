@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         }
     })
-    const User = sequelize.import('./user')
-    User.hasMany(Notification, {foreignKey: 'user'})
+    const Attendee = sequelize.import('./attendee')
+    Attendee.hasMany(Notification, {foreignKey: 'user'})
 
     return Notification
 }

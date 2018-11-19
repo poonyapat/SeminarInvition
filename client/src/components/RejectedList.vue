@@ -30,11 +30,11 @@
                         <v-list-tile-content>
                             <v-text-field label="Username" v-model="username"></v-text-field>
                         </v-list-tile-content>
-                        <v-list-tile-actions>
+                        <v-list-tile-action>
                             <v-btn icon>
                                 <v-icon @click="add">add</v-icon>
                             </v-btn>
-                        </v-list-tile-actions>
+                        </v-list-tile-action>
                     </v-list-tile>
                 </v-list>
             </v-card-text>

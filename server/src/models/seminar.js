@@ -28,6 +28,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        maximumReserves: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         currentRegistered: {
             type: DataTypes.INTEGER,
             allowNull: false

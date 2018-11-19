@@ -95,13 +95,12 @@ module.exports = {
             res.status(500).send({
                 error: error
             })
-            return;
         }
         if (req.body.requiredData) {
             try {
                 const requiredData = await RequiredData.findOne({ where: { id: req.body.id } })
                 await requiredData.update(req.body.requiredData)
-                res.status(200).send()
+                res.status(200).send({})
             } catch (error) {
                 res.status(500).send({
                     error: error

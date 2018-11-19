@@ -22,18 +22,18 @@ async function doCancelRegistration(attendee, registeredSeminar){
     const firstQueue = await Attendee.min('order', {
         where: {
             seminar: attendee.seminar,
-            status: 'Reserved'
+            status: 'Alternative'
         }
     })
     if (firstQueue) {
-        const firstReservedAttendee = await Attendee.findOne({
+        const nextAttendee = await Attendee.findOne({
             where: {
                 seminar: attendee.seminar,
-                status: 'Reserved',
+                status: 'Alternative',
                 order: firstQueue
             }
         })
-        firstReservedAttendee.update({
+        nextAttendee.update({
             status: 'Attended',
             order: null
         })   
@@ -121,16 +121,16 @@ module.exports = {
                     }
                 }
             })
-            const nReserved = await Attendee.count({
+            const nAlternate = await Attendee.count({
                 where: {
                     seminar: req.body.seminar,
-                    status: 'Reserved'
+                    status: 'Alternative'
                 }
             }) || 0
-            console.log(55555555555555555555 + " " + nReserved + " " + nMainAttendees)
+            console.log(55555555555555555555 + " " + nAlternate + " " + nMainAttendees)
             if (nMainAttendees >= seminar.maximumAttendees) {
-                req.body.status = 'Reserved'
-                req.body.order = nReserved+1
+                req.body.status = 'Alternative'
+                req.body.order = nAlternate+1
             }
             const attendee = await Attendee.create(req.body)
             seminar.update({

@@ -4,12 +4,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.JSON,
             allowNull: false
         },
-        token: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
         status: {
-            type: DataTypes.ENUM('Confirmed', 'Attended', 'Cancelled', 'Reserved'),
+            type: DataTypes.ENUM('Confirmed', 'Attended', 'Alternative', 'Reserved'),
             allowNull: false
         },
         order: {

@@ -66,6 +66,7 @@
                     </template>
                 </v-data-table>
             </v-flex>
+            
         </v-layout>
         <error v-else-if="loaded" code="403" msg="Access Denied"/>
     </v-container>

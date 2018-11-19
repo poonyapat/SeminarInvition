@@ -21,9 +21,21 @@
                     label="Maximum Attendees"
                     v-model="info.maximumAttendees"
                     type="number"
-                    :rules="rules.notNull"
+                    :rules="rules.positiveInteger"
+                    style="width: 35%; display: inline-block"
+                    class="mr-3"
             >
             </v-text-field>
+            <v-text-field
+                    label="Reserved Attendees"
+                    v-model="info.maximumReserves"
+                    type="number"
+                    :rules="rules.positiveInteger"
+                    style="width: 35%; display: inline-block"
+                    class="mr-3"
+            >
+            </v-text-field>
+            <span :class="availableAttendees > 0?'':'error'"> Available : {{ availableAttendees }} </span>
             <v-btn round color="primary" @click="stepper = 2" :disabled="!completeStep1">
                 <v-icon>navigate_next</v-icon>
                 Continue
@@ -190,6 +202,7 @@
                     startTime: '',
                     endTime: '',
                     maximumAttendees: 0,
+                    maximumReserves: 0,
                     contactNumber: '',
                     contactEmail: '',
                 },
@@ -201,6 +214,7 @@
                 requiredBasicInfo: false,
                 rules: {
                     notNull: [v => !!v || 'Require Information'],
+                    positiveInteger: [v => v >= 0 || 'Require Positive Integer']
                 }
             }
         },
@@ -255,6 +269,9 @@
             today(){
                 return new Date().toISOString().slice(0,10)
             },
+            availableAttendees(){
+                return this.info.maximumAttendees - this.info.maximumReserves
+            },
             seminarShowableData() {
                 return {
                     'Title': this.info.title,
@@ -268,7 +285,7 @@
                 }
             },
             completeStep1(){
-                return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees > 0
+                return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees >= 0 &&this.info.maximumReserves >= 0 && (this.info.maximumAttendees - this.info.maximumReserves > 0)
             },
             completeStep2(){
                 return this.info.place.length > 0 && this.info.startTime.length > 0 && this.info.endTime.length > 0

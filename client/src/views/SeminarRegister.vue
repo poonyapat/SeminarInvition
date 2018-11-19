@@ -97,8 +97,8 @@ export default {
     },
     accessible(){
       return !this.attendees.map(attendee => attendee.seminar).includes(parseInt(this.route.params.id)) &&
-          !this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id) &&
-          this.seminar.rejectedList && !(this.seminar.rejectedList.includes(this.user.username))
+            !this.mySeminars.map(seminar=> seminar.id).includes(this.route.params.id) &&
+            this.seminar.rejectedList && !(this.seminar.rejectedList.includes(this.user.username))
     },
     fullRegisteredData(){
       let res = {}
@@ -116,8 +116,8 @@ export default {
           return false
         }
       }
-      for (let attr in this.registeredData){
-        if (!this.registeredData[attr]){
+      for (let attr in this.requiredData.requiredData){
+        if (this.requiredData.requiredData[attr] !== 'boolean' && !this.registeredData[attr]){
           return false
         }
       }
