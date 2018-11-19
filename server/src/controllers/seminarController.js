@@ -1,34 +1,45 @@
-const {Seminar, RequiredData} = require('../models')
+const {
+    Seminar,
+    RequiredData,
+    User
+} = require('../models')
+
+const sequelize = require('sequelize')
 
 module.exports = {
     async findAll(req, res) {
         try {
-            offset = 10 * (req.query.page -1)
+            offset = 10 * (req.query.page - 1)
             if (req.query.search) {
                 const seminars = await Seminar.findAndCountAll({
                     offset: offset,
-                    limit: 10 ,
+                    limit: 10,
                     where: {
                         title: {
                             $like: `%${req.query.search}%`
                         }
                     },
-                    order: [ 
+                    order: [
                         ['updatedAt', 'DESC']
-                    ]
+                    ],
+                    include: [{
+                        model: User,
+                        attributes: ['fullname']
+                    }]
                 })
-                console.log(seminars)
                 res.send(seminars)
-            }
-            else {
+            } else {
                 const seminars = await Seminar.findAndCountAll({
                     offset: offset,
                     limit: 10,
-                    order: [ 
+                    order: [
                         ['updatedAt', 'DESC']
-                    ]
+                    ],
+                    include: [{
+                        model: User,
+                        attributes: ['fullname']
+                    }]
                 })
-                console.log(seminars)
                 res.send(seminars)
             }
         } catch (error) {
@@ -42,7 +53,11 @@ module.exports = {
             const seminar = await Seminar.findOne({
                 where: {
                     id: req.query.id
-                }
+                },
+                include: [{
+                    model: User,
+                    attributes: ['fullname']
+                }]
             })
             if (!seminar) {
                 res.status(403).send({
@@ -61,7 +76,11 @@ module.exports = {
             const seminars = await Seminar.findAll({
                 where: {
                     author: req.query.author
-                }
+                },
+                include: [{
+                    model: User,
+                    attributes: ['fullname']
+                }]
             })
             res.send(seminars)
         } catch (error) {
@@ -79,17 +98,23 @@ module.exports = {
             seminar.update({
                 author: req.body.author
             })
-            res.send({seminar:seminar, requiredData: requiredData})
-        }
-        catch (error) {
+            res.send({
+                seminar: seminar,
+                requiredData: requiredData
+            })
+        } catch (error) {
             res.status(500).send({
-                error:error
+                error: error
             })
         }
     },
     async update(req, res) {
         try {
-            const seminar = await Seminar.findOne({ where: { id:req.body.id } })
+            const seminar = await Seminar.findOne({
+                where: {
+                    id: req.body.id
+                }
+            })
             await seminar.update(req.body.info)
         } catch (error) {
             res.status(500).send({
@@ -98,7 +123,11 @@ module.exports = {
         }
         if (req.body.requiredData) {
             try {
-                const requiredData = await RequiredData.findOne({ where: { id: req.body.id } })
+                const requiredData = await RequiredData.findOne({
+                    where: {
+                        id: req.body.id
+                    }
+                })
                 await requiredData.update(req.body.requiredData)
                 res.status(200).send({})
             } catch (error) {
@@ -108,21 +137,20 @@ module.exports = {
             }
         }
     },
-    async getRequiredData(req, res){
+    async getRequiredData(req, res) {
         try {
             const requiredData = await RequiredData.findOne({
                 where: {
                     seminar: req.query.id
                 }
             })
-            if (!requiredData){
+            if (!requiredData) {
                 res.status(500).send({
                     error: 'An error has occured trying to get seminar\'s required data'
                 })
             }
             res.send(requiredData)
-        }
-        catch(error){
+        } catch (error) {
             res.status(500).send({
                 error: 'An error has occured trying to get seminar\'s required data'
             })

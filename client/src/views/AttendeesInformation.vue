@@ -145,7 +145,7 @@ export default {
             return [
                 { text: 'Fullname', value: 'registeredData.fullname' },
                 { text: 'Email', value: 'registeredData.email' },
-                { text: 'Contact Number', value: 'registeredData.contactNumber' },
+                { text: 'Contact Phone Number', value: 'registeredData.contactNumber' },
                 { text: 'Company', value: 'registeredData.company' },
                 { text: 'Status', value: 'status' },
                 { text: 'Credit', value: 'registeredData.credit' },

@@ -1,7 +1,9 @@
 <template>
-    <v-card class="ma-3 secondary lighten-1 elevation-5">
+    <v-card class="ma-3 secondary lighten-1 elevation-5 text-xs-left" >
         <v-card-title primary-title class="secondary low-op overflow-hidden">
             <h3>{{seminar.title}}</h3>
+            <v-spacer></v-spacer>
+            <small>(Created by {{seminar.User.fullname}})</small>
         </v-card-title>
         <v-card-actions class="secondary lighten-1">
             <slot/>

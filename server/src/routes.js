@@ -60,4 +60,7 @@ module.exports = (app) => {
     
     app.post('/user/generate',
         UserController.generate)
+    
+    // app.get('/test',
+    //     SeminarController.findAll2)
 }

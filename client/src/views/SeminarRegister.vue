@@ -76,9 +76,9 @@ export default {
         age: {label: 'Age', value: 15, type: 'number', min: 15, max: 100},
         nationality: {label: 'Nationality', value: '', type: 'text'},
         email: {label: 'Email', value: '', type: 'text'},
-        contactNumber: {label: 'Contact Number', value: '', type: 'text', mask: 'phone'},
+        contactNumber: {label: 'Contact Phone Number', value: '', type: 'text', mask: 'phone'},
         company: {label: 'Company', value: '', type: 'text'},
-        officeNumber: {label: 'Office Number', value: '', type: 'text', mask: 'phone'},
+        officeNumber: {label: 'Office Phone Number', value: '', type: 'text', mask: 'phone'},
         fax: {label: 'Fax', value: '', type: 'text', mask: 'phone'},
       },
       rules: {

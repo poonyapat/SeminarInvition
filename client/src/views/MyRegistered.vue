@@ -32,7 +32,12 @@
                             </span>
                         </v-btn>
                         <v-card>
-                            <div v-html="qrCode(seminar.id)"></div>
+                            <div v-html="qrcode(seminar.id)"></div>
+                            <v-card-actions>
+                                <a download="custom-filename.jpg" style="text-decoration: none" :href="qrcodeSrc(seminar.id)">
+                                    <v-btn icon><v-icon>vertical_align_bottom</v-icon></v-btn>
+                                </a>
+                            </v-card-actions>
                         </v-card>
                     </v-dialog>
                 </seminar>
@@ -84,11 +89,17 @@
             ConfirmDialog
         },
         methods: {
-            qrCode(seminar) {
+            qrcode(seminar) {
                 var qr = qrcode(0, 'Q')
                 qr.addData('http://localhost:8080/seminar/' + seminar + '/confirm/' + this.user.username)
                 qr.make()
                 return qr.createImgTag().replace('width="90" height="90"', 'width="120" height="120"')
+            },
+            qrcodeSrc(seminar){
+                var qr = qrcode(0, 'Q')
+                qr.addData('http://localhost:8080/seminar/' + seminar + '/confirm/' + this.user.username)
+                qr.make()
+                return qr.createDataURL()
             },
             cancel(seminarId) {
                 //remove from db
@@ -148,9 +159,8 @@
 <style scoped>
     .v-card__text {
         max-height: 10em;
-        overflow: scroll
+        overflow: scroll;
     }
-
     /* .icon {
   background-image: url('../assets/qrcode_scan.png');
   height: 16px;
