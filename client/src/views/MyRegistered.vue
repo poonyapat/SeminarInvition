@@ -24,7 +24,7 @@
                             </span>
                         </v-btn>
                     </confirm-dialog>
-                    <v-dialog width='120'>
+                    <v-dialog width='200'>
                         <v-btn slot="activator" flat round :icon="isXS">
                             <span v-html="icon('qrcode')"></span>
                             <span class="hidden-xs-only">
@@ -91,13 +91,13 @@
         methods: {
             qrcode(seminar) {
                 var qr = qrcode(0, 'Q')
-                qr.addData(`${window.location.host}/seminar/${seminar}/confirm/${this.user.username}`)
+                qr.addData(`${window.location.origin}/seminar/${seminar}/confirm/${this.user.username}`)
                 qr.make()
-                return qr.createImgTag().replace('width="90" height="90"', 'width="120" height="120"')
+                return qr.createImgTag().replace('width="90" height="90"', 'width="200" height="200"')
             },
             qrcodeSrc(seminar){
                 var qr = qrcode(0, 'Q')
-                qr.addData(`${window.location.host}/seminar/${seminar}/confirm/${this.user.username}`)
+                qr.addData(`${window.location.origin}/seminar/${seminar}/confirm/${this.user.username}`)
                 qr.make()
                 return qr.createDataURL()
             },
