@@ -14,16 +14,15 @@
         >
             <v-text-field
                     slot="activator"
-                    v-model="dateFormatted"
+                    v-model="time"
                     :label="label"
-                    hint="MM/DD/YYYY format"
+                    hint="HH:MM format"
                     persistent-hint
                     prepend-icon="event"
-                    @blur="date = parseDate(dateFormatted)"
                     readonly
                     clearable
             ></v-text-field>
-            <v-date-picker multiple :min="min" :max="max" v-model="date" no-title @input="menu1 = false"></v-date-picker>
+            <v-time-picker format="24hr" :min="min" :max="max" :allowedMinutes="m => m%5===0" v-model="time" @input="menu1 = false"></v-time-picker>
         </v-menu>
     </v-flex>
 </template>
@@ -33,7 +32,7 @@
         props: {
             label: {
                 type: String,
-                default: 'Date'
+                default: 'time'
             },
             min: {
                 type: String,
@@ -49,36 +48,21 @@
         },
         data() {
             return {
-                date: null,
-                dateFormatted: null,
+                time: null,
+                timeFormatted: null,
                 menu1: false,
             }
         },
         watch: {
-            date() {
-                this.dateFormatted = this.formatDate(this.date)
-                this.$emit('selected', this.date)
+            time() {
+                this.$emit('input', this.time)
             },
             value() {
                 if (this.value){
-                    this.date = this.value.slice(0,10)
+                    this.time = this.value
                 }
             }
         },
-
-        methods: {
-            formatDate(date) {
-                if (!date) return null
-
-                const [year, month, day] = date.split('-')
-                return `${month}/${day}/${year}`
-            },
-            parseDate(date) {
-                if (!date) return null
-                const [month, day, year] = date.split('/')
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-            }
-        }
     }
 </script>
 

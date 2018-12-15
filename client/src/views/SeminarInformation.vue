@@ -43,7 +43,8 @@ export default {
       seminar: {
         title: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
+        dates: []
       },
       status: ""
     };
@@ -54,17 +55,25 @@ export default {
   computed: {
     ...mapState(["user", "attendees"]),
     showableInfo(){
+        let timeRange =  `${this.seminar.startTime} - ${this.seminar.endTime}`
+        let currentAttendees = `${this.seminar.currentRegistered} / ${this.seminar.maximumAttendees}`
         return {
             title: {label: 'Title', value: this.seminar.title},
             description: {label: 'Description', value: this.seminar.description},
-            date: {label: 'Date', value: this.formatDate(this.seminar.startTime) !== this.formatDate(this.seminar.endTime)?
-                    [{label: 'Start Date', value: this.formatDate(this.seminar.startTime)}, {label: 'End Date', value: this.formatDate(this.seminar.endTime)}]:
-                    this.formatDate(this.seminar.startTime) 
-            },
+            date: {label: 'Date', value: [
+              {label: 'Date', value: this.formattedDate}, 
+              {label: 'Time', value: timeRange}
+            ]},
             place: {label: 'Location', value: this.seminar.place},
-            contact: {label: 'Contact', value: [{label: 'Email', value: this.seminar.contactEmail}, {label:'Contact Number', value: this.seminar.contactNumber}]},
-            attendees: {label: 'Current Attendees', value: this.seminar.currentRegistered +' / '+ this.seminar.maximumAttendees}
+            contact: {label: 'Contact', value: [
+              {label: 'Email', value: this.seminar.contactEmail}, 
+              {label:'Contact Number', value: this.seminar.contactNumber}
+            ]},
+            attendees: {label: 'Current Attendees', value: currentAttendees}
         }
+    },
+    formattedDate(){
+      return this.seminar.dates.map(date=>date.substring(0,10)).toString()
     }
   },
   methods: {

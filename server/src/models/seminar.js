@@ -16,12 +16,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
+        dates: {
+            type: DataTypes.ARRAY(DataTypes.DATE),
+            allowNull: false
+        },
         startTime: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(5),
             allowNull: false
         },
         endTime: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(5),
             allowNull: false
         },
         maximumAttendees: {

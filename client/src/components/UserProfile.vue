@@ -132,7 +132,8 @@
                             label: 'Age',
                             value: this.user.age,
                             type: 'number',
-                            max: 120
+                            max: 100,
+                            min: 15
                         },
                         nationality: {
                             label: 'Nationality',

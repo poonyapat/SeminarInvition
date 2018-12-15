@@ -127,7 +127,6 @@ module.exports = {
                     status: 'Alternative'
                 }
             }) || 0
-            console.log(55555555555555555555 + " " + nAlternate + " " + nMainAttendees)
             if (nMainAttendees >= seminar.maximumAttendees) {
                 req.body.status = 'Alternative'
                 req.body.order = nAlternate+1
@@ -179,17 +178,44 @@ module.exports = {
                 }
             })
             if (!attendee) {
-                res.status(403).send({
+                res.status(404).send({
                     error: 'Attendee is not found'
                 })
             }
-            attendee.update({
+            await attendee.update({
                 status: req.body.newStatus
             })
             res.send({
                 nessage: "Update Complete"
             })
         } catch (error) {
+            res.status(500).send({
+                error: error
+            })
+        }
+    },
+    async present(req, res) {
+        try {
+            const attendee = await Attendee.findOne({
+                where: {
+                    user: req.body.username,
+                    seminar: req.body.seminar
+                }
+            })
+            console.log(attendee)
+            if (!attendee) {
+                res.status(404).send({
+                    error: 'Attendee is not found'
+                })
+            }
+            await attendee.update({
+                isPresent: true
+            })
+            res.send({
+                nessage: "Update Complete"
+            })
+        } catch (error) {
+            console.log(error)
             res.status(500).send({
                 error: error
             })

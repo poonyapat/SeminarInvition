@@ -46,5 +46,12 @@ export default {
             registeredData: data,
             status: 'Attended'
         })
+    },
+
+    present(username, seminar) {
+        return Api().post('attendee/present', {
+            username: username,
+            seminar: seminar
+        })
     }
 }

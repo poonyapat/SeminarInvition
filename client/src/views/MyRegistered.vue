@@ -91,13 +91,13 @@
         methods: {
             qrcode(seminar) {
                 var qr = qrcode(0, 'Q')
-                qr.addData('http://localhost:8080/seminar/' + seminar + '/confirm/' + this.user.username)
+                qr.addData(`${window.location.host}/seminar/${seminar}/confirm/${this.user.username}`)
                 qr.make()
                 return qr.createImgTag().replace('width="90" height="90"', 'width="120" height="120"')
             },
             qrcodeSrc(seminar){
                 var qr = qrcode(0, 'Q')
-                qr.addData('http://localhost:8080/seminar/' + seminar + '/confirm/' + this.user.username)
+                qr.addData(`${window.location.host}/seminar/${seminar}/confirm/${this.user.username}`)
                 qr.make()
                 return qr.createDataURL()
             },

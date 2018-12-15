@@ -4,36 +4,14 @@
             Seminar Information
         </v-stepper-step>
         <v-stepper-content step="1">
-            <v-text-field
-                    clearable
-                    label="Seminar Title"
-                    v-model="info.title"
-                    :rules="rules.notNull"
-            ></v-text-field>
-            <v-textarea
-                    clearable
-                    label="Seminar Description"
-                    v-model="info.description"
-                    :rules="rules.notNull"
-            >
+            <v-text-field clearable label="Seminar Title" v-model="info.title" :rules="rules.notNull"></v-text-field>
+            <v-textarea clearable label="Seminar Description" v-model="info.description" :rules="rules.notNull">
             </v-textarea>
-            <v-text-field
-                    label="Maximum Attendees"
-                    v-model="info.maximumAttendees"
-                    type="number"
-                    :rules="rules.positiveInteger"
-                    style="width: 35%; display: inline-block"
-                    class="mr-3"
-            >
+            <v-text-field label="Maximum Attendees" v-model="info.maximumAttendees" type="number" :rules="rules.positiveInteger"
+                style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
-            <v-text-field
-                    label="Reserved Attendees"
-                    v-model="info.maximumReserves"
-                    type="number"
-                    :rules="rules.positiveInteger"
-                    style="width: 35%; display: inline-block"
-                    class="mr-3"
-            >
+            <v-text-field label="Reserved Attendees" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
+                style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
             <span :class="availableAttendees > 0?'':'error'"> Available : {{ availableAttendees }} </span>
             <v-btn round color="primary" @click="stepper = 2" :disabled="!completeStep1">
@@ -45,15 +23,10 @@
             Location & Date Time
         </v-stepper-step>
         <v-stepper-content step="2">
-            <v-textarea
-                    clearable
-                    label="Location"
-                    v-model="info.place"
-                    :rules="rules.notNull"
-            >
-            </v-textarea>
-            <date-selector label="Start Date" :value="info.startTime" :min="today" @selected="setStartDate" :max="info.endTime"></date-selector>
-            <date-selector label="End Date" :value="info.endTime" :min="info.startTime" @selected="setEndDate"></date-selector>
+            <v-textarea clearable label="Location" v-model="info.place" :rules="rules.notNull"/>
+            <v-date-picker multiple :min="today" v-model="info.dates"></v-date-picker>
+            <time-selector label="Start Time" :max="info.endTime" v-model="info.startTime"></time-selector>
+            <time-selector label="End Time" :min="info.startTime" v-model="info.endTime"></time-selector>
             <v-btn round color="primary" @click="stepper = 3" :disabled="!completeStep2">
                 <v-icon>navigate_next</v-icon>
                 Continue
@@ -67,10 +40,10 @@
             Attendee's Information Requirement
         </v-stepper-step>
         <v-stepper-content step="3">
-            <v-checkbox
-                    label="Required Basic Information"
-                    v-model="requiredBasicInfo"
-            ></v-checkbox>
+            <v-tooltip bottom>
+            <span>fullname, gender, age, nationality, email, contact phone number, company, office phone number and fax</span>
+            <v-checkbox slot="activator" label="Required Basic Information" v-model="requiredBasicInfo"></v-checkbox>
+            </v-tooltip>
             <v-layout v-for="(data, index) in requiredData" :key="index" class="tertiary">
                 <v-flex xs12 lg5 class="ma-2">
                     <v-text-field label="Name" v-model="data.name"></v-text-field>
@@ -112,29 +85,10 @@
             Contact
         </v-stepper-step>
         <v-stepper-content step="4">
-            <v-text-field
-                    label="Company"
-                    v-model="info.company"
-                    type="text"
-                    clearable
-                    :rules="rules.notNull"
-            ></v-text-field>
-            <v-text-field
-                    label="Contact Number"
-                    v-model="info.contactNumber"
-                    type="text"
-                    clearable
-                    mask="phone"
-                    :rules="rules.notNull"
-            >
+            <v-text-field label="Company" v-model="info.company" type="text" clearable :rules="rules.notNull"></v-text-field>
+            <v-text-field label="Contact Number" v-model="info.contactNumber" type="text" clearable mask="phone" :rules="rules.notNull">
             </v-text-field>
-            <v-text-field
-                    label="Contact Email"
-                    v-model="info.contactEmail"
-                    type="text"
-                    clearable
-                    :rules="rules.notNull"
-            >
+            <v-text-field label="Contact Email" v-model="info.contactEmail" type="text" clearable :rules="rules.notNull">
             </v-text-field>
             <v-btn round color="primary" @click="stepper = 5" :disabled="!completeStep4">
                 <v-icon>navigate_next</v-icon>
@@ -164,7 +118,7 @@
                     </v-list-tile>
                     <v-list-tile v-show="requiredBasicInfo" @click="() => {return}">
                         <v-list-tile-content>
-                            <v-list-tile-title> {{'*Basic Information*'}}</v-list-tile-title>
+                            <v-list-tile-title> {{'*Basic Information* (fullname, gender, age, nationality, email, contact phone number, company, office phone number and fax)'}}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-list-tile v-for="(data, index) in requiredData" :key="index" @click="() => {return}">
@@ -190,7 +144,10 @@
 <script>
     import DateSelector from '@/components/DateSelector'
     import SeminarService from '@/services/seminarService'
-    import {mapState} from 'vuex'
+    import TimeSelector from '@/components/TimeSelector'
+    import {
+        mapState
+    } from 'vuex'
     export default {
         data() {
             return {
@@ -205,6 +162,7 @@
                     maximumReserves: 0,
                     contactNumber: '',
                     contactEmail: '',
+                    dates: []
                 },
                 requiredData: [],
                 stepper: 1,
@@ -224,27 +182,30 @@
             },
         },
         async mounted() {
-            if (this.seminarId){
+            if (this.seminarId) {
                 let seminar = (await SeminarService.findOneById(this.seminarId)).data
-                for (let attr in seminar){
-                    if (!["id", 'currentRegistered', 'author', 'createdAt', 'updatedAt'].includes(attr)){
+                for (let attr in seminar) {
+                    if (!["id", 'currentRegistered', 'author', 'createdAt', 'updatedAt'].includes(attr)) {
                         this.info[attr] = seminar[attr]
                     }
                 }
                 let requiredData = (await SeminarService.getRequiredData(this.seminarId)).data
                 this.requiredBasicInfo = requiredData.baseInformation
-                for (let attr in requiredData.requiredData){
-                    this.requiredData.push({name: attr, type: requiredData.requiredData[attr]})
+                for (let attr in requiredData.requiredData) {
+                    this.requiredData.push({
+                        name: attr,
+                        type: requiredData.requiredData[attr]
+                    })
                 }
-            }
-            else {
+            } else {
                 this.info.company = this.user.company
                 this.info.contactNumber = this.user.contactNumber
                 this.info.contactEmail = this.user.email
             }
         },
         components: {
-            DateSelector
+            DateSelector,
+            TimeSelector
         },
         methods: {
             setStartDate(val) {
@@ -266,10 +227,10 @@
             }
         },
         computed: {
-            today(){
-                return new Date().toISOString().slice(0,10)
+            today() {
+                return new Date().toISOString().slice(0, 10)
             },
-            availableAttendees(){
+            availableAttendees() {
                 return this.info.maximumAttendees - this.info.maximumReserves
             },
             seminarShowableData() {
@@ -284,16 +245,17 @@
                     'Contact Number': this.info.contactNumber,
                 }
             },
-            completeStep1(){
-                return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees >= 0 &&this.info.maximumReserves >= 0 && (this.info.maximumAttendees - this.info.maximumReserves > 0)
+            completeStep1() {
+                return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees >=
+                    0 && this.info.maximumReserves >= 0 && (this.info.maximumAttendees - this.info.maximumReserves > 0)
             },
-            completeStep2(){
+            completeStep2() {
                 return this.info.place.length > 0 && this.info.startTime.length > 0 && this.info.endTime.length > 0
             },
-            completeStep3(){
+            completeStep3() {
                 return this.requiredData.length > 0 || this.requiredBasicInfo
             },
-            completeStep4(){
+            completeStep4() {
                 return this.info.contactNumber.length > 9 && this.info.contactEmail.match(/.+@.+\..+/)
             },
             ...mapState([

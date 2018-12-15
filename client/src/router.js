@@ -7,6 +7,7 @@ import MyCreatedSeminar from './views/MyCreatedSeminar'
 import SeminarCreation from './views/SeminarCreation'
 import SeminarInformation from './views/SeminarInformation'
 import AttendeesInformation from './views/AttendeesInformation'
+import AttentionConfirming from './views/AttentionConfirming'
 import SeminarRegister from './views/SeminarRegister'
 import SeminarEditor from './views/SeminarEditor'
 import Browse from './views/Browse'
@@ -65,6 +66,11 @@ export default new Router({
             path: '/seminar/:id/attendees',
             name: 'attendeesInformation',
             component: AttendeesInformation
+        },
+        {
+            path: '/seminar/:seminar/confirm/:username',
+            name: 'attentionConfirming',
+            component: AttentionConfirming
         }
     ]
 })

@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         order: {
             type: DataTypes.INTEGER,
+        },
+        isPresent: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     },{
         indexes: [
