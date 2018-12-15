@@ -37,7 +37,7 @@
                     id="transTable"
                 >
                     <template slot="items" slot-scope="props">
-                        <tr @click="props.expanded = !props.expanded" id="head">
+                        <tr @click="props.expanded = !props.expanded" id="head" :style="`background-color: ${props.item.isPresent? '#66CC55': 'white'}`">
                             <td>{{ props.item.registeredData.fullname }}</td>
                             <template v-if="!isXS">
                                 <td>{{ props.item.registeredData.email }}</td>
@@ -47,7 +47,7 @@
                             <td>{{ props.item.status }}</td>
                             <td>{{ props.item.registeredData.credit }}</td>
                             <td>
-                                <v-tooltip bottom>
+                                <v-tooltip bottom v-if="!props.item.isPresent && today < firstDate">
                                     <v-icon slot="activator" small @click="props.expanded=true;rejectAttendee(props.item.user, props.item.seminar)">
                                         delete
                                     </v-icon>
@@ -91,6 +91,7 @@ export default {
                 status: 'All',
                 minCred: 0
             },
+            today: '',
             loaded: false
         }
     },
@@ -151,6 +152,28 @@ export default {
                 { text: 'Credit', value: 'registeredData.credit' },
                 { text: 'Actions', sortable: false }
             ]
+        },
+        lastDate(){
+            let max = "2000-01-01T00:00:00.000"
+            if (!this.seminar.dates){
+                return max
+            }
+            for (let i = 0; i < this.seminar.dates.length; i++){
+                if (this.seminar.dates[i] > max)
+                    max = this.seminar.dates[i]
+            }
+            return max
+        },
+        firstDate(){
+            let min = "2000-01-01T00:00:00.000"
+            if (!this.seminar.dates){
+                return min
+            }
+            for (let i = 0; i < this.seminar.dates.length; i++){
+                if (this.seminar.dates[i] < max)
+                    min = this.seminar.dates[i]
+            }
+            return min
         }
     },
     components: {
@@ -160,6 +183,7 @@ export default {
         this.loaded = false
         this.attendees = (await AttendeeService.findAllBySeminar(this.route.params.id)).data
         this.seminar = (await SeminarService.findOneById(this.route.params.id)).data
+        this.today = new Date().toISOString()
         this.loaded = true
     }
 }
