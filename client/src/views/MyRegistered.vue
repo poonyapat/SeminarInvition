@@ -7,10 +7,9 @@
                 </v-toolbar>
                 <seminar v-for="(seminar,index) in registeredSeminars" :key="seminar.id" :seminar="seminar" :status="attendees[index].status"
                     @confirm="confirm(seminar.id)" @cancel="cancel(seminar.id)">
-                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || !actionable" @click="confirm(seminar.id)"
+                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || attendees[index].status === 'Alternative' || !actionable" @click="confirm(seminar.id)"
                         :icon="isXS">
                         <v-icon>done</v-icon>
-
                         <span class="hidden-xs-only">
                             Confirm
                         </span>

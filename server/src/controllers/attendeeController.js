@@ -7,6 +7,55 @@ const {
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
+
+const schedule = require('node-schedule')
+schedule.scheduleJob('0 0 0 * * *', async () => {
+    let seminars;
+    try {
+        seminars = await Seminar.findAll({
+            attributes: ['dates', 'id']
+        })
+    } catch (error) {
+        console.log("error: Seminar Querying")
+    }
+    seminars = seminars.filter(seminar => {
+        let today = new Date().toISOString()
+        for (let i = 0; i < seminar.dates.length; i++) {
+            if (today < seminar.dates[i].toISOString()) {
+                return false
+            }
+        }
+        return true
+    }).map(seminar => seminar.id)
+    try {
+        const attendees = await Attendee.findAll({
+            where: {
+                seminar: {
+                    [Op.in]: seminars
+                },
+                isPresent: {
+                    [Op.eq]: null
+                }
+            }
+        })
+        await attendees.update({ isPresent: true })
+        const users = await User.findAll({
+            where: {
+                id: {
+                    [Op.in]: attendees.map(attendee => attendee.id)
+                },
+                credit: {
+                    [Op.gt]: 0
+                }
+            }
+        })
+        users.decrement('credit', {by: 0.2})
+    } catch (error) {
+        console.log("Updating is error")
+    }
+})
+
+
 async function doCancelRegistration(attendee, registeredSeminar){
     if (!attendee) {
         return {
@@ -43,6 +92,7 @@ async function doCancelRegistration(attendee, registeredSeminar){
         code: 200
     }
 }
+
 
 module.exports = {
     async findSeminarByUser(req, res) {
@@ -202,7 +252,6 @@ module.exports = {
                     seminar: req.body.seminar
                 }
             })
-            console.log(attendee)
             if (!attendee) {
                 res.status(404).send({
                     error: 'Attendee is not found'
@@ -211,11 +260,19 @@ module.exports = {
             await attendee.update({
                 isPresent: true
             })
+            await User.update({
+                where: {
+                    id: attendee.user,
+                    credit: {
+                        [Op.lt]: 5
+                    }
+                }
+            })
+            
             res.send({
                 nessage: "Update Complete"
             })
         } catch (error) {
-            console.log(error)
             res.status(500).send({
                 error: error
             })

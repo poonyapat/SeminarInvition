@@ -2,6 +2,7 @@ const SeminarController = require('./controllers/seminarController')
 const UserController = require('./controllers/userController')
 const UserPolicy = require('./policies/userPolicy')
 const AttendeeController = require('./controllers/attendeeController')
+const TestController = require('./controllers/testController')
 module.exports = (app) => {
     app.post('/seminar/create',
         SeminarController.create)
@@ -60,4 +61,7 @@ module.exports = (app) => {
     
     app.post('/attendee/present',
         AttendeeController.present)
+    
+    app.get('/test',
+        TestController.test)
 }

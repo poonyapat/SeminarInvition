@@ -157,5 +157,6 @@ module.exports = {
                 error: 'An error has occured trying to get seminar\'s required data'
             })
         }
-    }
+    },
+    
 }

@@ -7,10 +7,10 @@
             <v-text-field clearable label="Seminar Title" v-model="info.title" :rules="rules.notNull"></v-text-field>
             <v-textarea clearable label="Seminar Description" v-model="info.description" :rules="rules.notNull">
             </v-textarea>
-            <v-text-field label="Maximum Attendees" v-model="info.maximumAttendees" type="number" :rules="rules.positiveInteger"
+            <v-text-field label="Maximum Seats" v-model="info.maximumAttendees" type="number" :rules="rules.positiveInteger"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
-            <v-text-field label="Reserved Attendees" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
+            <v-text-field label="Reserved Seats for VIP" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
             <span :class="availableAttendees > 0?'':'error'"> Available : {{ availableAttendees }} </span>
