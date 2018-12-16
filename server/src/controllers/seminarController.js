@@ -9,18 +9,19 @@ const sequelize = require('sequelize')
 module.exports = {
     async findAll(req, res) {
         try {
-            offset = 10 * (req.query.page - 1)
+            let limit = 10
+            let offset = limit * (req.query.page - 1)
             if (req.query.search) {
                 const seminars = await Seminar.findAndCountAll({
                     offset: offset,
-                    limit: 10,
+                    limit: limit,
                     where: {
                         title: {
-                            $like: `%${req.query.search}%`
+                            $like: `%${req.query.search}%`,
                         }
                     },
                     order: [
-                        ['updatedAt', 'DESC']
+                        ['createdAt', 'DESC']
                     ],
                     include: [{
                         model: User,
@@ -31,9 +32,9 @@ module.exports = {
             } else {
                 const seminars = await Seminar.findAndCountAll({
                     offset: offset,
-                    limit: 10,
+                    limit: limit,
                     order: [
-                        ['updatedAt', 'DESC']
+                        ['createdAt', 'DESC']
                     ],
                     include: [{
                         model: User,

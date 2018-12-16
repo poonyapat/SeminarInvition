@@ -12,9 +12,6 @@ module.exports = (app) => {
     app.get('/seminar',
         SeminarController.findAll)
 
-    app.post('/seminar',
-        SeminarController.findAll)
-
     app.get('/seminar/author',
         SeminarController.findAllByAuthor)
 

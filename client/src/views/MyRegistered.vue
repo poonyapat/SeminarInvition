@@ -7,7 +7,7 @@
                 </v-toolbar>
                 <seminar v-for="(seminar,index) in registeredSeminars" :key="seminar.id" :seminar="seminar" :status="attendees[index].status"
                     @confirm="confirm(seminar.id)" @cancel="cancel(seminar.id)">
-                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed'" @click="confirm(seminar.id)"
+                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || !actionable" @click="confirm(seminar.id)"
                         :icon="isXS">
                         <v-icon>done</v-icon>
 
@@ -17,7 +17,7 @@
                     </v-btn>
                     <confirm-dialog title="Cancel Registration" text="Are you sure that you are going to cancel this seminar registration"
                         @confirm="cancel(seminar.id)">
-                        <v-btn flat round color="cancel" :icon="isXS">
+                        <v-btn flat round color="cancel" :disabled="!actionable" :icon="isXS">
                             <v-icon>close</v-icon>
                             <span class="hidden-xs-only">
                                 Cancel
@@ -25,7 +25,7 @@
                         </v-btn>
                     </confirm-dialog>
                     <v-dialog width='200'>
-                        <v-btn slot="activator" flat round :icon="isXS">
+                        <v-btn slot="activator" flat round :icon="isXS" :disabled="!actionable">
                             <span v-html="icon('qrcode')"></span>
                             <span class="hidden-xs-only">
                                 QR code
@@ -61,7 +61,7 @@
     import qrcode from 'qrcode-generator'
     import Icon from '@/services/icon'
     import ConfirmDialog from '@/components/ConfirmDialog'
-
+    import DateService from '@/services/dateService'
     import {
         mapState,
         mapActions
@@ -70,7 +70,8 @@
         data() {
             return {
                 registeredSeminars: [],
-                loaded: true
+                loaded: true,
+                today: ''
             }
         },
         computed: {
@@ -124,6 +125,11 @@
                     }
                 }
             },
+            actionable(seminar){
+                let firstDate = new Date(DateService.firstDate(seminar))
+                firstDate.setDate(firstDate.getDate()-3)
+                return this.today < firstDate.toISOString()
+            },
             icon(name) {
                 return Icon.iconTag(name)
             },
@@ -137,6 +143,7 @@
             for (let i = 0; i < this.attendees.length; i++) {
                 this.registeredSeminars.push((await SeminarService.findOneById(this.attendees[i].seminar)).data)
             }
+            this.today = new Date().toISOString()
             this.loaded = true
         },
         watch: {

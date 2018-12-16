@@ -16,7 +16,7 @@
                     </v-btn>
                 </v-toolbar>
                 <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar">
-                    <v-btn round flat color="edit" :to="{name: 'seminarEditor', params: {id: seminar.id}}">
+                    <v-btn round flat color="edit" :to="{name: 'seminarEditor', params: {id: seminar.id}}" :disabled="!editable(seminar)">
                         <v-icon>edit</v-icon>
                         <span class="hidden-xs-only">    
                         Edit
@@ -46,11 +46,13 @@ import Seminar from '@/components/Seminar'
 import Error from '@/components/Error'
 import SeminarService from '@/services/seminarService'
 import { mapState } from 'vuex';
+import DateService from '@/services/dateService'
 export default {
     data() {
         return {
             loaded: false,
-            seminars: []
+            seminars: [],
+            today: ''
         }
     },
     components: {
@@ -62,7 +64,7 @@ export default {
         ]),
         accessible(){
             return this.user && (this.user.role == 'Internal User' || this.user.role == 'Admin')
-        }
+        },
     },
     async mounted(){
         this.loaded = false
@@ -70,7 +72,13 @@ export default {
             this.seminars = []
         else
             this.seminars = (await SeminarService.findAllByAuthor(this.user.username)).data
+        this.today = new Date().toISOString()
         this.loaded = true
+    },
+    methods: {  
+        editable(seminar){
+            return DateService.firstDate(seminar) > this.today
+        }
     },
     wacth: {
         mySeminars: async ()=> {

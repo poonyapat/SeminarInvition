@@ -48,6 +48,7 @@ Vue.use(Vuetify, {
         success: colors.green.darken1,
         edit: colors.orange.base,
         tertiary: '#ffe2eb',
+        disabled: '#666'
     },
 })
 

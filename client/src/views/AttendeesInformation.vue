@@ -37,7 +37,7 @@
                     id="transTable"
                 >
                     <template slot="items" slot-scope="props">
-                        <tr @click="props.expanded = !props.expanded" id="head" :style="`background-color: ${props.item.isPresent? '#66CC55': 'white'}`">
+                        <tr @click="props.expanded = !props.expanded" id="head" :style="`background-color: ${color(props.item.isPresent)}`">
                             <td>{{ props.item.registeredData.fullname }}</td>
                             <template v-if="!isXS">
                                 <td>{{ props.item.registeredData.email }}</td>
@@ -79,6 +79,7 @@ import AttendeeInformation from '@/components/AttendeeInformation'
 import RejectedList from '@/components/RejectedList'
 import Error from '@/components/Error'
 import {mapState} from 'vuex'
+import DateService from '@/services/dateService'
 export default {
     data() {
         return {
@@ -122,6 +123,17 @@ export default {
                     rejectedList: this.seminar.rejectedList
                 }
             })
+        },
+        color(isPresent){
+            if (isPresent){
+                return '#66CC55'
+            }
+            else if (this.today > this.lastDate){
+                return '#880000'
+            }
+            else {
+                return 'white'
+            }
         }
     },
     computed: {
@@ -154,26 +166,10 @@ export default {
             ]
         },
         lastDate(){
-            let max = "2000-01-01T00:00:00.000"
-            if (!this.seminar.dates){
-                return max
-            }
-            for (let i = 0; i < this.seminar.dates.length; i++){
-                if (this.seminar.dates[i] > max)
-                    max = this.seminar.dates[i]
-            }
-            return max
+            return DateService.lastDate(this.seminar)
         },
         firstDate(){
-            let min = "2000-01-01T00:00:00.000"
-            if (!this.seminar.dates){
-                return min
-            }
-            for (let i = 0; i < this.seminar.dates.length; i++){
-                if (this.seminar.dates[i] < max)
-                    min = this.seminar.dates[i]
-            }
-            return min
+            return DateService.firstDate(this.seminar)
         }
     },
     components: {

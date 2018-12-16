@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         rejectedList: {
             type: DataTypes.ARRAY(DataTypes.STRING),
             defaultValue: []
-        }
+        },
     })
     const User = sequelize.import('./user')
     User.hasMany(Seminar, { foreignKey: 'author' })

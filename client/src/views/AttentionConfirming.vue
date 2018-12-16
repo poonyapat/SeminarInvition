@@ -28,7 +28,6 @@
                 this.error = `Error [${error.response.status}] : ${error.response.data.error}`
             }
             this.loaded = true
-
         },
     }
 </script>

@@ -24,7 +24,8 @@
         </v-stepper-step>
         <v-stepper-content step="2">
             <v-textarea clearable label="Location" v-model="info.place" :rules="rules.notNull"/>
-            <v-date-picker multiple :min="today" v-model="info.dates"></v-date-picker>
+            <small>At least next week</small><br>
+            <v-date-picker multiple :min="nextWeek" v-model="info.dates" color="#DD5566"></v-date-picker>
             <time-selector label="Start Time" :max="info.endTime" v-model="info.startTime"></time-selector>
             <time-selector label="End Time" :min="info.startTime" v-model="info.endTime"></time-selector>
             <v-btn round color="primary" @click="stepper = 3" :disabled="!completeStep2">
@@ -176,17 +177,16 @@
                 }
             }
         },
-        props: {
-            seminarId: {
-                type: Number,
-            },
-        },
+        props: ['seminarId'],
         async mounted() {
             if (this.seminarId) {
                 let seminar = (await SeminarService.findOneById(this.seminarId)).data
                 for (let attr in seminar) {
-                    if (!["id", 'currentRegistered', 'author', 'createdAt', 'updatedAt'].includes(attr)) {
+                    if (!["id", 'currentRegistered', 'author', 'createdAt', 'updatedAt', 'dates'].includes(attr)) {
                         this.info[attr] = seminar[attr]
+                    }
+                    if (attr === 'dates'){
+                        this.info[attr] = seminar[attr].map(e => new Date(e).toISOString().substring(0,10))
                     }
                 }
                 let requiredData = (await SeminarService.getRequiredData(this.seminarId)).data
@@ -227,8 +227,10 @@
             }
         },
         computed: {
-            today() {
-                return new Date().toISOString().slice(0, 10)
+            nextWeek() {
+                let temp = new Date()
+                temp.setDate(temp.getDate()+7)
+                return temp.toISOString().slice(0, 10)
             },
             availableAttendees() {
                 return this.info.maximumAttendees - this.info.maximumReserves

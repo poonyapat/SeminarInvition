@@ -1,11 +1,11 @@
 <template>
-    <v-card class="ma-3 secondary lighten-1 elevation-5 text-xs-left" >
-        <v-card-title primary-title class="secondary low-op overflow-hidden">
+    <v-card :class="`ma-3 ${colorClass} lighten-1 elevation-5 text-xs-left`" >
+        <v-card-title primary-title :class="`${colorClass} low-op overflow-hidden`">
             <h3>{{seminar.title}}</h3>
             <v-spacer></v-spacer>
             <small>(Created by {{seminar.User.fullname}})</small>
         </v-card-title>
-        <v-card-actions class="secondary lighten-1">
+        <v-card-actions>
             <slot/>
             <v-spacer></v-spacer>
             <v-btn round flat color="info" :to="{name: 'seminarInformation', params: {id: seminar.id}}">
@@ -17,7 +17,7 @@
             </v-btn>
         </v-card-actions>
         <v-slide-y-transition>
-            <v-card-text class="secondary lighten-1" v-show="show">
+            <v-card-text :class="`${colorClass} lighten-1`" v-show="show">
                 <p class="description ma-0 pa-0">
                     {{seminar.description}}
                 </p>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-
+    import DateService from '@/services/dateService'
     export default {
         props: {
             seminar: {
@@ -41,7 +41,21 @@
         },
         data() {
             return {
-                show: false
+                show: false,
+                today: ''
+            }
+        },
+        mounted() {
+            this.today = new Date().toISOString()
+        },
+        computed: {
+            colorClass() {
+                if (this.today > DateService.lastDate(this.seminar)){
+                    return 'disabled white--text'
+                }
+                else {
+                    return 'secondary'
+                }
             }
         },
     }
