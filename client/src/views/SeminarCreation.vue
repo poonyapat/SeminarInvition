@@ -24,7 +24,7 @@ export default {
     computed: {
         ...mapState(['user']),
         accessible(){
-            return this.user.role && (this.user.role == 'Internal User' || this.user.role == 'Admin')
+            return this.user.role && (this.user.role == 'Seminar Admin' || this.user.role == 'Admin')
         }
     },
     methods: {

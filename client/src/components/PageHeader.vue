@@ -74,7 +74,7 @@
         computed: {
             hasPermissionToCreate() {
                 const role = this.$store.state.user.role
-                return role === 'Internal User' || role === 'Admin'
+                return role === 'Seminar Admin' || role === 'Admin'
             }
         },
         components: {

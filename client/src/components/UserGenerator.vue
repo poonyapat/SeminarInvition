@@ -109,7 +109,7 @@ export default {
             adminPassword: '',
             error: '',
             cError: '',
-            roles: ['Admin','Internal User', 'External User'],
+            roles: ['Admin','Seminar Admin', 'External User'],
             confirmation: false,
             stepper: 1
         }

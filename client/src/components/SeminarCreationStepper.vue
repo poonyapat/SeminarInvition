@@ -43,7 +43,7 @@
         <v-stepper-content step="3">
             <v-tooltip bottom>
             <span>fullname, gender, age, nationality, email, contact phone number, company, office phone number and fax</span>
-            <v-checkbox slot="activator" label="Required Basic Information" v-model="requiredBasicInfo"></v-checkbox>
+            <v-checkbox slot="activator" label="Required Basic Information" v-model="requiredBasicInfo" disabled></v-checkbox>
             </v-tooltip>
             <v-layout v-for="(data, index) in requiredData" :key="index" class="tertiary">
                 <v-flex xs12 lg5 class="ma-2">
@@ -170,7 +170,7 @@
                 attrName: '',
                 attrType: '',
                 types: ['short-text', 'long-text', 'number', 'boolean'],
-                requiredBasicInfo: false,
+                requiredBasicInfo: true,
                 rules: {
                     notNull: [v => !!v || 'Require Information'],
                     positiveInteger: [v => v >= 0 || 'Require Positive Integer']

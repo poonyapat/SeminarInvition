@@ -11,6 +11,7 @@ import AttentionConfirming from './views/AttentionConfirming'
 import SeminarRegister from './views/SeminarRegister'
 import SeminarEditor from './views/SeminarEditor'
 import Browse from './views/Browse'
+import Report from './views/Report'
 
 Vue.use(Router)
 
@@ -71,6 +72,11 @@ export default new Router({
             path: '/seminar/:seminar/confirm/:username',
             name: 'attentionConfirming',
             component: AttentionConfirming
+        },
+        {
+            path: '/seminar/:seminar/report',
+            name: 'report',
+            component: Report
         }
     ]
 })

@@ -24,7 +24,7 @@ export default {
     computed: {
         ...mapState(['user', 'route']),
         accessible(){
-            return this.user.role && (this.user.role == 'Internal User' || this.user.role == 'Admin')
+            return this.user.role && (this.user.role == 'Seminar Admin' || this.user.role == 'Admin')
         }
     },
     methods: {
@@ -34,7 +34,7 @@ export default {
             for (let index in requiredData){
                 rd[requiredData[index].name] = requiredData[index].type
             }
-            const res = await SeminarService.update({
+            await SeminarService.update({
                 id: this.route.params.id,
                 info: info,
                 requiredData: {

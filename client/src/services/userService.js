@@ -17,10 +17,24 @@ export default {
         })
     },
 
+    findOneByUsername(username) {
+        return Api().get('user', {
+            params: {
+                username: username
+            }
+        })
+    },
+
     generateUser(adminCredential, userData) {
         return Api().post('user/generate', {
             adminCredential: adminCredential,
             user: userData
+        })
+    },
+
+    findAll(query) {
+        return Api().get('user/all', {
+            params: query
         })
     }
 }

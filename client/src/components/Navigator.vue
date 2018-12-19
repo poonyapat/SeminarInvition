@@ -134,7 +134,7 @@
                 'isUserLoggedIn', 'user'
             ]),
             hasPermissionToCreate() {
-                return this.user && (this.user.role === 'Internal User' || this.user.role === 'Admin')
+                return this.user && (this.user.role === 'Seminar Admin' || this.user.role === 'Admin')
             }
         },
         watch: {

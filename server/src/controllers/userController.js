@@ -125,5 +125,39 @@ module.exports = {
                 error: 'Invalid'
             })
         }
+    },
+
+    async findOneByUsername(req, res) {
+        try {
+            console.log(1, req.query)
+            const user = await User.findOne({
+                where: {
+                    username: req.query.username
+                }
+            })
+            if (!user) {
+                res.status(404).send({error: 'User is not found'})
+            }
+            else {
+                res.send(user)
+            }
+        } catch (error) {
+            res.status(500).send({error: 'Error has occurs, trying to find User'})
+        }
+    },
+
+    async findAll(req, res) {
+        try {
+            const users = await User.findAll({ where: JSON.parse(req.query.where), attributes: req.query.attributes })
+            console.log(users)
+            if (!users) {
+                res.status(404).send({error: 'User is not found'})
+            }
+            else {
+                res.send(users)
+            }
+        } catch (error) {
+            res.status(500).send({error: 'Error has occurs, trying to find Users'})
+        }
     }
 }

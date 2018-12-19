@@ -24,6 +24,7 @@
                         thumb-label="always"
                     ></v-slider>
                     <rejected-list :rejected-list="seminar.rejectedList" @remove="removeFromRejectedList" @add="addToRejectedList"></rejected-list>
+                    <v-btn :to="{name: 'report', params: {seminar: seminar.id}}" round dark>report</v-btn>
                 </v-card>
             </v-flex>
             <v-flex xs12 sm10 md8>

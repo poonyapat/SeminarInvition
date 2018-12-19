@@ -48,7 +48,12 @@ module.exports = (app) => {
 
     app.post('/seminar/update',
         SeminarController.update)
+    
+    app.get('/user',
+        UserController.findOneByUsername)
 
+    app.get('/user/all',
+        UserController.findAll)
     
     app.post('/userProfile/update',
         UserController.updateProfile)
