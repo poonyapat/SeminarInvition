@@ -38,7 +38,7 @@
                     id="transTable"
                 >
                     <template slot="items" slot-scope="props">
-                        <tr @click="props.expanded = !props.expanded" id="head" :style="`background-color: ${color(props.item.isPresent)}`">
+                        <tr @click="props.expanded = !props.expanded" id="head" :style="color(props.item.isPresent)">
                             <td>{{ props.item.registeredData.fullname }}</td>
                             <template v-if="!isXS">
                                 <td>{{ props.item.registeredData.email }}</td>
@@ -127,13 +127,13 @@ export default {
         },
         color(isPresent){
             if (isPresent){
-                return '#66CC55'
+                return 'background-color: #66CC55'
             }
             else if (this.today > this.lastDate){
-                return '#880000'
+                return 'background-color: #880000; color: white'
             }
             else {
-                return 'white'
+                return 'background-color: white'
             }
         }
     },
