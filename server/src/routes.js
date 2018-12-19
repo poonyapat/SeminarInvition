@@ -53,7 +53,7 @@ module.exports = (app) => {
         UserController.findOneByUsername)
 
     app.get('/user/all',
-        UserController.findAll)
+        UserController.findAllByUsernames)
     
     app.post('/userProfile/update',
         UserController.updateProfile)

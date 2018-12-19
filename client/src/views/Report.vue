@@ -12,7 +12,8 @@
                 <p><b>Held by: </b> {{author.company}} </p>
                 <p><b>Localtion: </b> {{seminar.place}} </p>
                 <p style="text-indent: 50px;">{{seminar.description}}</p>
-                <p><b>Number of Attendees: </b> {{normalAttendees.length}} <b>Number of Reserves: </b> {{reservedAttendees.length}}</p>
+                <p><b>Number of Attendees: </b> {{normalAttendees.length}} <b>Number of Reserves: </b>
+                    {{reservedAttendees.length}}</p>
                 <p><b>Number of VIP seats: </b> {{seminar.maximumReserves}} </p>
                 <p><b>Normal Attendees:
                         <!--({{normalAttendees.length}} attendee{{normalAttendees.length > 1? 's': ''}})--></b></p>
@@ -144,9 +145,7 @@
                 }
             }
             this.rejectedAttendees = (await UserService.findAll({
-                where: {
-                    username: 'poonyapat'
-                },
+                usernames: this.seminar.rejectedList,
                 attributes: ['fullname', 'contactNumber', 'company', 'credit']
             })).data
         },

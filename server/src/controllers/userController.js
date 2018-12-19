@@ -1,4 +1,6 @@
-const {User} = require('../models')
+const {
+    User
+} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
@@ -15,8 +17,7 @@ function jwtVerifyUser(username, token) {
         if (decoded.username === username)
             return true
         else return false
-    }
-    catch (err) {
+    } catch (err) {
         return false
     }
 }
@@ -63,7 +64,10 @@ module.exports = {
     },
     async authenticate(req, res) {
         try {
-            const {username, password} = req.body
+            const {
+                username,
+                password
+            } = req.body
             const user = await User.findOne({
                 where: {
                     username: username
@@ -80,7 +84,9 @@ module.exports = {
                     error: 'Wrong password'
                 })
             }
-            token = jwtSignUser({username: user.username})
+            token = jwtSignUser({
+                username: user.username
+            })
             jwtVerifyUser(user.username, token)
             delete user.dataValues.password
             res.send({
@@ -103,8 +109,7 @@ module.exports = {
             if (jwtVerifyUser(req.body.username, req.body.token)) {
                 user.update(req.body.data)
                 res.status(200).send()
-            }
-            else {
+            } else {
                 res.status(402).send({
                     error: 'Unauthentication'
                 })
@@ -119,7 +124,9 @@ module.exports = {
     async verify(req, res) {
         try {
             decoded = jwtVerifyUser(req.body.username, req.body.token)
-            res.status(200).send({ verified: decoded })
+            res.status(200).send({
+                verified: decoded
+            })
         } catch (err) {
             res.status(500).send({
                 error: 'Invalid'
@@ -129,35 +136,46 @@ module.exports = {
 
     async findOneByUsername(req, res) {
         try {
-            console.log(1, req.query)
             const user = await User.findOne({
                 where: {
                     username: req.query.username
                 }
             })
             if (!user) {
-                res.status(404).send({error: 'User is not found'})
-            }
-            else {
+                res.status(404).send({
+                    error: 'User is not found'
+                })
+            } else {
                 res.send(user)
             }
         } catch (error) {
-            res.status(500).send({error: 'Error has occurs, trying to find User'})
+            res.status(500).send({
+                error: 'Error has occurs, trying to find User'
+            })
         }
     },
 
-    async findAll(req, res) {
+    async findAllByUsernames(req, res) {
         try {
-            const users = await User.findAll({ where: JSON.parse(req.query.where), attributes: req.query.attributes })
-            console.log(users)
+            const users = await User.findAll({
+                where: {
+                    username: {
+                        in: req.query.usernames
+                    }
+                },
+                attributes: req.query.attributes
+            })
             if (!users) {
-                res.status(404).send({error: 'User is not found'})
-            }
-            else {
+                res.status(404).send({
+                    error: 'User is not found'
+                })
+            } else {
                 res.send(users)
             }
         } catch (error) {
-            res.status(500).send({error: 'Error has occurs, trying to find Users'})
+            res.status(500).send({
+                error: 'Error has occurs, trying to find Users'
+            })
         }
     }
 }

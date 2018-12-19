@@ -7,7 +7,7 @@
                         {{user.username}} Profile
                     </v-toolbar-title>
                     <v-divider></v-divider>
-                    <v-btn round class="edit" v-show="!editing" @click="editing=true">
+                    <v-btn round class="edit" v-show="!editing" @click="edit">
                         <v-icon>edit</v-icon>
                         Edit
                     </v-btn>
@@ -29,7 +29,7 @@
                                     <v-radio v-for="choice in content.choices" :key="choice" :label="choice" :value="choice"></v-radio>
                                 </v-radio-group>
                                 <div v-else-if="content.type === 'number'">
-                                    <v-text-field type="number" v-model="content.value" style="width: 20%" :label="content.label"></v-text-field>
+                                    <v-text-field type="number" v-model="content.value" disabled style="width: 20%" :label="content.label"></v-text-field>
                                     <v-slider v-model="content.value" :min="content.min" :max="content.max" append-icon="add"
                                         prepend-icon="remove" @click:append="content.value++" @click:prepend="content.value--" />
                                 </div>
@@ -37,7 +37,7 @@
                         </div>
                         <!-- <v-text-field v-else v-for="(content, index) in contents" :key="index" :label="content.label" v-model="profile[key][index].value" readonly :mask="content.mask">
                         </v-text-field> -->
-                        <div v-else class="v-text-field__slot" v-for="(content, index) in contents" :key="index"> 
+                        <div v-else class="v-text-field__slot" v-for="(content, index) in contents" :key="index">
                             <p style="font-size:1.2em"> {{content.label}} : {{profile[key][index].value}} </p>
                         </div>
                     </div>
@@ -73,6 +73,13 @@
             }
         },
         methods: {
+            edit() {
+                this.editing = true;
+                if (this.profile.General.age.value < 15 || !this.profile.General.age.value){
+                    this.profile.General.age.value = 15
+                }
+                console.log(this.profile)
+            },
             ...mapActions([
                 'updateUser'
             ]),

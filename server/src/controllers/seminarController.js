@@ -1,6 +1,7 @@
 const {
     Seminar,
     RequiredData,
+    Attendee,
     User
 } = require('../models')
 
@@ -104,7 +105,6 @@ module.exports = {
                 requiredData: requiredData
             })
         } catch (error) {
-            console.log(error)
             res.status(500).send({
                 error: error
             })
@@ -118,6 +118,32 @@ module.exports = {
                 }
             })
             await seminar.update(req.body.info)
+            const nNormalAttendees = (await Attendee.count({
+                where: {
+                    seminar: seminar.id,
+                    status: {
+                        $not : 'Alternative'
+                    }
+                }
+            }))
+            let nAvailableSeat = seminar.maximumAttendees - seminar.maximumReserves - nNormalAttendees
+            if (nAvailableSeat > 0) {
+                const attendees = await Attendee.findAll({
+                    limit: nAvailableSeat,
+                    order: sequelize.col('order'),
+                    where: {
+                        seminar: seminar.id,
+                        status: 'Alternative'
+                    },
+                })
+                attendees.forEach(async attendee => {
+                    await attendee.update({
+                        status: 'Attended',
+                        order: null
+                    })
+                });
+                console.log("testtttttttt")
+            }
         } catch (error) {
             res.status(500).send({
                 error: error

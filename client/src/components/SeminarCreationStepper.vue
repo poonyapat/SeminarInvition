@@ -7,13 +7,12 @@
             <v-text-field clearable label="Seminar Title" v-model="info.title" :rules="rules.notNull"></v-text-field>
             <v-textarea clearable label="Seminar Description" v-model="info.description" :rules="rules.notNull">
             </v-textarea>
-            <v-text-field label="Maximum Seats" v-model="info.maximumAttendees" type="number" :rules="rules.positiveInteger"
+            <v-text-field label="Available Seats" v-model="availableAttendees" type="number" :rules="rules.basedOn"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
             <v-text-field label="Reserved Seats for VIP" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
-            <span :class="availableAttendees > 0?'':'error'"> Available : {{ availableAttendees }} </span>
             <v-btn round color="primary" @click="stepper = 2" :disabled="!completeStep1">
                 <v-icon>navigate_next</v-icon>
                 Continue
@@ -173,8 +172,11 @@
                 requiredBasicInfo: true,
                 rules: {
                     notNull: [v => !!v || 'Require Information'],
-                    positiveInteger: [v => v >= 0 || 'Require Positive Integer']
-                }
+                    positiveInteger: [v => v >= 0 || 'Require Positive Integer'],
+                    basedOn: [v=> v >= Math.min(this.basedAvailable, 10) || `At least ${this.basedAvailable}`]
+                },
+                availableAttendees: 0,
+                basedAvailable: 10
             }
         },
         props: ['seminarId'],
@@ -197,6 +199,8 @@
                         type: requiredData.requiredData[attr]
                     })
                 }
+                this.basedAvailable = this.info.maximumAttendees - this.info.maximumReserves
+                this.availableAttendees = this.info.maximumAttendees - this.info.maximumReserves
             } else {
                 this.info.company = this.user.company
                 this.info.contactNumber = this.user.contactNumber
@@ -232,9 +236,6 @@
                 temp.setDate(temp.getDate()+7)
                 return temp.toISOString().slice(0, 10)
             },
-            availableAttendees() {
-                return this.info.maximumAttendees - this.info.maximumReserves
-            },
             seminarShowableData() {
                 return {
                     'Title': this.info.title,
@@ -249,7 +250,7 @@
             },
             completeStep1() {
                 return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees >=
-                    0 && this.info.maximumReserves >= 0 && (this.info.maximumAttendees - this.info.maximumReserves > 0)
+                    0 && this.info.maximumReserves >= 0 && (this.availableAttendees > 0)
             },
             completeStep2() {
                 return this.info.place.length > 0 && this.info.startTime.length > 0 && this.info.endTime.length > 0
@@ -263,6 +264,14 @@
             ...mapState([
                 'user'
             ])
+        },
+        watch: {
+            availableAttendees(value){
+                this.info.maximumAttendees = parseInt(value) + parseInt(this.info.maximumReserves)
+            },
+            'info.maximumReserves': function(value){
+                this.info.maximumAttendees = parseInt(value) + parseInt(this.availableAttendees)
+            }
         }
     }
 </script>
