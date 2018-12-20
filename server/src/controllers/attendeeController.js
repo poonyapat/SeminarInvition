@@ -38,7 +38,16 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
                 }
             }
         })
-        await attendees.update({ isPresent: true })
+        await Attendee.update({isPresent: true},{
+            where: {
+                seminar: {
+                    [Op.in]: seminars
+                },
+                isPresent: {
+                    [Op.eq]: null
+                }
+            }
+        })
         const users = await User.findAll({
             where: {
                 id: {
