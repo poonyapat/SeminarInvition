@@ -42,7 +42,7 @@
         <v-stepper-content step="3">
             <v-tooltip bottom>
             <span>fullname, gender, age, nationality, email, contact phone number, company, office phone number and fax</span>
-            <v-checkbox slot="activator" label="Required Basic Information" v-model="requiredBasicInfo" disabled></v-checkbox>
+            <v-checkbox slot="activator" label="Basic Informations" v-model="requiredBasicInfo" disabled></v-checkbox>
             </v-tooltip>
             <v-layout v-for="(data, index) in requiredData" :key="index" class="tertiary">
                 <v-flex xs12 lg5 class="ma-2">
