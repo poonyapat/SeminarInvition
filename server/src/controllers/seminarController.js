@@ -79,6 +79,9 @@ module.exports = {
                 where: {
                     author: req.query.author
                 },
+                order: [
+                    ['createdAt', 'DESC']
+                ],
                 include: [{
                     model: User,
                     attributes: ['fullname']
@@ -142,7 +145,6 @@ module.exports = {
                         order: null
                     })
                 });
-                console.log("testtttttttt")
             }
         } catch (error) {
             res.status(500).send({

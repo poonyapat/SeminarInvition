@@ -45,15 +45,30 @@
                                 <td>{{ props.item.registeredData.contactNumber }}</td>
                                 <td>{{ props.item.registeredData.company }}</td>
                             </template>
-                            <td>{{ props.item.status }}</td>
+                            <td>{{ props.item.status !== 'Alternative'? props.item.status: 'Reserved' }}</td>
                             <td>{{ props.item.registeredData.credit }}</td>
                             <td>
-                                <v-tooltip bottom v-if="!props.item.isPresent && today < firstDate">
-                                    <v-icon slot="activator" small @click="props.expanded=true;rejectAttendee(props.item.user, props.item.seminar)">
-                                        delete
-                                    </v-icon>
-                                    <span>Reject Attendee</span>
-                                </v-tooltip>
+                                <v-dialog width="400">
+                                    <v-tooltip bottom v-if="!props.item.isPresent && today < firstDate" slot="activator">
+                                        <v-icon slot="activator" small>
+                                            delete
+                                        </v-icon>
+                                        <span>Reject Attendee</span>
+                                    </v-tooltip>
+                                    <v-card>
+                                        <v-toolbar dark>
+                                            <v-toolbar-title>Confirm Rejection</v-toolbar-title>    
+                                        </v-toolbar>
+                                        <v-card-text>
+                                        Press confirm to reject "{{props.item.registeredData.fullname}}" from seminar
+                                        </v-card-text>
+                                        <v-card-actions>
+                                            <v-spacer></v-spacer>
+                                        <v-btn round dark @click="props.expanded=true;rejectAttendee(props.item.user, props.item.seminar)">confirm</v-btn>
+                                            <v-spacer></v-spacer>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-dialog>
                             </td>
                         </tr>
                     </template>
@@ -107,7 +122,7 @@ export default {
         },
         async removeFromRejectedList(username){
             for (let i in this.seminar.rejectedList){
-                if (this.seminar.rejectedList[i] === username) this.seminar.rejectedList.pop(i)
+                if (this.seminar.rejectedList[i] === username) this.seminar.rejectedList.splice(i,1)
             }
             await SeminarService.update({
                 id: this.seminar.id,

@@ -15,13 +15,13 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
-            <v-btn v-if="registrable" @click="register(seminar.id)" class="primary">
+            <v-btn v-if="registrable && actionable(seminar)" @click="register(seminar.id)" class="primary">
               Register
             </v-btn>
-            <v-btn v-if="status === 'Attended'" class="success" @click="confirm(seminar.id)">
+            <v-btn v-if="status === 'Attended'  && actionable(seminar)" class="success" @click="confirm(seminar.id)">
               Confirm Registration
             </v-btn>
-            <v-btn v-if="status !== ''" class="cancel" dark @click="cancel(seminar.id)">
+            <v-btn v-if="status !== '' && actionable(seminar)" class="cancel" dark @click="cancel(seminar.id)">
               Cancel Registration
             </v-btn>
             <p v-if="!registrable && status === ''"> {{conditionMsg}} </p>
@@ -62,7 +62,7 @@
       ...mapState(["user", "attendees"]),
       showableInfo() {
         let timeRange = `${this.seminar.startTime} - ${this.seminar.endTime}`
-        let currentAttendees = `${this.seminar.currentRegistered} / ${this.seminar.maximumAttendees}`
+        let currentAttendees = `${this.seminar.currentRegistered} / ${this.seminar.maximumAttendees - this.seminar.maximumReserves}`
         return {
           title: {
             label: 'Title',
@@ -111,20 +111,18 @@
       },
       registrable() {
         let firstDate = new Date(DateService.firstDate(this.seminar))
-        firstDate.setDate(firstDate.getDate()-3)
+        firstDate.setDate(firstDate.getDate() - 3)
         return this.user && this.status === '' && this.seminar.author !== this.user.username && this.seminar.rejectedList &&
           !this.seminar.rejectedList.includes(this.user.username) && this.today < firstDate.toISOString()
       },
-      conditionMsg(){
+      conditionMsg() {
         let firstDate = new Date(DateService.firstDate(this.seminar))
-        firstDate.setDate(firstDate.getDate()-3)
-        if (this.seminar.author === this.user.username){
+        firstDate.setDate(firstDate.getDate() - 3)
+        if (this.seminar.author === this.user.username) {
           return 'Unable to register your own seminar'
-        }
-        else if (firstDate.toISOString() < this.today){
+        } else if (firstDate.toISOString() < this.today) {
           return 'Not in registration time'
-        }
-        else if (this.seminar.rejectedList && !this.seminar.rejectedList.includes(this.user.username)){
+        } else if (this.seminar.rejectedList && !this.seminar.rejectedList.includes(this.user.username)) {
           return 'You are rejected by organizer, please contact them'
         }
         return ''
@@ -141,6 +139,11 @@
             id: seminarId
           }
         });
+      },
+      actionable(seminar) {
+        let firstDate = new Date(DateService.firstDate(seminar))
+        firstDate.setDate(firstDate.getDate() - 3)
+        return this.today < firstDate.toISOString()
       },
       cancel(seminarId) {
         //remove from db

@@ -28,6 +28,9 @@
                                     :label="content.label">
                                     <v-radio v-for="choice in content.choices" :key="choice" :label="choice" :value="choice"></v-radio>
                                 </v-radio-group>
+                                <v-combobox v-else-if="content.type === 'combo'" :items="content.choices" :key="index" v-model="content.value"
+                                    :label="content.label">
+                                </v-combobox>
                                 <div v-else-if="content.type === 'number'">
                                     <v-text-field type="number" v-model="content.value" disabled style="width: 20%" :label="content.label"></v-text-field>
                                     <v-slider v-model="content.value" :min="content.min" :max="content.max" append-icon="add"
@@ -60,6 +63,7 @@
     } from 'vuex'
     import UserService from '@/services/userService'
     import AdminCard from '@/components/AdminCard'
+    import Nationality from '@/Nationality'
     export default {
         computed: {
             ...mapState([
@@ -145,7 +149,8 @@
                         nationality: {
                             label: 'Nationality',
                             value: this.user.nationality,
-                            type: 'text'
+                            type: 'combo',
+                            choices: Nationality
                         }
                     },
                     'Contact': {

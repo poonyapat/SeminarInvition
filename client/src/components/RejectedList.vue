@@ -26,7 +26,7 @@
                             </v-btn>
                         </v-list-tile-action>
                     </v-list-tile>
-                    <v-list-tile>
+                    <!-- <v-list-tile>
                         <v-list-tile-content>
                             <v-text-field label="Username" v-model="username"></v-text-field>
                         </v-list-tile-content>
@@ -35,7 +35,7 @@
                                 <v-icon @click="add">add</v-icon>
                             </v-btn>
                         </v-list-tile-action>
-                    </v-list-tile>
+                    </v-list-tile> -->
                 </v-list>
             </v-card-text>
         </v-card>

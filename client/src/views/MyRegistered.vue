@@ -7,7 +7,7 @@
                 </v-toolbar>
                 <seminar v-for="(seminar,index) in registeredSeminars" :key="seminar.id" :seminar="seminar" :status="attendees[index].status"
                     @confirm="confirm(seminar.id)" @cancel="cancel(seminar.id)">
-                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || attendees[index].status === 'Alternative' || !actionable" @click="confirm(seminar.id)"
+                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || attendees[index].status === 'Alternative' || !actionable(seminar)" @click="confirm(seminar.id)"
                         :icon="isXS">
                         <v-icon>done</v-icon>
                         <span class="hidden-xs-only">
@@ -16,7 +16,7 @@
                     </v-btn>
                     <confirm-dialog title="Cancel Registration" text="Are you sure that you are going to cancel this seminar registration"
                         @confirm="cancel(seminar.id)">
-                        <v-btn flat round color="cancel" :disabled="!actionable" :icon="isXS">
+                        <v-btn flat round color="cancel" :disabled="!actionable(seminar)" :icon="isXS">
                             <v-icon>close</v-icon>
                             <span class="hidden-xs-only">
                                 Cancel
@@ -24,7 +24,7 @@
                         </v-btn>
                     </confirm-dialog>
                     <v-dialog width='200'>
-                        <v-btn slot="activator" flat round :icon="isXS" :disabled="!actionable">
+                        <v-btn slot="activator" flat round :icon="isXS">
                             <span v-html="icon('qrcode')"></span>
                             <span class="hidden-xs-only">
                                 QR code

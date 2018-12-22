@@ -38,7 +38,7 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
                 }
             }
         })
-        await Attendee.update({isPresent: true},{
+        await Attendee.update({ isPresent: false }, {
             where: {
                 seminar: {
                     [Op.in]: seminars
@@ -48,18 +48,19 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
                 }
             }
         })
-        const users = await User.findAll({
+        await User.decrement({credit: 0.2},{
             where: {
-                id: {
-                    [Op.in]: attendees.map(attendee => attendee.id)
+                username: {
+                    [Op.in]: attendees.map(attendee => attendee.user)
                 },
                 credit: {
                     [Op.gt]: 0
                 }
             }
         })
-        users.decrement('credit', {by: 0.2})
+        // users.decrement({credit: 0.2})
     } catch (error) {
+        console.log(error)
         console.log("Updating is error")
     }
 })
@@ -269,19 +270,24 @@ module.exports = {
             await attendee.update({
                 isPresent: true
             })
-            await User.update({
+            const user = await User.findOne({
                 where: {
-                    id: attendee.user,
-                    credit: {
-                        [Op.lt]: 5
-                    }
+                    username: attendee.user
                 }
             })
+            if (user.credit <= 4.8) {
+                await user.increment({
+                    credit: 0.2
+                })
+            } else {
+                await user.update({credit: 5})
+            }
             
             res.send({
                 nessage: "Update Complete"
             })
         } catch (error) {
+            console.log(error)
             res.status(500).send({
                 error: error
             })
