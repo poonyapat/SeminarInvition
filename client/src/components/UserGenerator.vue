@@ -67,8 +67,8 @@
                 <v-stepper-step step="2">Admin Credential</v-stepper-step>
             </v-stepper-header>
             <v-stepper-content step="1">
-                <v-text-field label="Username" v-model="userData.username"></v-text-field>
-                <v-text-field label="Password" type="password" v-model="userData.password"></v-text-field>
+                <v-text-field :rules="[v => !!v.match(/[A-Za-z0-9]{8,32}/) || 'ONLY 8 to 32 characters with lower-case, upper-case or numerics']" label="Username" v-model="userData.username"></v-text-field>
+                <v-text-field :rules="[v => v.length >= 8 ||'ONLY 8 to 32 characters']" label="Password" type="password" v-model="userData.password"></v-text-field>
                 <v-select
                     v-model="userData.role"
                     :items="roles"
@@ -77,7 +77,7 @@
                 <p class="error" v-if="error"> {{error}} </p>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn dark round @click="stepper = 2">
+                    <v-btn class="primary" round @click="stepper = 2" :disabled="!(userData.username.match(/[A-Za-z0-9]{8,32}/)) || userData.password.length < 8">
                         Next
                     </v-btn>
                 </v-card-actions>

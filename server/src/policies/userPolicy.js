@@ -7,7 +7,7 @@ module.exports = {
                 new RegExp('^[a-zA-Z0-9]{8,32}$')
             ),
             password: Joi.string().regex(
-                new RegExp('^[a-zA-Z0-9]{8,32}$')
+                new RegExp('^.{8,32}$')
             )
         }
 
@@ -18,7 +18,7 @@ module.exports = {
                     errorMsg = `Invalid username: ONLY 8 to 32 characters with lower-case, upper-case or numerics`
                     break
                 case 'password':
-                    errorMsg = `Invalid password: ONLY 8 to 32 characters with lower-case, upper-case or numerics`
+                    errorMsg = `Invalid password: ONLY 8 to 32 characters`
                     break
                 default:
                     errorMsg = error.details[0].message

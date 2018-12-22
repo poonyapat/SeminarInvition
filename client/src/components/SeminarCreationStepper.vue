@@ -46,18 +46,18 @@
             </v-tooltip>
             <v-layout v-for="(data, index) in requiredData" :key="index" class="tertiary">
                 <v-flex xs12 lg5 class="ma-2">
-                    <v-text-field label="Name" v-model="data.name"></v-text-field>
+                    <v-text-field :disabled="!!seminarId" label="Name" v-model="data.name"></v-text-field>
                 </v-flex>
                 <v-flex xs10 lg5 class="ma-2">
-                    <v-select :items="types" label="Type" v-model="data.type"></v-select>
+                    <v-select :disabled="!!seminarId" :items="types" label="Type" v-model="data.type"></v-select>
                 </v-flex>
                 <v-flex xs2 lg2>
-                    <v-btn icon top>
+                    <v-btn icon top v-if="!seminarId">
                         <v-icon color="cancel" @click="removeData(index)">cancel</v-icon>
                     </v-btn>
                 </v-flex>
             </v-layout>
-            <v-layout>
+            <v-layout v-if="!seminarId">
                 <v-flex xs12 lg6 class="ma-2">
                     <v-text-field label="Name" v-model="attrName"></v-text-field>
                 </v-flex>
@@ -201,6 +201,7 @@
                 }
                 this.basedAvailable = this.info.maximumAttendees - this.info.maximumReserves
                 this.availableAttendees = this.info.maximumAttendees - this.info.maximumReserves
+                console.log(this.info)
             } else {
                 this.info.company = this.user.company
                 this.info.contactNumber = this.user.contactNumber
@@ -270,7 +271,9 @@
                 this.info.maximumAttendees = parseInt(value) + parseInt(this.info.maximumReserves)
             },
             'info.maximumReserves': function(value){
-                this.info.maximumAttendees = parseInt(value) + parseInt(this.availableAttendees)
+                if (this.availableAttendees >= this.basedAvailable){
+                    this.info.maximumAttendees = parseInt(value) + parseInt(this.availableAttendees)
+                }
             }
         }
     }
