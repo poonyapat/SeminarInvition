@@ -23,7 +23,7 @@
                             </span>
                         </v-btn>
                     </confirm-dialog>
-                    <v-dialog width='200'>
+                    <v-dialog width='200' v-if="!hideQRCode(seminar)">
                         <v-btn slot="activator" flat round :icon="isXS">
                             <span v-html="icon('qrcode')"></span>
                             <span class="hidden-xs-only">
@@ -128,6 +128,10 @@
                 let firstDate = new Date(DateService.firstDate(seminar))
                 firstDate.setDate(firstDate.getDate()-3)
                 return this.today < firstDate.toISOString()
+            },
+            hideQRCode(seminar){
+                let lastDate = new Date(DateService.lastDate(seminar))
+                return this.today > lastDate.toISOString()
             },
             icon(name) {
                 return Icon.iconTag(name)
