@@ -5,12 +5,7 @@
                 <v-toolbar fla dense class="primary" dark>
                     <v-toolbar-title> My Created Seminars </v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-btn 
-                        round
-                        flat
-                        class="primary" 
-                        :to="{name: 'seminarCreation'}"
-                    >
+                    <v-btn round flat class="primary" :to="{name: 'seminarCreation'}">
                         <v-icon>add</v-icon>
                         New Seminar
                     </v-btn>
@@ -18,14 +13,14 @@
                 <seminar v-for="(seminar, index) in seminars" :key="index" :seminar="seminar">
                     <v-btn round flat color="edit" :to="{name: 'seminarEditor', params: {id: seminar.id}}" :disabled="!editable(seminar)">
                         <v-icon>edit</v-icon>
-                        <span class="hidden-xs-only">    
-                        Edit
+                        <span class="hidden-xs-only">
+                            Edit
                         </span>
                     </v-btn>
                     <v-btn round flat color="info" :to="{name: 'attendeesInformation', params: {id: seminar.id}}">
                         <v-icon>people</v-icon>
-                        <span class="hidden-xs-only"> 
-                        Attendees
+                        <span class="hidden-xs-only">
+                            Attendees
                         </span>
                     </v-btn>
                 </seminar>
@@ -42,55 +37,60 @@
 </template>
 
 <script>
-import Seminar from '@/components/Seminar'
-import Error from '@/components/Error'
-import SeminarService from '@/services/seminarService'
-import { mapState } from 'vuex';
-import DateService from '@/services/dateService'
-export default {
-    data() {
-        return {
-            loaded: false,
-            seminars: [],
-            today: ''
-        }
-    },
-    components: {
-        Seminar,Error
-    },
-    computed: {
-        ...mapState([
-            'user', 'attendees', 'route', 'mySeminars'
-        ]),
-        accessible(){
-            return this.user && (this.user.role == 'Seminar Admin' || this.user.role == 'Admin')
+    import Seminar from '@/components/Seminar'
+    import Error from '@/components/Error'
+    import SeminarService from '@/services/seminarService'
+    import {
+        mapState
+    } from 'vuex';
+    import DateService from '@/services/dateService'
+    export default {
+        data() {
+            return {
+                loaded: false,
+                seminars: [],
+                today: ''
+            }
         },
-    },
-    async mounted(){
-        this.loaded = false
-        if (!this.user)
-            this.seminars = []
-        else
-            this.seminars = (await SeminarService.findAllByAuthor(this.user.username)).data
-        this.today = new Date().toISOString()
-        this.loaded = true
-    },
-    methods: {  
-        editable(seminar){
-            return DateService.firstDate(seminar) > this.today
-        }
-    },
-    wacth: {
-        mySeminars: async ()=> {
+        components: {
+            Seminar,
+            Error
+        },
+        computed: {
+            ...mapState([
+                'user', 'attendees', 'route', 'mySeminars'
+            ]),
+            accessible() {
+                return this.user && (this.user.role == 'Seminar Admin' || this.user.role == 'Admin')
+            },
+        },
+        async mounted() {
             this.loaded = false
             if (!this.user)
                 this.seminars = []
             else
                 this.seminars = (await SeminarService.findAllByAuthor(this.user.username)).data
+            this.today = new Date().toISOString()
             this.loaded = true
         },
+        methods: {
+            editable(seminar) {
+                let firstDate = new Date(DateService.firstDate(seminar))
+                firstDate.setDate(firstDate.getDate() - 3)
+                return this.today < firstDate.toISOString()
+            }
+        },
+        wacth: {
+            mySeminars: async () => {
+                this.loaded = false
+                if (!this.user)
+                    this.seminars = []
+                else
+                    this.seminars = (await SeminarService.findAllByAuthor(this.user.username)).data
+                this.loaded = true
+            },
+        }
     }
-}
 </script>
 
 <style>

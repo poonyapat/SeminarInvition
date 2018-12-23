@@ -11,6 +11,7 @@
                       <v-radio-group v-if="data.type === 'select'" v-model="data.value" :label="data.label">
                         <v-radio v-for="choice in data.choices" :key="choice" :label="choice" :value="choice"></v-radio>
                       </v-radio-group>
+                      <v-combobox v-else-if="data.type ==='combo'" v-model="data.value" :label="data.label" :items="data.choices"></v-combobox>
                       <v-text-field v-else-if="data.type === 'text'" v-model="data.value" :label="data.label" :mask="data.mask" :rules="rules.notNull"></v-text-field>
                       <div v-else-if="data.type === 'number' && data.min && data.max">
                         <v-text-field type="number" v-model="data.value" style="width: 20%" :label="data.label" :rules="rules.notNull"></v-text-field>
@@ -57,6 +58,7 @@
 import SeminarService from "@/services/seminarService";
 import AttendeeService from "@/services/attendeeService";
 import Error from "@/components/Error"
+import Nationality from "@/Nationality"
 import { mapState, mapActions } from "vuex";
 export default {
   data() {
@@ -74,7 +76,7 @@ export default {
         fullname: {label: 'Fullname', value: '', type: 'text'},
         gender: {label: 'Gender', value: '', type: 'select', choices: ['Male', 'Female', 'Other']},
         age: {label: 'Age', value: 15, type: 'number', min: 15, max: 100},
-        nationality: {label: 'Nationality', value: '', type: 'text'},
+        nationality: {label: 'Nationality', value: '', type: 'combo', choices: Nationality},
         email: {label: 'Email', value: '', type: 'text'},
         contactNumber: {label: 'Contact Phone Number', value: '', type: 'text', mask: 'phone'},
         company: {label: 'Company', value: '', type: 'text'},
