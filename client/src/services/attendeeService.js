@@ -38,6 +38,12 @@ export default {
             newStatus: newStatus
         })
     },
+    grantVIP(username, seminarId) {
+        return Api().post('attendee/vip', {
+            user: username,
+            seminar: seminarId
+        })
+    },
 
     register(username, seminarId, data) {
         return Api().post('seminar/register', {

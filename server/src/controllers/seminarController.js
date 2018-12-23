@@ -90,7 +90,6 @@ module.exports = {
                 }]
             })
             res.send(seminars)
-            res.send(seminar)
         } catch (error) {
             console.log(error)
             res.status(500).send({

@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         isPresent: {
             type: DataTypes.BOOLEAN
+        },
+        present: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        isVIP: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     },{
         indexes: [

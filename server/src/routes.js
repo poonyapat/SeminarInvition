@@ -3,6 +3,7 @@ const UserController = require('./controllers/userController')
 const UserPolicy = require('./policies/userPolicy')
 const AttendeeController = require('./controllers/attendeeController')
 const TestController = require('./controllers/testController')
+const TransactionController = require('./controllers/transactionController')
 module.exports = (app) => {
     app.post('/seminar/create',
         SeminarController.create)
@@ -36,7 +37,8 @@ module.exports = (app) => {
         SeminarController.findOneById)
     app.get('/seminar/ids',
         SeminarController.findAllByIds)
-
+    app.post('/attendee/vip',
+        AttendeeController.grantVIP)
     app.post('/attendee/update_status',
         AttendeeController.updateStatus)
     app.post('/attendee/reject',
@@ -68,6 +70,10 @@ module.exports = (app) => {
     
     app.post('/attendee/present',
         AttendeeController.present)
+    
+    
+    app.post('/transaction/create',
+        TransactionController.create)
     
     app.get('/test',
         TestController.test)

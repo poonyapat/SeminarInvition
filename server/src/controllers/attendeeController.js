@@ -33,25 +33,26 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
                 seminar: {
                     [Op.in]: seminars
                 },
-                isPresent: {
-                    [Op.eq]: null
-                }
+                present: {
+                    [Op.lt]: 2
+                },
+                isVIP: false
             }
         })
-        await Attendee.update({ isPresent: false }, {
+        await User.decrement({credit: 0.2},{
             where: {
-                seminar: {
-                    [Op.in]: seminars
+                username: {
+                    [Op.in]: attendees.filter(attendee => attendee.present ==0).map(attendee => attendee.user)
                 },
-                isPresent: {
-                    [Op.eq]: null
+                credit: {
+                    [Op.gt]: 0
                 }
             }
         })
         await User.decrement({credit: 0.2},{
             where: {
                 username: {
-                    [Op.in]: attendees.map(attendee => attendee.user)
+                    [Op.in]: attendees.filter(attendee => attendee.present ==1).map(attendee => attendee.user)
                 },
                 credit: {
                     [Op.gt]: 0
@@ -64,7 +65,6 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
         console.log("Updating is error")
     }
 })
-
 
 async function doCancelRegistration(attendee, registeredSeminar){
     if (!attendee) {
@@ -105,6 +105,36 @@ async function doCancelRegistration(attendee, registeredSeminar){
 
 
 module.exports = {
+    async grantVIP(req, res){
+        try {
+            const attendee = await Attendee.findOne({
+                where: {
+                    user: req.body.user,
+                    seminar: req.body.seminar
+                }
+            })
+            if (!attendee) {
+                res.status(404).send({
+                    error: 'Attendee is not found'
+                })
+            }
+            await attendee.update({
+                isVIP: true
+            })
+            await Seminar.decrement({ currentRegistered: 1 }, {
+                where: {
+                    id: req.body.seminar
+                }
+            })
+            res.send({
+                nessage: "Update Complete"
+            })
+        } catch (error) {
+            res.status(500).send({
+                error: error
+            })
+        }
+    },
     async findSeminarByUser(req, res) {
         try {
             const attendees = await Attendee.findAll({
@@ -267,8 +297,8 @@ module.exports = {
                     error: 'Attendee is not found'
                 })
             }
-            await attendee.update({
-                isPresent: true
+            await attendee.increase({
+                present: 1
             })
             const user = await User.findOne({
                 where: {

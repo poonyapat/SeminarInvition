@@ -14,6 +14,7 @@
 
 <script>
     import AttendeeService from '@/services/attendeeService'
+    import TransactionService from '@/services/transactionService'
     export default {
         data() {
             return {
@@ -24,6 +25,7 @@
         async mounted() {
             try {
                 await AttendeeService.present(this.$route.params.username, this.$route.params.seminar)
+                await TransactionService.create(this.$route.params.username, this.$route.params.seminar, 'present', `${this.$route.params.username} is present at ${new Date().toISOString()}`)
             } catch(error){
                 this.error = `Error [${error.response.status}] : ${error.response.data.error}`
             }

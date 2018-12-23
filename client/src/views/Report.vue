@@ -15,8 +15,30 @@
                 <p><b>Number of Attendees: </b> {{normalAttendees.length}} <b>Number of Reserves: </b>
                     {{reservedAttendees.length}}</p>
                 <p><b>Number of VIP seats: </b> {{seminar.maximumReserves}} </p>
-                <p><b>Normal Attendees:
-                        <!--({{normalAttendees.length}} attendee{{normalAttendees.length > 1? 's': ''}})--></b></p>
+                <br>
+                <p><b>VIP Attendees: </b></p>
+                <table style="width: 100%">
+                    <tr>
+                        <th style="width: 30%;">Name</th>
+                        <th style="width: 25%;">Contact Phone Number</th>
+                        <th style="width: 20%">Company</th>
+                        <th>Credit</th>
+                    </tr>
+                    <tr v-for="attendee in vipAttendees" :key="attendee.user">
+                        <td style="width: 30%;">{{attendee.registeredData.fullname}}</td>
+                        <td style="width: 25%;">{{attendee.registeredData.contactNumber}}</td>
+                        <td style="width: 20%;">{{attendee.registeredData.company}}</td>
+                        <td>{{attendee.registeredData.credit}}</td>
+                    </tr>
+                    <tr v-if="!vipAttendees.length">
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+                <br>
+                <p><b>Normal Attendees:</b></p>
                 <table style="width: 100%">
                     <tr>
                         <th style="width: 30%;">Name</th>
@@ -41,8 +63,7 @@
                     </tr>
                 </table>
                 <br>
-                <p><b>Reserved Attendees:
-                        <!--({{reservedAttendees.length}} attendee{{reservedAttendees.length > 1? 's': ''}})--></b></p>
+                <p><b>Reserved Attendees:</b></p>
                 <table style="width: 100%">
                     <tr>
                         <th style="width: 30%;">Name</th>
@@ -115,7 +136,8 @@
                 author: {},
                 normalAttendees: [],
                 reservedAttendees: [],
-                rejectedAttendees: []
+                rejectedAttendees: [],
+                vipAttendees: []
             }
         },
         computed: {
@@ -129,7 +151,7 @@
             },
             attendedReserves() {
                 return this.reservedAttendees.filter(attendee => attendee.isPresent).length
-            }
+            },
         },
         async mounted() {
             this.seminar = (await SeminarService.findOneById(this.route.params.seminar)).data
@@ -138,12 +160,15 @@
             this.normalAttendees = []
             this.reservedAttendees = []
             for (let i = 0; i < attendees.length; i++) {
-                if (attendees[i].status === 'Alternative') {
+                if (attendees[i].isVIP){
+                    this.vipAttendees.push(attendees[i])
+                } else if (attendees[i].status === 'Alternative') {
                     this.reservedAttendees.push(attendees[i])
                 } else {
                     this.normalAttendees.push(attendees[i])
                 }
             }
+            console.log(this.vipAttendees)
             this.rejectedAttendees = (await UserService.findAll({
                 usernames: this.seminar.rejectedList,
                 attributes: ['fullname', 'contactNumber', 'company', 'credit']
