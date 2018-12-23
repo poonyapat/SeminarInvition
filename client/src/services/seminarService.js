@@ -26,6 +26,13 @@ export default {
             }
         })
     },
+    findAllByIds(ids) {
+        return Api().get('seminar/ids', {
+            params: {
+                ids: ids
+            }
+        })
+    },
     findAllByAuthor(author) {
         return Api().get('seminar/author', {
             params: {

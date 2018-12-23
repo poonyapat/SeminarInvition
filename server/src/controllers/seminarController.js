@@ -6,6 +6,7 @@ const {
 } = require('../models')
 
 const sequelize = require('sequelize')
+const Op = sequelize.Op
 
 module.exports = {
     async findAll(req, res) {
@@ -68,6 +69,30 @@ module.exports = {
             }
             res.send(seminar)
         } catch (error) {
+            res.status(500).send({
+                error: 'An error has occured trying to fetch the seminars'
+            })
+        }
+    },
+    async findAllByIds(req, res) {
+        try {
+            console.log(req)
+            const seminars = await Seminar.findAll({
+                where: {
+                    id: { [Op.in]: req.query.ids }
+                },
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                include: [{
+                    model: User,
+                    attributes: ['fullname']
+                }]
+            })
+            res.send(seminars)
+            res.send(seminar)
+        } catch (error) {
+            console.log(error)
             res.status(500).send({
                 error: 'An error has occured trying to fetch the seminars'
             })

@@ -21,9 +21,10 @@
                     prepend-icon="event"
                     @blur="date = parseDate(dateFormatted)"
                     readonly
+                    width="20%"
                     clearable
             ></v-text-field>
-            <v-date-picker multiple :min="min" :max="max" v-model="date" no-title @input="menu1 = false"></v-date-picker>
+            <v-date-picker :min="min" :max="max" v-model="date" no-title @input="menu1 = false"></v-date-picker>
         </v-menu>
     </v-flex>
 </template>
@@ -44,7 +45,8 @@
                 default: ''
             },
             value: {
-                type: String
+                type: String,
+                default: ''
             }
         },
         data() {
@@ -57,7 +59,7 @@
         watch: {
             date() {
                 this.dateFormatted = this.formatDate(this.date)
-                this.$emit('selected', this.date)
+                this.$emit('input', this.date)
             },
             value() {
                 if (this.value){
@@ -65,7 +67,9 @@
                 }
             }
         },
-
+        mounted() {
+            this.dateFormatted = this.formatDate(this.value)
+        },
         methods: {
             formatDate(date) {
                 if (!date) return null

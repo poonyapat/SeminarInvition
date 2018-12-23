@@ -31,6 +31,7 @@
                                 <v-combobox v-else-if="content.type === 'combo'" :items="content.choices" :key="index" v-model="content.value"
                                     :label="content.label">
                                 </v-combobox>
+                                <date-selector v-else-if="content.type =='date'" :label="content.label" :key="index" v-model="content.value"></date-selector>
                                 <div v-else-if="content.type === 'number'">
                                     <v-text-field type="number" v-model="content.value" disabled style="width: 20%" :label="content.label"></v-text-field>
                                     <v-slider v-model="content.value" :min="content.min" :max="content.max" append-icon="add"
@@ -63,6 +64,7 @@
     } from 'vuex'
     import UserService from '@/services/userService'
     import AdminCard from '@/components/AdminCard'
+    import DateSelector from '@/components/DateSelector'
     import Nationality from '@/Nationality'
     export default {
         computed: {
@@ -99,7 +101,7 @@
                         ({
                             fullname,
                             gender,
-                            age,
+                            birthDate,
                             nationality,
                             email,
                             contactNumber,
@@ -110,7 +112,7 @@
                         ({
                             fullname,
                             gender,
-                            age,
+                            birthDate,
                             nationality,
                             email,
                             contactNumber,
@@ -126,6 +128,7 @@
                 this.loadProfile()
             },
             loadProfile() {
+                console.log(this.user.birthDate)
                 this.profile = {
                     'General': {
                         fullname: {
@@ -139,12 +142,10 @@
                             type: 'select',
                             choices: ['Male', 'Female', 'Other']
                         },
-                        age: {
-                            label: 'Age',
-                            value: this.user.age,
-                            type: 'number',
-                            max: 100,
-                            min: 15
+                        birthDate: {
+                            label: 'Date of Birth',
+                            value: this.user.birthDate,
+                            type: 'date',
                         },
                         nationality: {
                             label: 'Nationality',
@@ -199,7 +200,7 @@
             }
         },
         components: {
-            AdminCard
+            AdminCard, DateSelector
         },
         async mounted() {
             this.loadProfile()

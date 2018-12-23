@@ -7,8 +7,8 @@
                 </v-toolbar>
                 <seminar v-for="(seminar,index) in registeredSeminars" :key="seminar.id" :seminar="seminar" :status="attendees[index].status"
                     @confirm="confirm(seminar.id)" @cancel="cancel(seminar.id)">
-                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || attendees[index].status === 'Alternative' || !actionable(seminar)" @click="confirm(seminar.id)"
-                        :icon="isXS">
+                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || attendees[index].status === 'Alternative' || !actionable(seminar)"
+                        @click="confirm(seminar.id)" :icon="isXS">
                         <v-icon>done</v-icon>
                         <span class="hidden-xs-only">
                             Confirm
@@ -23,7 +23,7 @@
                             </span>
                         </v-btn>
                     </confirm-dialog>
-                    <v-dialog width='200' v-if="!hideQRCode(seminar)">
+                    <v-dialog width='250' v-if="!hideQRCode(seminar)">
                         <v-btn slot="activator" flat round :icon="isXS">
                             <span v-html="icon('qrcode')"></span>
                             <span class="hidden-xs-only">
@@ -33,8 +33,12 @@
                         <v-card>
                             <div v-html="qrcode(seminar.id)"></div>
                             <v-card-actions>
-                                <a download="custom-filename.jpg" style="text-decoration: none" :href="qrcodeSrc(seminar.id)">
-                                    <v-btn icon><v-icon>vertical_align_bottom</v-icon></v-btn>
+                                <div>{{seminar.title}} [{{firstDate(seminar)}}]</div>
+                                <a :download="`${seminar.title} [${firstDate(seminar)}].jpg`" style="text-decoration: none"
+                                    :href="qrcodeSrc(seminar.id)">
+                                    <v-btn icon>
+                                        <v-icon>vertical_align_bottom</v-icon>
+                                    </v-btn>
                                 </a>
                             </v-card-actions>
                         </v-card>
@@ -95,7 +99,7 @@
                 qr.make()
                 return qr.createImgTag().replace('width="90" height="90"', 'width="200" height="200"')
             },
-            qrcodeSrc(seminar){
+            qrcodeSrc(seminar) {
                 var qr = qrcode(0, 'Q')
                 qr.addData(`${window.location.origin}/seminar/${seminar}/confirm/${this.user.username}`)
                 qr.make()
@@ -124,12 +128,12 @@
                     }
                 }
             },
-            actionable(seminar){
+            actionable(seminar) {
                 let firstDate = new Date(DateService.firstDate(seminar))
-                firstDate.setDate(firstDate.getDate()-3)
+                firstDate.setDate(firstDate.getDate() - 3)
                 return this.today < firstDate.toISOString()
             },
-            hideQRCode(seminar){
+            hideQRCode(seminar) {
                 let lastDate = new Date(DateService.lastDate(seminar))
                 return this.today > lastDate.toISOString()
             },
@@ -139,12 +143,15 @@
             ...mapActions([
                 'setAttendees', 'updateAttendeeStatus', 'cancelRegistration'
             ]),
+            firstDate(seminar) {
+                return DateService.firstDate(seminar).substring(0, 10)
+            }
         },
         async mounted() {
             this.loaded = false
-            this.registeredSeminars = []
-            for (let i = 0; i < this.attendees.length; i++) {
-                this.registeredSeminars.push((await SeminarService.findOneById(this.attendees[i].seminar)).data)
+            if (this.attendees.length > 0) {
+                this.registeredSeminars = (await SeminarService.findAllByIds(this.attendees.map(attendee =>
+                    attendee.seminar))).data
             }
             this.today = new Date().toISOString()
             this.loaded = true
@@ -154,9 +161,9 @@
                 imidiate: true,
                 async handler(attendees) {
                     this.loaded = false
-                    this.registeredSeminars = []
-                    for (let i = 0; i < attendees.length; i++) {
-                        this.registeredSeminars.push((await SeminarService.findOneById(attendees[i].seminar)).data)
+                    if (this.attendees.length > 0) {
+                        this.registeredSeminars = (await SeminarService.findAllByIds(this.attendees.map(attendee =>
+                            attendee.seminar))).data
                     }
                     this.loaded = true
                 }
@@ -171,6 +178,7 @@
         max-height: 10em;
         overflow: scroll;
     }
+
     /* .icon {
   background-image: url('../assets/qrcode_scan.png');
   height: 16px;

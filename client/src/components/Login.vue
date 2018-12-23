@@ -8,7 +8,7 @@
         <v-card>
             <v-card-title class="primary headline white--text">
                 <v-icon dark>person_</v-icon>
-                Login
+                Log in to SeIMS 
                 <v-spacer></v-spacer>
                 <v-btn @click="dialog = false" flat icon dark>
                     <v-icon>close</v-icon>

@@ -15,7 +15,6 @@
                     Browse
                 </v-btn>
             </v-toolbar-items>
-            <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">
                 <login v-if="!$store.state.isUserLoggedIn">
                     <v-btn flat>
@@ -35,13 +34,18 @@
                     </v-icon>
                     Registered Semianars
                 </v-btn>
-                <v-btn flat :to="{name: 'myCreatedSeminar'}"
-                       v-if="$store.state.isUserLoggedIn && hasPermissionToCreate">
+                <v-btn flat :to="{name: 'myCreatedSeminar'}" v-if="$store.state.isUserLoggedIn && hasPermissionToCreate">
                     <v-icon>
                         storage
                     </v-icon>
                     My Seminars
                 </v-btn>
+            </v-toolbar-items>
+            <v-spacer></v-spacer>
+            <v-toolbar-title>
+                {{$store.state.user.username}}
+            </v-toolbar-title>
+            <v-toolbar-items>
                 <v-btn flat @click="logout" v-if="$store.state.isUserLoggedIn">
                     <v-icon>
                         logout
@@ -50,7 +54,7 @@
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
-        <navigator :show="show" @hide="show = false"/>
+        <navigator :show="show" @hide="show = false" />
     </div>
 </template>
 
@@ -58,7 +62,6 @@
     import Navigator from '@/components/Navigator'
     import Login from '@/components/Login'
     import Register from '@/components/Register'
-
     export default {
         data() {
             return {
@@ -68,7 +71,9 @@
         methods: {
             logout() {
                 this.$store.dispatch('logout')
-                this.$router.push({name: 'home'})
+                this.$router.push({
+                    name: 'home'
+                })
             },
         },
         computed: {
@@ -78,7 +83,9 @@
             }
         },
         components: {
-            Login, Register, Navigator
+            Login,
+            Register,
+            Navigator
         }
     }
 </script>
@@ -96,4 +103,3 @@
         color: rgb(167, 167, 167);
     }
 </style>
-

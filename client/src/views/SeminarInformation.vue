@@ -3,7 +3,7 @@
     <v-layout v-if="seminar" wrap justify-center>
       <v-flex sm12 lg10>
         <v-toolbar flat dark class="primary">
-          <v-toolbar-title> {{seminar.title}} </v-toolbar-title>
+          <v-toolbar-title> {{seminar.title}} <b :style="`color: ${colorStatus}`">(current registered {{seminar.currentRegistered}}/ {{seminar.maximumAttendees - seminar.maximumReserves}})</b></v-toolbar-title>
         </v-toolbar>
         <v-card class="low-op pa-2">
           <v-card-text v-for="(info, key) in showableInfo" :key="key">
@@ -60,9 +60,17 @@
     },
     computed: {
       ...mapState(["user", "attendees"]),
+      colorStatus(){
+        let c = this.seminar.currentRegistered || 0
+        let m = this.seminar.maximumAttendees - this.seminar.maximumReserves
+        console.log(c, m)
+        if (c < m) return '#0F0'
+        else if (c > m) return 'Red'
+        else return 'yellow'
+      },
       showableInfo() {
         let timeRange = `${this.seminar.startTime} - ${this.seminar.endTime}`
-        let currentAttendees = `${this.seminar.currentRegistered} / ${this.seminar.maximumAttendees - this.seminar.maximumReserves}`
+        let currentAttendees = `${this.seminar.currentRegistered} ${this.seminar.currentRegistered>1?'people': 'person'} / ${this.seminar.maximumAttendees - this.seminar.maximumReserves} seats`
         return {
           title: {
             label: 'Title',

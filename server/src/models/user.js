@@ -41,7 +41,8 @@ module.exports = (sequelize, DataTypes) => {
         credit: {
             type: DataTypes.FLOAT,
             default: 5,
-        }
+        },
+        birthDate: DataTypes.DATE
     }, {
         hooks: {
             beforeCreate: hashPassword,

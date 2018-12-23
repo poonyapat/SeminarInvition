@@ -1,4 +1,5 @@
 export default [
+    "Thai",
     "Afghan",
     "Albanian",
     "Algerian",
@@ -97,7 +98,6 @@ export default [
     "Syrian",
     "Taiwanese",
     "Tajikistani",
-    "Thai",
     "Tongan",
     "Tunisian",
     "Turkish",

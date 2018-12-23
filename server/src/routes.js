@@ -34,6 +34,8 @@ module.exports = (app) => {
 
     app.get('/seminar/id',
         SeminarController.findOneById)
+    app.get('/seminar/ids',
+        SeminarController.findAllByIds)
 
     app.post('/attendee/update_status',
         AttendeeController.updateStatus)

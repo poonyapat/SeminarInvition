@@ -4,13 +4,13 @@
             Seminar Information
         </v-stepper-step>
         <v-stepper-content step="1">
-            <v-text-field clearable label="Seminar Title" v-model="info.title" :rules="rules.notNull"></v-text-field>
-            <v-textarea clearable label="Seminar Description" v-model="info.description" :rules="rules.notNull">
+            <v-text-field clearable label="Seminar Title*" v-model="info.title" :rules="rules.notNull"></v-text-field>
+            <v-textarea clearable label="Seminar Description" v-model="info.description">
             </v-textarea>
-            <v-text-field label="Available Seats" v-model="availableAttendees" type="number" :rules="rules.basedOn"
+            <v-text-field label="Available Seats*" v-model="availableAttendees" type="number" :rules="rules.basedOn"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
-            <v-text-field label="Reserved Seats for VIP" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
+            <v-text-field label="Reserved Seats for VIP*" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
             <v-btn round color="primary" @click="stepper = 2" :disabled="!completeStep1">
@@ -23,10 +23,10 @@
         </v-stepper-step>
         <v-stepper-content step="2">
             <v-textarea clearable label="Location" v-model="info.place" :rules="rules.notNull"/>
-            <small>At least next week</small><br>
+            <b>Dates*</b><small>(At least next week)</small><br>
             <v-date-picker multiple :min="nextWeek" v-model="info.dates" color="#DD5566"></v-date-picker>
-            <time-selector label="Start Time" :max="info.endTime" v-model="info.startTime"></time-selector>
-            <time-selector label="End Time" :min="info.startTime" v-model="info.endTime"></time-selector>
+            <time-selector label="Start Time" :max="maxTime" v-model="info.startTime"></time-selector>
+            <time-selector label="End Time" :min="minTime" v-model="info.endTime"></time-selector>
             <v-btn round color="primary" @click="stepper = 3" :disabled="!completeStep2">
                 <v-icon>navigate_next</v-icon>
                 Continue
@@ -41,7 +41,7 @@
         </v-stepper-step>
         <v-stepper-content step="3">
             <v-tooltip bottom>
-            <span>fullname, gender, age, nationality, email, contact phone number, company, office phone number and fax</span>
+            <span>fullname, gender, birthDate, nationality, email, contact phone number, company, office phone number and fax</span>
             <v-checkbox slot="activator" label="Basic Informations" v-model="requiredBasicInfo" disabled></v-checkbox>
             </v-tooltip>
             <v-layout v-for="(data, index) in requiredData" :key="index" class="tertiary">
@@ -118,7 +118,7 @@
                     </v-list-tile>
                     <v-list-tile v-show="requiredBasicInfo" @click="() => {return}">
                         <v-list-tile-content>
-                            <v-list-tile-title> {{'*Basic Information* (fullname, gender, age, nationality, email, contact phone number, company, office phone number and fax)'}}</v-list-tile-title>
+                            <v-list-tile-title> {{'*Basic Information* (fullname, gender, birthDate, nationality, email, contact phone number, company, office phone number and fax)'}}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                     <v-list-tile v-for="(data, index) in requiredData" :key="index" @click="() => {return}">
@@ -172,8 +172,8 @@
                 requiredBasicInfo: true,
                 rules: {
                     notNull: [v => !!v || 'Require Information'],
-                    positiveInteger: [v => v >= 0 || 'Require Positive Integer'],
-                    basedOn: [v=> v >= Math.min(this.basedAvailable, 10) || `At least ${this.basedAvailable}`]
+                    positiveInteger: [v => v >= 0 && v<=50000 && v%1===0 || 'Require Positive Integer [0-50000]'],
+                    basedOn: [v=> v >= Math.min(this.basedAvailable, 10) && v<=50000 && v%1===0 || `Require Positive Integer [${this.basedAvailable}-50000]`],
                 },
                 availableAttendees: 0,
                 basedAvailable: 10
@@ -250,21 +250,48 @@
                 }
             },
             completeStep1() {
-                return this.info.title.length > 0 && this.info.description.length > 0 && this.info.maximumAttendees >=
+                return this.info.title.length > 0 && this.info.maximumAttendees >=
                     0 && this.info.maximumReserves >= 0 && (this.availableAttendees > 0)
             },
             completeStep2() {
-                return this.info.place.length > 0 && this.info.startTime.length > 0 && this.info.endTime.length > 0
+                return this.info.dates.length > 0
             },
             completeStep3() {
-                return this.requiredData.length > 0 || this.requiredBasicInfo
+                return true
             },
             completeStep4() {
-                return this.info.contactNumber.length > 9 && this.info.contactEmail.match(/.+@.+\..+/)
+                return true
             },
             ...mapState([
                 'user'
-            ])
+            ]),
+            minTime(){
+                if (this.info.startTime){
+                    let time = parseInt(this.info.startTime.substring(0,2))+2
+                    if (time > 9){
+                        time = this.info.startTime.replace(this.info.startTime.substring(0,2), time+"")
+                    }else {
+                        time = this.info.startTime.replace(this.info.startTime.substring(0,2), "0"+time)
+                    }
+                    return time
+                }
+                else {
+                    return "03:00"
+                }
+            },
+            maxTime(){
+                if (this.info.endTime){
+                    let time = parseInt(this.info.endTime.substring(0,2))-2
+                    if (time > 9){
+                        time = this.info.startTime.replace(this.info.endTime.substring(0,2), time+"")
+                    }else {
+                        time = this.info.startTime.replace(this.info.endTime.substring(0,2), "0"+time)
+                    }
+                    return time
+                }else {
+                    return "21:00"
+                }
+            },
         },
         watch: {
             availableAttendees(value){
