@@ -16,18 +16,6 @@
                 </v-btn>
             </v-toolbar-items>
             <v-toolbar-items class="hidden-sm-and-down">
-                <login v-if="!$store.state.isUserLoggedIn">
-                    <v-btn flat>
-                        <v-icon>person</v-icon>
-                        Login
-                    </v-btn>
-                </login>
-                <register v-if="!$store.state.isUserLoggedIn">
-                    <v-btn flat>
-                        <v-icon>person_add</v-icon>
-                        Register
-                    </v-btn>
-                </register>
                 <v-btn flat :to="{name: 'myRegistered'}" v-if="$store.state.isUserLoggedIn">
                     <v-icon>
                         bookmarks
@@ -42,10 +30,22 @@
                 </v-btn>
             </v-toolbar-items>
             <v-spacer></v-spacer>
-            <v-toolbar-title>
+            <v-toolbar-title v-if="$store.state.isUserLoggedIn">
                 {{$store.state.user.username}}
             </v-toolbar-title>
             <v-toolbar-items>
+                <login v-if="!$store.state.isUserLoggedIn">
+                    <v-btn flat>
+                        <v-icon>person</v-icon>
+                        Login
+                    </v-btn>
+                </login>
+                <register v-if="!$store.state.isUserLoggedIn">
+                    <v-btn flat>
+                        <v-icon>person_add</v-icon>
+                        Register
+                    </v-btn>
+                </register>
                 <v-btn flat @click="logout" v-if="$store.state.isUserLoggedIn">
                     <v-icon>
                         logout

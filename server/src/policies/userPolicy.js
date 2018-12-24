@@ -27,7 +27,14 @@ module.exports = {
                 error: errorMsg
             })
         } else {
-            next()
+            if (req.body.username == req.body.password) {
+                res.status(400).send({
+                    error: 'Username cannot be same as password'
+                })
+            }
+            else {
+                next()
+            }
         }
     }
 }

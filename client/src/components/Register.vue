@@ -50,7 +50,7 @@
                 password: null,
                 confirmedPassword: null,
                 error: null,
-                dialog: false
+                dialog: false,
             }
         },
         methods: {
