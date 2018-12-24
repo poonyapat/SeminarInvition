@@ -5,7 +5,7 @@
         </v-chip>
         <v-card-title primary-title :class="`${colorClass} low-op overflow-hidden`">
             <h3>{{seminar.title}}</h3><v-chip :style="`background-color: ${colorClass3};`">
-            {{firstDate}}
+            start: {{firstDate}}
         </v-chip>
             <v-spacer></v-spacer>
             <small>(Created by {{seminar.User.fullname}})</small>

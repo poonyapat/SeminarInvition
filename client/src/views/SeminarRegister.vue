@@ -49,6 +49,7 @@
 <script>
   import SeminarService from "@/services/seminarService";
   import AttendeeService from "@/services/attendeeService";
+  import TransactionService from "@/services/transactionService";
   import Error from "@/components/Error"
   import Nationality from "@/Nationality"
   import DateSelector from '@/components/DateSelector'
@@ -177,6 +178,7 @@
           this.seminar.id,
           this.fullRegisteredData
         );
+        await TransactionService.create(this.user.username, this.seminar.id, 'register', '')
         this.setAttendees(
           (await AttendeeService.findAllByUser(this.user.username)).data
         );

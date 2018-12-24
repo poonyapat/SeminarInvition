@@ -24,8 +24,10 @@
         },
         async mounted() {
             try {
-                await AttendeeService.present(this.$route.params.username, this.$route.params.seminar)
-                await TransactionService.create(this.$route.params.username, this.$route.params.seminar, 'present', `${this.$route.params.username} is present at ${new Date().toISOString()}`)
+                const username = this.$route.params.username
+                const seminar = this.$route.params.seminar
+                await AttendeeService.present(username, seminar)
+                await TransactionService.create(username, seminar, 'present', `${username} is present at ${new Date().toISOString()}`)
             } catch(error){
                 this.error = `Error [${error.response.status}] : ${error.response.data.error}`
             }

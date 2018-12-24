@@ -75,6 +75,9 @@ module.exports = (app) => {
     app.post('/transaction/create',
         TransactionController.create)
     
+    app.get('/transaction/findOne/latest',
+        TransactionController.findLatestByUserAndSeminar)
+    
     app.get('/test',
         TestController.test)
 }

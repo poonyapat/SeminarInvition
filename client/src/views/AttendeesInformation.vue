@@ -150,7 +150,7 @@
         methods: {
             async rejectAttendee(username, seminarId) {
                 await AttendeeService.rejectAttendee(username, seminarId);
-                await TransactionService.create(username, seminarId, 'Reject', this.reason)
+                await TransactionService.create(username, seminarId, 'reject', this.reason)
                 for (let i in this.attendees) {
                     if (this.attendees[i].user === username)
                         this.attendees.pop(i)

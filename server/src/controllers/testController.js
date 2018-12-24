@@ -1,7 +1,8 @@
 const {
     Attendee,
     Seminar,
-    User
+    User,
+    Transaction
 } = require('../models')
 
 const Sequelize = require('sequelize')
@@ -10,28 +11,31 @@ const Op = Sequelize.Op
 
 module.exports = {
     test: async (req, res) => {
-        const seminar = await Seminar.findOne({
-            where: {
-                id: 4
-            }
-        })
-        const nNormalAttendees = (await Attendee.count({
-            where: {
-                seminar: seminar.id,
-                status: {
-                    $not : 'Alternative'
+        try {
+
+            const today = new Date(new Date().toISOString().substring(0, 10))
+            const tmr = new Date(today)
+            tmr.setDate(tmr.getDate() + 1)
+            const transaction = await Transaction.findOne({
+                where: {
+                    seminar: 3,
+                    user: 'deityngo',
+                    action: 'present',
+                    createdAt: {
+                        [Op.lt]: tmr,
+                        [Op.gt]: today
+                    }
                 }
+            })
+            if (!transaction) {
+                res.send(transaction)
+            } else {
+                res.status(403).send({
+                    error: 'Attendee is already checked today'
+                })
             }
-        }))
-        let nAvailableSeat = seminar.maximumAttendees - seminar.maximumReserves - nNormalAttendees
-        const attendees = await Attendee.findAll({
-            where: {
-                seminar: seminar.id,
-                status: 'Alternative'
-            },
-            limit: nAvailableSeat,
-            order: Sequelize.col('order')
-        })
-        res.send(attendees)
+        } catch (error) {
+            res.status(500).send({ error: error })
+        }
     }
 }

@@ -1,5 +1,5 @@
 import Api from '@/services/api'
-
+import TransactionService from '@/services/transactionService'
 export default {
     cancelRegistration(username, seminarId) {
         return Api().post('attendee/cancel', {

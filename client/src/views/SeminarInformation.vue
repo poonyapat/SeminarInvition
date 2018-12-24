@@ -40,6 +40,7 @@
   } from "vuex";
   import SeminarService from "@/services/seminarService";
   import AttendeeService from "@/services/attendeeService";
+  import TransactionService from "@/services/transactionService";
   import Error from '@/components/Error'
   import DateService from '@/services/dateService'
   export default {
@@ -153,9 +154,10 @@
         firstDate.setDate(firstDate.getDate() - 3)
         return this.today < firstDate.toISOString()
       },
-      cancel(seminarId) {
+      async cancel(seminarId) {
         //remove from db
-        AttendeeService.cancelRegistration(this.user.username, seminarId);
+        await AttendeeService.cancelRegistration(this.user.username, seminarId);
+        await TransactionService.create(this.user.username, seminarId, 'cancel', '')
         for (let i = 0; i < this.attendees.length; i++) {
           if (this.attendees[i].seminar === seminarId) {
             this.cancelRegistration(i);

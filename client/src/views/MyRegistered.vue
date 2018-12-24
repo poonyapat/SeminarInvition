@@ -105,9 +105,10 @@
                 qr.make()
                 return qr.createDataURL()
             },
-            cancel(seminarId) {
+            async cancel(seminarId) {
                 //remove from db
-                AttendeeService.cancelRegistration(this.user.username, seminarId)
+                await AttendeeService.cancelRegistration(this.user.username, seminarId)
+                await TransactionService.create(this.user.username, seminarId, 'cancel', '')
                 for (let i = 0; i < this.registeredSeminars.length; i++) {
                     if (this.registeredSeminars[i].id === seminarId) {
                         this.registeredSeminars.splice(i, 1)

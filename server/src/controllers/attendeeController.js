@@ -1,7 +1,8 @@
 const {
     Attendee,
     Seminar,
-    User
+    User,
+    Transaction
 } = require('../models')
 
 const Sequelize = require('sequelize')
@@ -28,45 +29,45 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
         return true
     }).map(seminar => seminar.id)
     try {
-        const attendees = await Attendee.findAll({
-            where: {
-                seminar: {
-                    [Op.in]: seminars
-                },
-                present: {
-                    [Op.lt]: 2
-                },
-                isVIP: false
-            }
-        })
-        await User.decrement({credit: 0.2},{
-            where: {
-                username: {
-                    [Op.in]: attendees.filter(attendee => attendee.present ==0).map(attendee => attendee.user)
-                },
-                credit: {
-                    [Op.gt]: 0
+        for (let i = 0; i < seminars.length; i++) {
+            const attendees = await Attendee.findAll({
+                where: {
+                    seminar: seminars[i].id,
+                    present: 0,
+                    isVIP: false
                 }
-            }
-        })
-        await User.decrement({credit: 0.2},{
-            where: {
-                username: {
-                    [Op.in]: attendees.filter(attendee => attendee.present ==1).map(attendee => attendee.user)
-                },
-                credit: {
-                    [Op.gt]: 0
+            })
+            await User.decrement({
+                credit: 0.2
+            }, {
+                where: {
+                    username: {
+                        [Op.in]: attendees.filter(attendee => attendee.present == 0).map(attendee => attendee.user)
+                    },
+                    credit: {
+                        [Op.gt]: 0
+                    }
                 }
-            }
-        })
-        // users.decrement({credit: 0.2})
+            })
+            await Attendee.update({
+                isPresent: false
+            }, {
+                where: {
+                    seminar: seminars[i].id,
+                    present: {
+                        [Op.lt]: seminars[i].dates.length
+                    },
+                    isVIP: false
+                }
+            })
+        }
     } catch (error) {
         console.log(error)
         console.log("Updating is error")
     }
 })
 
-async function doCancelRegistration(attendee, registeredSeminar){
+async function doCancelRegistration(attendee, registeredSeminar) {
     if (!attendee) {
         return {
             complete: false,
@@ -95,7 +96,7 @@ async function doCancelRegistration(attendee, registeredSeminar){
         nextAttendee.update({
             status: 'Attended',
             order: null
-        })   
+        })
     }
     return {
         complete: true,
@@ -105,7 +106,7 @@ async function doCancelRegistration(attendee, registeredSeminar){
 
 
 module.exports = {
-    async grantVIP(req, res){
+    async grantVIP(req, res) {
         try {
             const attendee = await Attendee.findOne({
                 where: {
@@ -121,7 +122,9 @@ module.exports = {
             await attendee.update({
                 isVIP: true
             })
-            await Seminar.decrement({ currentRegistered: 1 }, {
+            await Seminar.decrement({
+                currentRegistered: 1
+            }, {
                 where: {
                     id: req.body.seminar
                 }
@@ -219,7 +222,7 @@ module.exports = {
             }) || 0
             if (nMainAttendees >= seminar.maximumAttendees) {
                 req.body.status = 'Alternative'
-                req.body.order = nAlternate+1
+                req.body.order = nAlternate + 1
             }
             const attendee = await Attendee.create(req.body)
             seminar.update({
@@ -297,25 +300,66 @@ module.exports = {
                     error: 'Attendee is not found'
                 })
             }
-            await attendee.increase({
-                present: 1
-            })
-            const user = await User.findOne({
+            const seminar = await Seminar.findOne({
                 where: {
-                    username: attendee.user
+                    id: req.body.seminar
                 }
             })
-            if (user.credit <= 4.8) {
-                await user.increment({
-                    credit: 0.2
+            if (attendee.present >= seminar.dates.length) {
+                res.status(403).send({
+                    error: 'Attendee was completely checked'
                 })
-            } else {
-                await user.update({credit: 5})
             }
-            
-            res.send({
-                nessage: "Update Complete"
+            let today = new Date().toISOString().substring(0, 10)
+            if (!(seminar.dates.map(date => date.toISOString().substring(0, 10)).includes(today))) {
+                res.status(403).send({
+                    error: 'Wrong Date'
+                })
+            }
+            today = new Date(today)
+            const tmr = new Date(today)
+            tmr.setDate(tmr.getDate() + 1)
+            const transaction = await Transaction.findOne({
+                where: {
+                    seminar: attendee.seminar,
+                    user: attendee.user,
+                    action: 'present',
+                    createdAt: {
+                        [Op.lt]: tmr,
+                        [Op.gt]: today
+                    }
+                }
             })
+            if (!transaction) {
+                await attendee.increment({
+                    present: 1
+                })
+                if (attendee.present >= seminar.dates.length) {
+                    const user = await User.findOne({
+                        where: {
+                            username: attendee.user
+                        }
+                    })
+                    if (user.credit <= 4.8) {
+                        await user.increment({
+                            credit: 0.2
+                        })
+                    } else {
+                        await user.update({
+                            credit: 5
+                        })
+                    }
+                    await attendee.update({isPresent: true})
+                }
+                res.send({
+                    nessage: "Update Complete"
+                })
+            }
+            else {
+                res.status(403).send({
+                    error: 'Attendee is already checked today'
+                })
+            }
         } catch (error) {
             console.log(error)
             res.status(500).send({
@@ -343,7 +387,7 @@ module.exports = {
             const result = await doCancelRegistration(attendee, registeredSeminar)
             if (!result.complete)
                 res.status(result.code).send(result.error)
-            if (!registeredSeminar.dataValues.rejectedList.includes(user)) {   
+            if (!registeredSeminar.dataValues.rejectedList.includes(user)) {
                 await registeredSeminar.update({
                     rejectedList: registeredSeminar.dataValues.rejectedList.concat(user)
                 })

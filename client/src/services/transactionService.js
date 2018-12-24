@@ -9,4 +9,13 @@ export default {
             detail: detail
         })
     },
+    findLatestByUserAndSeminar(username, seminar, action) {
+        return Api().get('transaction/findOne/latest', {
+            params: {
+                user: username,
+                seminar: seminar,
+                action: action
+            }
+        })
+    }
 }
