@@ -30,50 +30,52 @@
                             <td>{{ props.item.registeredData.credit }}</td>
                             <td>
                                 <v-layout>
-                                <v-dialog width="400" style="display: inline-block">
-                                    <v-tooltip bottom v-if="!props.item.present && today < firstDate" slot="activator">
-                                        <v-icon slot="activator" small>
-                                            delete
-                                        </v-icon>
-                                        <span>Reject Attendee</span>
-                                    </v-tooltip>
-                                    <v-card>
-                                        <v-toolbar dark>
-                                            <v-toolbar-title>Confirm Rejection</v-toolbar-title>
-                                        </v-toolbar>
-                                        <v-card-text>
-                                            Press confirm to reject "{{props.item.registeredData.fullname}}" from
-                                            seminar
-                                            <v-text-field label="Reason for rejection*" :rules="[v=> !!v || 'required reason']" v-model="reason"></v-text-field>
-                                        </v-card-text>
-                                        <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn round dark @click="rejectAttendee(props.item.user, props.item.seminar)">confirm</v-btn>
-                                            <v-spacer></v-spacer>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-dialog>
-                                <v-dialog width="400">
-                                    <v-tooltip bottom v-if="!props.item.present && today < firstDate" slot="activator">
-                                        <v-icon slot="activator" small>
-                                            how_to_reg
-                                        </v-icon>
-                                        <span>Promote to VIP</span>
-                                    </v-tooltip>
-                                    <v-card>
-                                        <v-toolbar dark>
-                                            <v-toolbar-title>Confirm Promoting to VIP</v-toolbar-title>
-                                        </v-toolbar>
-                                        <v-card-text>
-                                            Press confirm to promote "{{props.item.registeredData.fullname}}" to VIP
-                                        </v-card-text>
-                                        <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn round dark @click="grantVIP(props.item.user, props.item.seminar)">confirm</v-btn>
-                                            <v-spacer></v-spacer>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-dialog>
+                                    <v-dialog width="400" style="display: inline-block">
+                                        <v-tooltip bottom v-if="!props.item.present && today < firstDate" slot="activator">
+                                            <v-icon slot="activator" small>
+                                                delete
+                                            </v-icon>
+                                            <span>Reject Attendee</span>
+                                        </v-tooltip>
+                                        <v-card>
+                                            <v-toolbar dark>
+                                                <v-toolbar-title>Confirm Rejection</v-toolbar-title>
+                                            </v-toolbar>
+                                            <v-card-text>
+                                                Press confirm to reject "{{props.item.registeredData.fullname}}" from
+                                                seminar
+                                                <v-text-field label="Reason for rejection*" :rules="[v=> !!v || 'required reason']"
+                                                    v-model="reason"></v-text-field>
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn round dark @click="rejectAttendee(props.item.user, props.item.seminar)">confirm</v-btn>
+                                                <v-spacer></v-spacer>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
+                                    <v-dialog width="400" v-model="showConfirm">
+                                        <v-tooltip bottom v-if="!props.item.present && today < firstDate" slot="activator">
+                                            <v-icon slot="activator" small>
+                                                how_to_reg
+                                            </v-icon>
+                                            <span>Promote to VIP</span>
+                                        </v-tooltip>
+                                        <v-card>
+                                            <v-toolbar dark>
+                                                <v-toolbar-title>Confirm Promoting to VIP</v-toolbar-title>
+                                            </v-toolbar>
+                                            <v-card-text>
+                                                Press confirm to promote "{{props.item.registeredData.fullname}}" to
+                                                VIP
+                                            </v-card-text>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn round dark @click="showConfirm=false;grantVIP(props.item.user, props.item.seminar); loadData()">confirm</v-btn>
+                                                <v-spacer></v-spacer>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-dialog>
                                 </v-layout>
                             </td>
                         </tr>
@@ -90,19 +92,14 @@
             </v-flex>
             <v-flex offset-sm1 offset-md2 xs12 sm10 md8>
                 <h2>VIP attendees</h2>
-                <v-data-table :headers="headers" :items="showableVipAttendees" item-key="user" :search="search" class="elevation-4"
+                <v-data-table :headers="headers2" :items="showableVipAttendees" item-key="user" :search="search" class="elevation-4"
                     :loading="!loaded" id="transTable">
                     <template slot="items" slot-scope="props">
                         <tr @click="props.expanded = !props.expanded" id="head">
                             <td>{{ props.item.registeredData.fullname }}</td>
-                            <template v-if="!isXS">
-                                <td>{{ props.item.registeredData.email }}</td>
-                                <td>{{ props.item.registeredData.contactNumber }}</td>
-                                <td>{{ props.item.registeredData.company }}</td>
-                            </template>
-                            <td>{{ props.item.status !== 'Alternative'? props.item.status: 'Reserved' }}</td>
-                            <td>{{ props.item.registeredData.credit }}</td>
-                            <td></td>
+                            <td>{{ props.item.registeredData.email }}</td>
+                            <td>{{ props.item.registeredData.contactNumber }}</td>
+                            <td>{{ props.item.registeredData.company }}</td>
                         </tr>
                     </template>
                     <template slot="expand" slot-scope="props">
@@ -146,7 +143,8 @@
                 },
                 today: '',
                 loaded: false,
-                reason: ''
+                reason: '',
+                showConfirm: false
             }
         },
         methods: {
@@ -159,7 +157,7 @@
                 }
                 this.reason = ""
             },
-            async grantVIP(username, seminarId){
+            async grantVIP(username, seminarId) {
                 await AttendeeService.grantVIP(username, seminarId)
             },
             async removeFromRejectedList(username) {
@@ -192,6 +190,13 @@
                 } else {
                     return 'background-color: white'
                 }
+            },
+            async loadData(){
+                this.loaded = false
+                this.attendees = (await AttendeeService.findAllBySeminar(this.route.params.id)).data
+                this.seminar = (await SeminarService.findOneById(this.route.params.id)).data
+                this.today = new Date().toISOString()
+                this.loaded = true
             }
         },
         computed: {
@@ -258,6 +263,25 @@
                     }
                 ]
             },
+            headers2() {
+                return [{
+                        text: 'Fullname',
+                        value: 'registeredData.fullname'
+                    },
+                    {
+                        text: 'Email',
+                        value: 'registeredData.email'
+                    },
+                    {
+                        text: 'Contact Phone Number',
+                        value: 'registeredData.contactNumber'
+                    },
+                    {
+                        text: 'Company',
+                        value: 'registeredData.company'
+                    },
+                ]
+            },
             lastDate() {
                 return DateService.lastDate(this.seminar)
             },
@@ -270,12 +294,8 @@
             Error,
             RejectedList
         },
-        async mounted() {
-            this.loaded = false
-            this.attendees = (await AttendeeService.findAllBySeminar(this.route.params.id)).data
-            this.seminar = (await SeminarService.findOneById(this.route.params.id)).data
-            this.today = new Date().toISOString()
-            this.loaded = true
+        mounted() {
+            this.loadData()
         }
     }
 </script>

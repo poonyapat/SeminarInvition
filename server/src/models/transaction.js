@@ -11,14 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     })
     const User = sequelize.import('./user')
     const Seminar = sequelize.import('./seminar')
-    User.belongsToMany(Seminar, {
-        through: Transaction,
-        foreignKey: 'user'
-    })
-    Seminar.belongsToMany(User, {
-        through: Transaction,
-        foreignKey: 'seminar'
-    })
+    User.hasMany(Transaction, { foreignKey: 'user' })
+    Seminar.hasMany(Transaction, { foreignKey: 'seminar' })
 
     return Transaction
 }

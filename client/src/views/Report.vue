@@ -22,16 +22,13 @@
                         <th style="width: 30%;">Name</th>
                         <th style="width: 25%;">Contact Phone Number</th>
                         <th style="width: 20%">Company</th>
-                        <th>Credit</th>
                     </tr>
                     <tr v-for="attendee in vipAttendees" :key="attendee.user">
                         <td style="width: 30%;">{{attendee.registeredData.fullname}}</td>
                         <td style="width: 25%;">{{attendee.registeredData.contactNumber}}</td>
                         <td style="width: 20%;">{{attendee.registeredData.company}}</td>
-                        <td>{{attendee.registeredData.credit}}</td>
                     </tr>
                     <tr v-if="!vipAttendees.length">
-                        <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
@@ -88,7 +85,7 @@
                     </tr>
                 </table>
                 <br>
-                <p><b>Rejected Attendees: </b></p>
+                <!-- <p><b>Rejected Attendees: </b></p>
                 <table style="width: 100%">
                     <tr>
                         <th style="width: 30%;">Name</th>
@@ -109,7 +106,7 @@
                         <td>-</td>
                     </tr>
                 </table>
-                <br>
+                <br> -->
                 <p><b>Total number of Attendees attended:</b> {{attendedAttendees}} </p>
                 <p><b>Total number of Reserved Attendees attended:</b> {{attendedReserves}} </p>
             </v-flex>
@@ -181,10 +178,10 @@
                 document.getElementById('button').style.display = ''
             },
             isPresent(attendee) {
-                if (attendee.isPresent === null) {
-                    return '-'
+                if (attendee.present == 1) {
+                    return 'Some Days'
                 }
-                if (attendee.isPresent) {
+                if (attendee.present == 2) {
                     return 'Yes'
                 }
                 return 'No'
