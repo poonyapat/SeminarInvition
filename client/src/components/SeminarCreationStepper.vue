@@ -201,7 +201,6 @@
                 }
                 this.basedAvailable = this.info.maximumAttendees - this.info.maximumReserves
                 this.availableAttendees = this.info.maximumAttendees - this.info.maximumReserves
-                console.log(this.info)
             } else {
                 this.info.company = this.user.company
                 this.info.contactNumber = this.user.contactNumber

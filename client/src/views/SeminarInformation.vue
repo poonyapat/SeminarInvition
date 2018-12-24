@@ -64,7 +64,6 @@
       colorStatus(){
         let c = this.seminar.currentRegistered || 0
         let m = this.seminar.maximumAttendees - this.seminar.maximumReserves
-        console.log(c, m)
         if (c < m) return '#0F0'
         else if (c > m) return 'Red'
         else return 'yellow'

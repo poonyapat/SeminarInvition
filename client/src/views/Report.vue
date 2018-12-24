@@ -165,7 +165,6 @@
                     this.normalAttendees.push(attendees[i])
                 }
             }
-            console.log(this.vipAttendees)
             this.rejectedAttendees = (await UserService.findAll({
                 usernames: this.seminar.rejectedList,
                 attributes: ['fullname', 'contactNumber', 'company', 'credit']

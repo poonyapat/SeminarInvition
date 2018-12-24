@@ -84,7 +84,6 @@
                 if (this.profile.General.age.value < 15 || !this.profile.General.age.value){
                     this.profile.General.age.value = 15
                 }
-                console.log(this.profile)
             },
             ...mapActions([
                 'updateUser'
@@ -128,7 +127,6 @@
                 this.loadProfile()
             },
             loadProfile() {
-                console.log(this.user.birthDate)
                 this.profile = {
                     'General': {
                         fullname: {
