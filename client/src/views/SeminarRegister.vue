@@ -12,7 +12,7 @@
               <v-radio v-for="choice in data.choices" :key="choice" :label="choice" :value="choice"></v-radio>
             </v-radio-group>
             <v-combobox v-else-if="data.type ==='combo'" v-model="data.value" :label="data.label" :items="data.choices"></v-combobox>
-            <date-selector v-else-if="data.type =='date'" :label="data.label" v-model="data.value" :max="today"></date-selector>
+            <date-selector v-else-if="data.type =='date'" :label="data.label" v-model="data.value" :max="maxYear()"></date-selector>
             <v-text-field v-else-if="data.type === 'text'" v-model="data.value" :label="data.label" :mask="data.mask"
               :rules="rules.notNull"></v-text-field>
             <div v-else-if="data.type === 'number' && data.min && data.max">
@@ -167,6 +167,12 @@
     },
     methods: {
       ...mapActions(["setAttendees"]),
+      maxYear(){
+        let maxYear = new Date()
+        maxYear.setFullYear(maxYear.getFullYear()-10)
+        maxYear = maxYear.toISOString().substring(0,10)
+        return maxYear
+      },
       async register() {
         if (!this.isAbleToRegister) {
           this.infoError = 'Information is required'

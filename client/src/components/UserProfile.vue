@@ -31,7 +31,7 @@
                                 <v-combobox v-else-if="content.type === 'combo'" :items="content.choices" :key="index" v-model="content.value"
                                     :label="content.label">
                                 </v-combobox>
-                                <date-selector v-else-if="content.type =='date'" :label="content.label" :key="index" v-model="content.value"></date-selector>
+                                <date-selector v-else-if="content.type =='date'" :label="content.label" :key="index" v-model="content.value" :max="content.max"></date-selector>
                                 <div v-else-if="content.type === 'number'">
                                     <v-text-field type="number" v-model="content.value" disabled style="width: 20%" :label="content.label"></v-text-field>
                                     <v-slider v-model="content.value" :min="content.min" :max="content.max" append-icon="add"
@@ -75,7 +75,7 @@
         data() {
             return {
                 profile: {},
-                editing: false
+                editing: false,
             }
         },
         methods: {
@@ -127,6 +127,10 @@
                 this.loadProfile()
             },
             loadProfile() {
+            let maxYear = new Date()
+            maxYear.setFullYear(maxYear.getFullYear()-10)
+            maxYear = maxYear.toISOString().substring(0,10)
+            console.log(maxYear)
                 this.profile = {
                     'General': {
                         fullname: {
@@ -144,6 +148,7 @@
                             label: 'Date of Birth',
                             value: this.user.birthDate,
                             type: 'date',
+                            max: maxYear
                         },
                         nationality: {
                             label: 'Nationality',
