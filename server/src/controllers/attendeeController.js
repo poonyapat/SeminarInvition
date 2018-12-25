@@ -75,7 +75,14 @@ async function doCancelRegistration(attendee, registeredSeminar) {
             error: 'Attendee is not found'
         }
     }
+    const vip = attendee.isVIP
     attendee.destroy()
+    if (vip) {
+        return {
+            complete: true,
+            code: 200
+        }
+    }
     registeredSeminar.update({
         currentRegistered: registeredSeminar.currentRegistered - 1
     })
@@ -129,6 +136,25 @@ module.exports = {
                     id: req.body.seminar
                 }
             })
+            const firstQueue = await Attendee.min('order', {
+                where: {
+                    seminar: attendee.seminar,
+                    status: 'Alternative'
+                }
+            })
+            if (firstQueue) {
+                const nextAttendee = await Attendee.findOne({
+                    where: {
+                        seminar: attendee.seminar,
+                        status: 'Alternative',
+                        order: firstQueue
+                    }
+                })
+                nextAttendee.update({
+                    status: 'Attended',
+                    order: null
+                })
+            }
             res.send({
                 nessage: "Update Complete"
             })
@@ -349,13 +375,14 @@ module.exports = {
                             credit: 5
                         })
                     }
-                    await attendee.update({isPresent: true})
+                    await attendee.update({
+                        isPresent: true
+                    })
                 }
                 res.send({
                     nessage: "Update Complete"
                 })
-            }
-            else {
+            } else {
                 res.status(403).send({
                     error: 'Attendee is already checked today'
                 })
