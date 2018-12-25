@@ -12,9 +12,9 @@
                 <p><b>Held by: </b> {{author.company}} </p>
                 <p><b>Localtion: </b> {{seminar.place}} </p>
                 <p style="text-indent: 50px;">{{seminar.description}}</p>
-                <p><b>Number of Attendees: </b> {{normalAttendees.length}} <b>Number of Reserves: </b>
-                    {{reservedAttendees.length}}</p>
-                <p><b>Number of VIP seats: </b> {{seminar.maximumReserves}} </p>
+                <p><b>Number of Attendees: </b> {{normalAttendees.length}} people <b>Number of Reserves: </b>
+                    {{reservedAttendees.length}} people</p>
+                <p><b>Number of VIP seats: </b> {{seminar.maximumReserves}} seats</p>
                 <br>
                 <p><b>VIP Attendees: </b></p>
                 <table style="width: 100%">
@@ -107,8 +107,10 @@
                     </tr>
                 </table>
                 <br> -->
-                <p><b>Total number of Attendees attended:</b> {{attendedAttendees}} </p>
-                <p><b>Total number of Reserved Attendees attended:</b> {{attendedReserves}} </p>
+                <p><b>Total number of Attendees attended:</b> {{attendedAttendees}} people</p>
+                <p><b>Total number of Attendees attended partially:</b> {{partialAttendedAttendees}} people</p>
+                <p><b>Total number of Reserved Attendees attended:</b> {{attendedReserves}} people</p>
+                <p><b>Total number of Reserved Attendees attended partially:</b> {{partialAttendedReserves}} people</p>
             </v-flex>
             <v-btn style="position: fixed; right: 2em; top: 0" dark round id="button" large @click="download">
                 <v-icon>arrow_downward</v-icon>
@@ -144,10 +146,16 @@
                 return this.seminar.dates.map(date => new Date(date).toLocaleDateString()).toString()
             },
             attendedAttendees() {
-                return this.normalAttendees.filter(attendee => attendee.isPresent).length
+                return this.normalAttendees.filter(attendee => attendee.present === this.seminar.dates.length).length
+            },
+            partialAttendedAttendees() {
+                return this.normalAttendees.filter(attendee => attendee.present < this.seminar.dates.length && !!attendee.present).length
             },
             attendedReserves() {
-                return this.reservedAttendees.filter(attendee => attendee.isPresent).length
+                return this.reservedAttendees.filter(attendee => attendee.present === this.seminar.dates.length).length
+            },
+            partialAttendedReserves() {
+                return this.reservedAttendees.filter(attendee => attendee.present < this.seminar.dates.length && !!attendee.present).length
             },
         },
         async mounted() {
