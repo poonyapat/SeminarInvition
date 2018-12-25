@@ -9,7 +9,7 @@
                     SeIMS
                 </v-toolbar-title>
             </router-link>
-            <v-toolbar-items class="hidden-sm-and-down">
+            <v-toolbar-items class="hidden-sm-and-down" v-if="$store.state.isUserLoggedIn">
                 <v-btn flat :to="{name: 'browse'}">
                     <v-icon>search</v-icon>
                     Browse
