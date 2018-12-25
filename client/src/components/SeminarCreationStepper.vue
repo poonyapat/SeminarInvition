@@ -173,7 +173,7 @@
                 rules: {
                     notNull: [v => !!v || 'Require Information'],
                     positiveInteger: [v => v >= 0 && v<=50000 && v%1===0 || 'Require Positive Integer [0-50000]'],
-                    basedOn: [v=> v >= Math.min(this.basedAvailable, 10) && v<=50000 && v%1===0 || `Require Positive Integer [${this.basedAvailable}-50000]`],
+                    basedOn: [v=> v >= Math.max(this.basedAvailable, 10) && v<=50000 && v%1===0 || `Require Positive Integer [${this.basedAvailable}-50000]`],
                     onlyHigher: [v=> v>= this.basedReserves && v <= 50000 && v%1===0 || `Require Positive Interger [${this.basedReserves}-50000]`]
                 },
                 availableAttendees: 0,
@@ -253,7 +253,8 @@
             },
             completeStep1() {
                 return this.info.title.length > 0 && this.info.maximumAttendees >=
-                    0 && this.info.maximumReserves >= 0 && (this.availableAttendees > 0)
+                    0 && this.availableAttendees >= Math.max(this.basedAvailable, 10) && this.availableAttendees<=50000 && this.availableAttendees%1===0 && 
+                     this.info.maximumReserves>= this.basedReserves && this.info.maximumReserves <= 50000 && this.info.maximumReserves%1===0
             },
             completeStep2() {
                 return this.info.dates.length > 0

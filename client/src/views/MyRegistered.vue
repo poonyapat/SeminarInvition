@@ -5,45 +5,48 @@
                 <v-toolbar fla dense class="primary" dark>
                     <v-toolbar-title> My Registered Seminars </v-toolbar-title>
                 </v-toolbar>
-                <seminar v-for="(seminar,index) in registeredSeminars" :key="seminar.id" :seminar="seminar" :status="attendees[index].status"
-                    @confirm="confirm(seminar.id)" @cancel="cancel(seminar.id)">
-                    <v-btn color="success" flat round :disabled="attendees[index].status === 'Confirmed' || attendees[index].status === 'Alternative' || !actionable(seminar)"
-                        @click="confirm(seminar.id)" :icon="isXS">
-                        <v-icon>done</v-icon>
-                        <span class="hidden-xs-only">
-                            Confirm
-                        </span>
-                    </v-btn>
-                    <confirm-dialog title="Cancel Registration" text="Are you sure that you are going to cancel this seminar registration"
-                        @confirm="cancel(seminar.id)">
-                        <v-btn flat round color="cancel" :disabled="!actionable(seminar)" :icon="isXS">
-                            <v-icon>close</v-icon>
+                <template v-for="(seminar,index) in registeredSeminars">
+                    <h1 style="z-index:20;top:75px; position:absolute" :key="index" v-if="attendee(seminar.id).isVIP">VIP</h1>
+                    <seminar :key="seminar.id" :seminar="seminar" :status="attendee(seminar.id).status" @confirm="confirm(seminar.id)"
+                        @cancel="cancel(seminar.id)">
+                        <v-btn color="success" flat round :disabled="attendee(seminar.id).status === 'Confirmed' || attendee(seminar.id).status === 'Alternative' || !actionable(seminar)"
+                            @click="confirm(seminar.id)" :icon="isXS">
+                            <v-icon>done</v-icon>
                             <span class="hidden-xs-only">
-                                Cancel
+                                Confirm
                             </span>
                         </v-btn>
-                    </confirm-dialog>
-                    <v-dialog width='250' v-if="!hideQRCode(seminar)">
-                        <v-btn slot="activator" flat round :icon="isXS">
-                            <span v-html="icon('qrcode')"></span>
-                            <span class="hidden-xs-only">
-                                QR code
-                            </span>
-                        </v-btn>
-                        <v-card>
-                            <div v-html="qrcode(seminar.id)"></div>
-                            <v-card-actions>
-                                <div>{{seminar.title}} [{{firstDate(seminar)}}]</div>
-                                <a :download="`${seminar.title} [${firstDate(seminar)}].jpg`" style="text-decoration: none"
-                                    :href="qrcodeSrc(seminar.id)">
-                                    <v-btn icon>
-                                        <v-icon>vertical_align_bottom</v-icon>
-                                    </v-btn>
-                                </a>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </seminar>
+                        <confirm-dialog :disabled="!actionable(seminar)" title="Cancel Registration" text="Are you sure that you are going to cancel this seminar registration"
+                            @confirm="cancel(seminar.id)">
+                            <v-btn flat round color="cancel" :disabled="!actionable(seminar)" :icon="isXS">
+                                <v-icon>close</v-icon>
+                                <span class="hidden-xs-only">
+                                    Cancel
+                                </span>
+                            </v-btn>
+                        </confirm-dialog>
+                        <v-dialog width='250' v-if="!hideQRCode(seminar)">
+                            <v-btn slot="activator" flat round :icon="isXS">
+                                <span v-html="icon('qrcode')"></span>
+                                <span class="hidden-xs-only">
+                                    QR code
+                                </span>
+                            </v-btn>
+                            <v-card>
+                                <div v-html="qrcode(seminar.id)"></div>
+                                <v-card-actions>
+                                    <div>{{seminar.title}} [{{firstDate(seminar)}}]</div>
+                                    <a :download="`${seminar.title} [${firstDate(seminar)}].jpg`" style="text-decoration: none"
+                                        :href="qrcodeSrc(seminar.id)">
+                                        <v-btn icon>
+                                            <v-icon>vertical_align_bottom</v-icon>
+                                        </v-btn>
+                                    </a>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </seminar>
+                </template>
                 <v-card v-if="registeredSeminars.length === 0" class="low-op">
                     <v-card-title>
                         <h1 v-if="loaded">0 Registered Seminar Found...</h1>
@@ -60,6 +63,7 @@
     import Seminar from '@/components/Seminar'
     import SeminarService from '@/services/seminarService'
     import AttendeeService from '@/services/attendeeService'
+    import TransactionService from '@/services/transactionService'
     import Error from '@/components/Error'
     import qrcode from 'qrcode-generator'
     import Icon from '@/services/icon'
@@ -93,6 +97,13 @@
             ConfirmDialog
         },
         methods: {
+            attendee(seminarId){
+                for (let i in this.attendees){
+                    if (this.attendees[i].seminar === seminarId){
+                        return this.attendees[i]
+                    }
+                }
+            },
             qrcode(seminar) {
                 var qr = qrcode(0, 'Q')
                 qr.addData(`${window.location.origin}/seminar/${seminar}/confirm/${this.user.username}`)
@@ -116,10 +127,10 @@
                     }
                 }
             },
-            confirm(seminarId) {
+            async confirm(seminarId) {
                 // change status in db
                 const confirm = "Confirmed"
-                AttendeeService.updateStatus(this.user.username, seminarId, confirm)
+                await AttendeeService.updateStatus(this.user.username, seminarId, confirm)
                 for (let i = 0; i < this.attendees.length; i++) {
                     if (this.attendees[i].seminar === seminarId) {
                         this.updateAttendeeStatus({

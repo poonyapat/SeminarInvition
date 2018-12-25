@@ -155,6 +155,7 @@
                     if (this.attendees[i].user === username)
                         this.attendees.pop(i)
                 }
+                this.seminar.rejectedList.push(username)
                 this.reason = ""
             },
             async grantVIP(username, seminarId) {
@@ -163,6 +164,7 @@
                     return
                 }
                 await AttendeeService.grantVIP(username, seminarId)
+            this.loadData()
             },
             async removeFromRejectedList(username) {
                 for (let i in this.seminar.rejectedList) {

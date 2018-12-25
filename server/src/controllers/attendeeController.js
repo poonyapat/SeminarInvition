@@ -304,10 +304,12 @@ module.exports = {
             await attendee.update({
                 status: req.body.newStatus
             })
+            console.log(attendee)
             res.send({
                 nessage: "Update Complete"
             })
         } catch (error) {
+            console.log(error)
             res.status(500).send({
                 error: error
             })

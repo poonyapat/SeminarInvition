@@ -28,9 +28,9 @@
                                     :label="content.label">
                                     <v-radio v-for="choice in content.choices" :key="choice" :label="choice" :value="choice"></v-radio>
                                 </v-radio-group>
-                                <v-combobox v-else-if="content.type === 'combo'" :items="content.choices" :key="index" v-model="content.value"
+                                <v-select v-else-if="content.type === 'combo'" :items="content.choices" :key="index" v-model="content.value"
                                     :label="content.label">
-                                </v-combobox>
+                                </v-select>
                                 <date-selector v-else-if="content.type =='date'" :label="content.label" :key="index" v-model="content.value" :max="content.max"></date-selector>
                                 <div v-else-if="content.type === 'number'">
                                     <v-text-field type="number" v-model="content.value" disabled style="width: 20%" :label="content.label"></v-text-field>

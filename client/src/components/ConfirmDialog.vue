@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" width="500" class="inline-block">
+    <v-dialog :disabled="disabled" v-model="dialog" width="500" class="inline-block">
         <slot slot="activator" />
         <v-card>
             <v-toolbar v-if="title" flat class="primary" dark>
@@ -35,7 +35,11 @@
                 type: String,
                 require: true
             },
-            title: String
+            title: String,
+            disabled: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {

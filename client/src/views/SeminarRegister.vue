@@ -11,7 +11,7 @@
             <v-radio-group v-if="data.type === 'select'" v-model="data.value" :label="data.label">
               <v-radio v-for="choice in data.choices" :key="choice" :label="choice" :value="choice"></v-radio>
             </v-radio-group>
-            <v-combobox v-else-if="data.type ==='combo'" v-model="data.value" :label="data.label" :items="data.choices"></v-combobox>
+            <v-select v-else-if="data.type ==='combo'" v-model="data.value" :label="data.label" :items="data.choices"></v-select>
             <date-selector v-else-if="data.type =='date'" :label="data.label" v-model="data.value" :max="maxYear()"></date-selector>
             <v-text-field v-else-if="data.type === 'text'" v-model="data.value" :label="data.label" :mask="data.mask"
               :rules="rules.notNull"></v-text-field>
