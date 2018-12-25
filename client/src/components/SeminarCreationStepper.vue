@@ -10,7 +10,7 @@
             <v-text-field label="Available Seats*" v-model="availableAttendees" type="number" :rules="rules.basedOn"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
-            <v-text-field label="Reserved Seats for VIP*" v-model="info.maximumReserves" type="number" :rules="rules.positiveInteger"
+            <v-text-field label="Reserved Seats for VIP*" v-model="info.maximumReserves" type="number" :rules="rules.onlyHigher"
                 style="width: 35%; display: inline-block" class="mr-3">
             </v-text-field>
             <v-btn round color="primary" @click="stepper = 2" :disabled="!completeStep1">
@@ -174,9 +174,11 @@
                     notNull: [v => !!v || 'Require Information'],
                     positiveInteger: [v => v >= 0 && v<=50000 && v%1===0 || 'Require Positive Integer [0-50000]'],
                     basedOn: [v=> v >= Math.min(this.basedAvailable, 10) && v<=50000 && v%1===0 || `Require Positive Integer [${this.basedAvailable}-50000]`],
+                    onlyHigher: [v=> v>= this.basedReserves && v <= 50000 && v%1===0 || `Require Positive Interger [${this.basedReserves}-50000]`]
                 },
                 availableAttendees: 0,
-                basedAvailable: 10
+                basedAvailable: 10,
+                basedReserves: 0
             }
         },
         props: ['seminarId'],
@@ -200,6 +202,7 @@
                     })
                 }
                 this.basedAvailable = this.info.maximumAttendees - this.info.maximumReserves
+                this.basedReserves = this.info.maximumReserves
                 this.availableAttendees = this.info.maximumAttendees - this.info.maximumReserves
             } else {
                 this.info.company = this.user.company

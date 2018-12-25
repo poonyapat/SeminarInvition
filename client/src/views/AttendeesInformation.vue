@@ -158,6 +158,10 @@
                 this.reason = ""
             },
             async grantVIP(username, seminarId) {
+                if (this.seminar.maximumReserves <= this.showableVipAttendees.length){
+                    alert("unable to promote this attendee, VIP seats are full")
+                    return
+                }
                 await AttendeeService.grantVIP(username, seminarId)
             },
             async removeFromRejectedList(username) {
