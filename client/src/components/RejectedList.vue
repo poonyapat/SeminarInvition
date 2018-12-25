@@ -1,5 +1,5 @@
 <template>
-    <v-dialog width="500" fill-height scrollable v-model="dialog">
+    <v-dialog width="600" fill-height scrollable v-model="dialog">
         <v-btn round slot="activator">
             <v-icon>person_add_disabled</v-icon>
             Rejected List
@@ -15,12 +15,12 @@
             <v-divider></v-divider>
             <v-card-text>
                 <v-list>
-                    <v-list-tile v-for="username in rejectedList" :key="username">
-                        
+                    <v-list-tile v-for="user in showableRejectedList" :key="user.username">
+
                         <v-list-tile-content>
-                            <v-list-tile-title>{{username}}</v-list-tile-title>
+                            <v-list-tile-title>{{`${user.username}(${user.fullname} from ${user.company})`}}</v-list-tile-title>
                         </v-list-tile-content>
-                        <v-list-tile-action @click="$emit('remove', username)">
+                        <v-list-tile-action @click="$emit('remove', user.username)">
                             <v-btn icon>
                                 <v-icon>close</v-icon>
                             </v-btn>
@@ -43,26 +43,42 @@
 </template>
 
 <script>
-export default {
-    props: {
-        rejectedList: {
-            type: Array,
-            required: true
+import UserService from '@/services/userService'
+    export default {
+        props: {
+            rejectedList: {
+                type: Array,
+                required: true
+            },
         },
-    },
-    data() {
-        return {
-            dialog: false,
-            username: ''
+        data() {
+            return {
+                dialog: false,
+                username: '',
+                showableRejectedList: []
+            }
+        },
+        methods: {
+            add() {
+                this.$emit('add', this.username)
+                this.username = ''
+            }
+        },
+        async mounted() {
+            this.showableRejectedList = (await UserService.findAll({
+                usernames: this.rejectedList,
+                attributes: ['username','fullname', 'company']
+            })).data
+        },
+        watch: {
+            async rejectedList(){
+                this.showableRejectedList = (await UserService.findAll({
+                usernames: this.rejectedList,
+                attributes: ['username','fullname', 'company']
+            })).data
+            }
         }
-    },
-    methods: {
-        add() {
-            this.$emit('add',this.username)
-            this.username = ''
-        }
-    },
-}
+    }
 </script>
 
 <style>
