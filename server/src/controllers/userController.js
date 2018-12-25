@@ -53,6 +53,11 @@ module.exports = {
                     error: 'Invalid Admin\'s Credential'
                 })
             }
+            if (req.body.user.username === req.body.user.password) {
+                res.status(400).send({
+                    error: 'Password cannot be same as username'
+                })
+            }
             req.body.user.credit = 5
             const user = await User.create(req.body.user)
             res.send(user.toJSON())
