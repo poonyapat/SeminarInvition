@@ -27,7 +27,7 @@ schedule.scheduleJob('0 0 0 * * *', async () => {
             }
         }
         return true
-    }).map(seminar => seminar.id)
+    })
     try {
         for (let i = 0; i < seminars.length; i++) {
             const attendees = await Attendee.findAll({
